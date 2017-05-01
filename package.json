@@ -1,0 +1,42 @@
+{
+  "name": "epcviewer",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack -w",
+    "start": "electron ./dist/main.js",
+    "list": "npm list --depth=0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "2ch-parser": "^0.0.4",
+    "electron-json-storage": "^3.0.5",
+    "moment": "^2.18.1",
+    "photon": "https://github.com/connors/photon",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-redux": "^5.0.4",
+    "redux": "^3.6.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.0",
+    "del": "^2.2.2",
+    "electron-load-devtool": "^0.5.1",
+    "gulp": "^3.9.1",
+    "gulp-jade": "^1.1.0",
+    "gulp-plumber": "^1.1.0",
+    "node-sass": "^4.5.2",
+    "resolve-url-loader": "^2.0.2",
+    "sass-loader": "^6.0.3",
+    "style-loader": "^0.16.1",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.4.1",
+    "webpack-notifier": "^1.5.0"
+  }
+}
