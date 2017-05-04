@@ -5,13 +5,14 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w",
-    "start": "electron ./dist/main.js",
+    "start": "electron ./dist/main.js http://jbbs.shitaraba.net/internet/22724/",
     "list": "npm list --depth=0"
   },
   "license": "MIT",
   "dependencies": {
-    "2ch-parser": "^0.0.4",
+    "2ch-parser": "^0.0.7",
     "electron-json-storage": "^3.0.5",
+    "immutable": "^3.8.1",
     "moment": "^2.18.1",
     "photon": "https://github.com/connors/photon",
     "react": "^15.5.4",
@@ -20,6 +21,7 @@
     "redux": "^3.6.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -27,7 +29,6 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.0",
     "del": "^2.2.2",
-    "electron-load-devtool": "^0.5.1",
     "gulp": "^3.9.1",
     "gulp-jade": "^1.1.0",
     "gulp-plumber": "^1.1.0",

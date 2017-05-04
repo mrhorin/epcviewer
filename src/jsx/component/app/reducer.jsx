@@ -1,19 +1,15 @@
+import {List, Map} from 'immutable'
+
 // stateの初期値
-const initialState = {
-  fuga: 10
-}
+var initialState = new Map({
+  boards: List([])
+})
 
 export default function reducer(state = initialState, action) {
 
   switch(action.type) {
-    case 'INCREMENT': {
-      return { fuga: Number(state.fuga) + 1 }
-    }
-    case 'DECREMENT': {
-      return { fuga: Number(state.fuga) - 1 }
-    }
-    case 'CHANGE': {
-      return { fuga: action.value }
+    case 'ADD_BOARD': {
+      return state.set('boards', state.get('boards').push(action.url))
     }
     default:
       return state

@@ -2,17 +2,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import App from 'jsx/component/app/app'
-import { increment, decrement, change } from 'jsx/action/app'
+import { increment, decrement, change, addBoard } from 'jsx/action/app'
 
 function mapStateToProps(state){
-  return state
+  return {
+    boards: state.get('boards')
+  }
 }
 
 function mapDispatchToProps(dispatch){
   return {
-    clickIncrement: () =>{ dispatch(increment()) },
-    clickDecrement: () =>{ dispatch(decrement()) },
-    onChangeFuga: (value)=>{ dispatch(change(value)) }
+    addBoard: (url)=>{ dispatch(addBoard(url)) }
   }
 }
 

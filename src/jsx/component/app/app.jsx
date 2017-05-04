@@ -1,20 +1,33 @@
 import React from 'react'
+import {ipcRenderer} from 'electron'
 
+import Header from 'jsx/component/app/header'
+import Footer from 'jsx/component/app/footer'
+
+// アプリケーションのメインウィンドウ
 export default class App extends React.Component {
 
-  onChangeFuga(e){
-    console.log(e.target.value)
+  constructor(props){
+    super(props)
+    this.bindEvents = this.bindEvents.bind(this)
+    this.bindEvents()
+    ipcRenderer.send('arg-url')
+  }
+
+  bindEvents(){
+    ipcRenderer.on('arg-url-reply', (event, argUrl)=>{
+      console.log(argUrl)
+    })
   }
 
   render() {
     return(
       <div>
-        <h1>{this.props.fuga}</h1>
-        <input ref="changeFuga" type="number" value={this.props.fuga} onChange={(e)=> this.props.onChangeFuga(e.target.value)} required/>
-        <div>
-          <button onClick={ () => this.props.clickIncrement() }>増加</button>
-          <button onClick={ () => this.props.clickDecrement() }>減算</button>
+        <Header addBoard={this.props.addBoard}/>
+        <div id="post-form" className="form-group">
+          <textarea className="form-control" rows="3"/>
         </div>
+        <Footer/>
       </div>
     )
   }

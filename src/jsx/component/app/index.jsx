@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
-import App from 'jsx/container/app'
+import AppContainer from 'jsx/container/app'
 import css from 'scss/app'
 
 import reducer from 'jsx/component/app/reducer'
 
-let store = createStore(reducer)
+const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <AppContainer />
   </Provider>,
   document.getElementById('container')
 )

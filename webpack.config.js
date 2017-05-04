@@ -26,7 +26,6 @@ module.exports = {
     '2ch-parser',
     'electron',
     'electron-json-storage',
-    'electron-load-devtool',
     'ipc'
   ],
   plugins: [

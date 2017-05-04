@@ -1,3 +1,68 @@
+input{
+  border-radius: 3px;
+  border: none;
+}
+
+.flex-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
 body#app{
   background: #efefef;
+  header{
+    padding: 3px;
+    .flex-container{
+      .flex-header-btns{
+        order: 1;
+        flex-grow: 1;
+        display: -webkit-inline-box;
+        margin-right: 3px;
+      }
+      .flex-header-url{
+        order: 2;
+        flex-grow: 300;
+        input{
+          width: 100%;
+        }
+      }
+    }
+  }
+  // 書き込み欄
+  #post-form{
+    position: fixed;
+    width: 100%;
+    bottom: 3px;
+    textarea{
+      width: 100%;
+      padding: 0px;
+    }
+  }
+  footer{
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    .flex-container{
+      // 最終更新時間
+      .flex-item.last-update{
+        order: 1;
+        flex-grow: 1;
+      }
+      // スレッド名
+      .flex-item.thread-title{
+        order: 2;
+        flex-grow: 3;
+        text-align: right;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+/* photonKit override */
+.btn-group{
+  display: -webkit-inline-box;
 }
