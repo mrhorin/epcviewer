@@ -16,9 +16,7 @@
     "moment": "^2.18.1",
     "photon": "https://github.com/connors/photon",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "react-redux": "^5.0.4",
-    "redux": "^3.6.0"
+    "react-dom": "^15.5.4"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

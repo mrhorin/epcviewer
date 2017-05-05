@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Post from 'jsx/component/app/post'
+
 export default class PostBox extends React.Component {
 
   constructor(props) {
@@ -8,8 +10,8 @@ export default class PostBox extends React.Component {
 
   render() {
     var posts = []
-    if (this.props.state.boards.size > 0) {
-      posts = this.props.state.boards.get(this.props.state.currentBoard).threads[this.props.state.currentThread].posts.map((post, index) => {
+    if (this.props.state.boards.length > 0 && this.props.posts.length > 0) {
+      posts = this.props.posts.map((post, index) => {
         return <Post key={index} post={post} />
       })
     }

@@ -43,6 +43,7 @@ header{
 }
 
 .list{
+  overflow: scroll;
   height: 100%;
   padding-bottom: 85px;
   padding-top: 30px;
@@ -60,6 +61,33 @@ header{
   }
   .thread:nth-child(even){
     background: #f4f0ff;
+  }
+}
+
+#post-box{
+  .post{
+    padding: 5px 10px;
+    .post-header{
+      .post-no{
+        width: 20px;
+        display: inline-block;
+        text-align: left
+      }
+      .post-name{
+        color: #008800;
+        font-weight: bold;
+        margin-right: 2px;
+      }
+      .post-mail{
+        margin-right: 5px
+      }
+      .post-date{
+        margin-right: 5px;
+      }
+    }
+    .post-body{
+      padding-left: 20px;
+    }
   }
 }
 

@@ -4,12 +4,9 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props)
-    this.getListModeUrl = this.getListModeUrl.bind(this)
     this.switchThreadsList = this.switchThreadsList.bind(this)
     this.switchPostsList = this.switchPostsList.bind(this)
     this.switchList = this.switchList.bind(this)
-    this.onChangeUrl = this.onChangeUrl.bind(this)
-    this.state = { url: this.getListModeUrl(this.props.state.listMode) }
   }
 
   // 一覧が表示されているか
@@ -17,29 +14,18 @@ export default class Header extends React.Component {
     return window.outerHeight > 130
   }
 
-  // 引数のリストモードのURLを取得  
-  getListModeUrl(listMode) {
-    let url = ""
-    if (listMode == "THREADS" && this.props.state.boards.size > 0) {
-      url = this.props.state.boards.get(this.props.state.currentBoard).url
-    } else if(listMode == "POSTS" && this.props.state.boards.size > 0) {
-      url = this.props.state.boards.get(this.props.state.currentBoard).threads[this.props.state.currentThread].url
-    }
-    return url
-  }
-
   // スレッド一覧表示切り替え
   switchThreadsList() {
-    this.props.state.setListMode("THREADS")
-    this.setState({ url: this.getListModeUrl("THREADS") })
+    this.props.setListMode("THREADS")
+    this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))
     if (this.isListShown && this.props.state.listMode != "THREADS") return
     this.switchList()
   }
 
   // 書き込み一覧表示切り替え
   switchPostsList() {
-    this.props.state.setListMode("POSTS")
-    this.setState({ url: this.getListModeUrl("POSTS") })
+    this.props.setListMode("POSTS")
+    this.props.setCurrentUrl(this.props.getCurrentUrl("POSTS"))
     if (this.isListShown && this.props.state.listMode != "POSTS") return
     this.switchList()
   }
@@ -51,10 +37,6 @@ export default class Header extends React.Component {
     } else {
       window.resizeTo(window.outerWidth, 600)
     }
-  }
-
-  onChangeUrl(event) {
-    this.setState({ url: event.target.value })
   }
 
   render() {
@@ -79,7 +61,7 @@ export default class Header extends React.Component {
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">
-            <input type="text" value={this.state.url} onChange={this.onChangeUrl}/>
+            <input type="text" value={this.props.state.currentUrl} onChange={e=>{ this.props.setCurrentUrl(e.target.value) }}/>
           </div>
         </div>
       </header>
