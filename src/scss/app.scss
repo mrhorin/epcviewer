@@ -1,6 +1,7 @@
 input{
   border-radius: 3px;
-  border: none;
+  border: 1px solid #ccc;
+  height: 22px;
 }
 
 .flex-container{
@@ -10,54 +11,87 @@ input{
 }
 
 body#app{
+  height: 100%;
   background: #efefef;
-  header{
-    padding: 3px;
-    .flex-container{
-      .flex-header-btns{
-        order: 1;
-        flex-grow: 1;
-        display: -webkit-inline-box;
-        margin-right: 3px;
-      }
-      .flex-header-url{
-        order: 2;
-        flex-grow: 300;
-        input{
-          width: 100%;
-        }
+}
+
+#container,
+#container>div{
+  height: 100%;
+}
+
+header{
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  padding: 3px;
+  .flex-container{
+    .flex-header-btns{
+      order: 1;
+      flex-grow: 1;
+      display: -webkit-inline-box;
+      margin-right: 3px;
+    }
+    .flex-header-url{
+      order: 2;
+      flex-grow: 300;
+      input{
+        width: 100%;
       }
     }
   }
-  // 書き込み欄
-  #post-form{
-    position: fixed;
-    width: 100%;
-    bottom: 3px;
-    textarea{
-      width: 100%;
-      padding: 0px;
-    }
+}
+
+.list{
+  height: 100%;
+  padding-bottom: 85px;
+  padding-top: 30px;
+}
+
+#thread-box{
+  background: #fff;
+  .thread{
+    padding: 1px 10px;
   }
-  footer{
-    position: fixed;
-    bottom: 0px;
+  .thread:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3f9aff;
+  }
+  .thread:nth-child(even){
+    background: #f4f0ff;
+  }
+}
+
+// 書き込み欄
+#post-form{
+  position: fixed;
+  width: 100%;
+  bottom: 3px;
+  textarea{
     width: 100%;
-    .flex-container{
-      // 最終更新時間
-      .flex-item.last-update{
-        order: 1;
-        flex-grow: 1;
-      }
-      // スレッド名
-      .flex-item.thread-title{
-        order: 2;
-        flex-grow: 3;
-        text-align: right;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
+    padding: 0px;
+  }
+}
+
+footer{
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  .flex-container{
+    // 最終更新時間
+    .flex-item.last-update{
+      order: 1;
+      flex-grow: 1;
+    }
+    // スレッド名
+    .flex-item.thread-title{
+      order: 2;
+      flex-grow: 3;
+      text-align: right;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 }

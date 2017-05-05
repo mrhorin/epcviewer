@@ -2,17 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import App from 'jsx/component/app/app'
-import { increment, decrement, change, addBoard } from 'jsx/action/app'
+import { addBoard, setListMode } from 'jsx/action/app'
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
-    boards: state.get('boards')
+    boards: state.get('boards'),
+    currentBoard: state.get('currentBoard'),
+    currentThread: state.get('currentThread'),
+    listMode: state.get('listMode')
   }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
-    addBoard: (url)=>{ dispatch(addBoard(url)) }
+    addBoard: (url) => { dispatch(addBoard(url)) },
+    setListMode: (type) => { dispatch(setListMode(type)) }
   }
 }
 

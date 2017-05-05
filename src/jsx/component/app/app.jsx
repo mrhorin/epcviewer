@@ -1,33 +1,46 @@
 import React from 'react'
-import {ipcRenderer} from 'electron'
+import { ipcRenderer } from 'electron'
 
 import Header from 'jsx/component/app/header'
+import ThreadBox from 'jsx/component/app/thread_box'
+import PostBox from 'jsx/component/app/post_box'
 import Footer from 'jsx/component/app/footer'
 
 // アプリケーションのメインウィンドウ
 export default class App extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.bindEvents = this.bindEvents.bind(this)
     this.bindEvents()
-    ipcRenderer.send('arg-url')
+    ipcRenderer.send('add-arg-board')
   }
 
-  bindEvents(){
-    ipcRenderer.on('arg-url-reply', (event, argUrl)=>{
-      console.log(argUrl)
+  bindEvents() {
+    ipcRenderer.on('add-board-reply', (event, board) => {
+      this.props.addBoard(board)
+    })
+    ipcRenderer.on('fetch-posts-reply', (event, posts) => {
+      console.log(posts)
     })
   }
 
   render() {
-    return(
+    {/*一覧*/ }
+    var compornents = {
+      "THREADS": <ThreadBox state={this.props} />,
+      "POSTS": <PostBox state={this.props} />
+    }
+
+    return (
       <div>
-        <Header addBoard={this.props.addBoard}/>
+        <Header state={this.props} />
+        {compornents[this.props.listMode]}
+        {/*書き込み欄*/}
         <div id="post-form" className="form-group">
-          <textarea className="form-control" rows="3"/>
+          <textarea className="form-control" rows="3" />
         </div>
-        <Footer/>
+        <Footer />
       </div>
     )
   }
