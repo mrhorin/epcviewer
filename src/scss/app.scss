@@ -1,30 +1,19 @@
-input{
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  height: 22px;
-}
-
-.flex-container{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
 body#app{
-  height: 100%;
   background: #efefef;
 }
 
-#container,
 #container>div{
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 header{
-  position: fixed;
-  top: 0px;
+  order: 1;
   width: 100%;
   padding: 3px;
+  min-height: 28px !important;
   .flex-container{
     .flex-header-btns{
       order: 1;
@@ -42,69 +31,33 @@ header{
   }
 }
 
+/* ---------- 一覧 ---------- */
 .list{
-  overflow: scroll;
-  height: 100%;
-  padding-bottom: 85px;
-  padding-top: 30px;
-}
-
-#thread-box{
-  background: #fff;
-  .thread{
-    padding: 1px 10px;
-  }
-  .thread:hover{
-    cursor: pointer;
-    text-decoration: underline;
-    color: #3f9aff;
-  }
-  .thread:nth-child(even){
-    background: #f4f0ff;
-  }
-}
-
-#post-box{
-  .post{
-    padding: 5px 10px;
-    .post-header{
-      .post-no{
-        width: 20px;
-        display: inline-block;
-        text-align: left
-      }
-      .post-name{
-        color: #008800;
-        font-weight: bold;
-        margin-right: 2px;
-      }
-      .post-mail{
-        margin-right: 5px
-      }
-      .post-date{
-        margin-right: 5px;
-      }
-    }
-    .post-body{
-      padding-left: 20px;
-    }
-  }
-}
-
-// 書き込み欄
-#post-form{
-  position: fixed;
+  order: 2;
   width: 100%;
-  bottom: 3px;
+  height: 100%;
+  overflow: scroll;
+}
+
+/* -------- 書き込み欄 -------- */
+#post-form{
+  order: 3;
+  width: 100%;
+  margin: 0px;
+  margin-bottom: -7px;
   textarea{
     width: 100%;
     padding: 0px;
+    border-radius: 0px;
+  }
+  textarea:focus{
+    border-color: #ddd !important;
+    box-shadow: none !important;
   }
 }
 
 footer{
-  position: fixed;
-  bottom: 0px;
+  order: 4;
   width: 100%;
   .flex-container{
     // 最終更新時間
@@ -121,6 +74,78 @@ footer{
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+  }
+}
+
+input{
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  height: 22px;
+}
+
+.flex-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+/* -------- スレッド一覧 -------- */
+#thread-box{
+  background: #fff;
+  .thread{
+    padding: 1px 10px;
+  }
+  .thread:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3f9aff;
+  }
+  .thread:nth-child(even){
+    background: #f4f0ff;
+  }
+}
+
+/* -------- 書き込み一覧 -------- */
+#post-box{
+  .post{
+    padding: 5px 10px;
+    .post-header{
+      display: block;
+      word-break: break-all;
+      .post-no{
+        display: inline;
+        margin-right: 3px;
+        text-align: left;
+      }
+      .post-no::after{
+        content: ":";
+        margin-right: 3px;
+      }
+      .post-name{
+        display: inline;
+        color: #008800;
+        font-weight: bold;
+        margin-right: 3px;
+      }
+      .post-mail{
+        display: inline;
+        margin-right: 5px;
+      }
+      .post-date{
+        display: inline;
+        margin-right: 5px;
+      }
+      .post-id{
+        display: inline;
+      }
+    }
+    .post-body{
+      padding-left: 30px;
+      word-wrap: break-word;
+    }
+  }
+  .post:last-child{
+    padding-bottom: 25px;
   }
 }
 

@@ -10,7 +10,7 @@ export default class Thread extends React.Component {
 
   // 書き込み一覧を取得  
   fetchPosts() {
-    ipcRenderer.send('fetch-posts', this.props.thread.url)
+    ipcRenderer.send('set-posts', this.props.thread.url)
   }
 
   render() {

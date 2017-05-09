@@ -54,8 +54,8 @@ export default class App extends React.Component {
       this.setState({ currentUrl: this.currentUrl })
       this.addBoard(board)
     })
-    ipcRenderer.on('fetch-posts-reply', (event, posts) => {
-      this.addPosts(posts)
+    ipcRenderer.on('set-posts-reply', (event, posts) => {
+      this.setPosts(posts)
     })
   }
 
@@ -68,6 +68,13 @@ export default class App extends React.Component {
       posts: this.state.posts.concat(posts),
       listMode: "POSTS"
     })
+  }
+
+  setPosts(posts) {
+    this.setState({
+      posts: posts,
+      listMode: "POSTS"
+    })    
   }
 
   setListMode(listMode) {

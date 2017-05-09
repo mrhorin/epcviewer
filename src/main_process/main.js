@@ -64,9 +64,9 @@ ipcMain.on('add-arg-board', (event)=>{
   })
 })
 
-ipcMain.on('fetch-posts', (event, threadUrl) => {
+ipcMain.on('set-posts', (event, threadUrl) => {
   var thread = new Thread(threadUrl)
   thread.fetchAllPosts((res) => {
-    event.sender.send('fetch-posts-reply', res.body)
+    event.sender.send('set-posts-reply', res.body)
   })
 })
