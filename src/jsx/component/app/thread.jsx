@@ -5,17 +5,17 @@ export default class Thread extends React.Component {
 
   constructor(props) {
     super(props)
-    this.fetchPosts = this.fetchPosts.bind(this)
+    this.addThread = this.addThread.bind(this)
   }
 
-  // 書き込み一覧を取得  
-  fetchPosts() {
-    ipcRenderer.send('set-posts', this.props.thread.url)
+  // スレッドを追加 
+  addThread() {
+    ipcRenderer.send('add-thread', this.props.thread.url)
   }
 
   render() {
     return (
-      <div className="thread" onClick={this.fetchPosts}>
+      <div className="thread" onClick={this.addThread}>
         {this.props.thread.title}
       </div>
     )

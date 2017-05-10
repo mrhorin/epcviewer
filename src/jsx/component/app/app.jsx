@@ -11,17 +11,17 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props)
-    this.getCurrentUrl = this.getCurrentUrl.bind(this)
     this.bindEvents = this.bindEvents.bind(this)
     this.addBoard = this.addBoard.bind(this)
-    this.addPosts = this.addPosts.bind(this)
-    this.setListMode = this.setListMode.bind(this)
+    this.addThread = this.addThread.bind(this)
+    this.getCurrentUrl = this.getCurrentUrl.bind(this)
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
+    this.setListMode = this.setListMode.bind(this)
     this.state = {
       boards: [],
-      posts: [],
-      currentBoard: 0,
-      currentThread: 0,
+      threads: [],
+      currentBoardIndex: 0,
+      currentThreadIndex: 0,
       currentUrl: "",
       listMode: "THREADS"
     }
@@ -29,69 +29,68 @@ export default class App extends React.Component {
     ipcRenderer.send('add-arg-board')
   }
 
-  get currentUrl() {
-    let url = ""
-    if (this.state.listMode == "THREADS" && this.state.boards.length > 0) {
-      url = this.state.boards[this.state.currentBoard].url
-    } else if(this.state.listMode == "POSTS" && this.state.boards.length > 0) {
-      url = this.state.boards[this.state.currentBoard].threads[this.state.currentThread].url
-    }
-    return url    
-  }
-
-  getCurrentUrl(listMode) {
-    let url = ""
-    if (listMode == "THREADS" && this.state.boards.length > 0) {
-      url = this.state.boards[this.state.currentBoard].url
-    } else if(listMode == "POSTS" && this.state.boards.length > 0) {
-      url = this.state.boards[this.state.currentBoard].threads[this.state.currentThread].url
-    }
-    return url    
-  }
-
   bindEvents() {
     ipcRenderer.on('add-board-reply', (event, board) => {
-      this.setState({ currentUrl: this.currentUrl })
       this.addBoard(board)
     })
-    ipcRenderer.on('set-posts-reply', (event, posts) => {
-      this.setPosts(posts)
+    ipcRenderer.on('add-thread-reply', (event, thread) => {
+      this.addThread(thread)
     })
   }
 
   addBoard(board) {
-    this.setState({ boards: this.state.boards.concat(board) })
+    this.setState({
+      boards: this.state.boards.concat(board),
+      currentUrl: board.url,
+      currentBoardIndex: this.state.boards.length,
+      listMode: "THREADS"
+    })
   }
 
-  addPosts(posts) {
+  addThread(thread) {
     this.setState({
-      posts: this.state.posts.concat(posts),
+      threads: this.state.threads.concat(thread),
+      currentUrl: thread.url,
+      currentThreadIndex: this.state.threads.length,
       listMode: "POSTS"
     })
   }
 
-  setPosts(posts) {
-    this.setState({
-      posts: posts,
-      listMode: "POSTS"
-    })    
+  // 現在のスレッドを取得
+  get currentThread() {
+    if (this.state.threads.length > 0) {
+      return this.state.threads[this.state.currentThreadIndex]
+    } else {
+      return { name: "", url: "", posts: [] }
+    }
   }
 
-  setListMode(listMode) {
-    this.setState({ listMode: listMode })
+  // 指定したリストモードの現在のURLを取得  
+  getCurrentUrl(listMode) {
+    let url = ""
+    if (listMode == "THREADS" && this.state.boards.length > 0) {
+      url = this.state.boards[this.state.currentBoardIndex].url
+    } else if(listMode == "POSTS" && this.state.boards.length > 0) {
+      url = this.state.boards[this.state.currentBoardIndex].threads[this.state.currentThreadIndex].url
+    }
+    return url    
   }
 
   setCurrentUrl(url) {
     this.setState({ currentUrl: url })
   }
 
+  setListMode(listMode) {
+    this.setState({ listMode: listMode })
+  }
+
   render() {
     {/*一覧*/ }
     var compornents = {
       "THREADS": <ThreadBox state={this.state} />,
-      "POSTS": <PostBox state={this.state} posts={this.state.posts} />
+      "POSTS": <PostBox state={this.state} posts={this.currentThread.posts} />
     }
-
+    console.log(this.currentThreadPosts)
     return (
       <div>
         <Header state={this.state}

@@ -11,7 +11,7 @@ export default class ThreadBox extends React.Component {
   render() {
     var threads = []
     if (this.props.state.boards.length > 0) {
-      threads = this.props.state.boards[this.props.state.currentBoard].threads.map((thread, index) => {
+      threads = this.props.state.boards[this.props.state.currentBoardIndex].threads.map((thread, index) => {
         return <Thread key={index} thread={thread} />
       })
     }

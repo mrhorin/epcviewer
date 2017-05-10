@@ -57,16 +57,13 @@ ipcMain.on('add-board', (event, url)=>{
 ipcMain.on('add-arg-board', (event)=>{
   var board = new Board(argUrl)
   board.fetchThreads((res)=>{
-    event.sender.send('add-board-reply', {
-      url: board.url,
-      threads: res.body
-    })
+    event.sender.send('add-board-reply', board)
   })
 })
 
-ipcMain.on('set-posts', (event, threadUrl) => {
+ipcMain.on('add-thread', (event, threadUrl) => {
   var thread = new Thread(threadUrl)
   thread.fetchAllPosts((res) => {
-    event.sender.send('set-posts-reply', res.body)
+    event.sender.send('add-thread-reply', thread)
   })
 })
