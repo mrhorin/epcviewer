@@ -4,8 +4,8 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props)
+    this.switchBoardsList = this.switchBoardsList.bind(this)
     this.switchThreadsList = this.switchThreadsList.bind(this)
-    this.switchPostsList = this.switchPostsList.bind(this)
     this.switchList = this.switchList.bind(this)
   }
 
@@ -14,19 +14,19 @@ export default class Header extends React.Component {
     return window.outerHeight > 130
   }
 
-  // スレッド一覧表示切り替え
+  // 掲示板一覧に表示切り替え
+  switchBoardsList() {
+    this.props.setListMode("BOARDS")
+    this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS"))
+    if (this.isListShown && this.props.state.listMode != "BOARDS") return
+    this.switchList()
+  }
+
+  // スレッド一覧に表示切り替え
   switchThreadsList() {
     this.props.setListMode("THREADS")
     this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))
     if (this.isListShown && this.props.state.listMode != "THREADS") return
-    this.switchList()
-  }
-
-  // 書き込み一覧表示切り替え
-  switchPostsList() {
-    this.props.setListMode("POSTS")
-    this.props.setCurrentUrl(this.props.getCurrentUrl("POSTS"))
-    if (this.isListShown && this.props.state.listMode != "POSTS") return
     this.switchList()
   }
 
@@ -49,12 +49,12 @@ export default class Header extends React.Component {
               <button className="btn btn-default btn-mini">
                 <span className="icon icon-arrows-ccw"></span>
               </button>
-              {/*スレッド一覧*/}
-              <button className="btn btn-default btn-mini" onClick={this.switchThreadsList}>
+              {/*掲示板一覧*/}
+              <button className="btn btn-default btn-mini" onClick={this.switchBoardsList}>
                 <span className="icon icon-menu"></span>
               </button>
-              {/*書き込み一覧*/}
-              <button className="btn btn-default btn-mini" onClick={this.switchPostsList}>
+              {/*スレッド一覧*/}
+              <button className="btn btn-default btn-mini" onClick={this.switchThreadsList}>
                 <span className="icon icon-window"></span>
               </button>
             </div>

@@ -1,7 +1,8 @@
 import React from 'react'
 
-import Thread from 'jsx/component/app/thread'
+import Post from 'jsx/component/app/post'
 
+/* スレッド一覧 */
 export default class ThreadBox extends React.Component {
 
   constructor(props) {
@@ -9,17 +10,23 @@ export default class ThreadBox extends React.Component {
   }
 
   render() {
-    var threads = []
-    if (this.props.state.boards.length > 0) {
-      threads = this.props.state.boards[this.props.state.currentBoardIndex].threads.map((thread, index) => {
-        return <Thread key={index} thread={thread} />
+    var posts = []
+    if (this.props.state.boards.length > 0 && this.props.posts.length > 0) {
+      posts = this.props.posts.map((post, index) => {
+        return <Post key={index} post={post} />
       })
     }
 
     return (
-      <div className="list" id="thread-box">
-        {threads}
-      </div>
+      <div id="thread-box">
+        {/*スレッドタブ*/}
+        <div id="thread-tab-box">
+        </div>
+        {/*書き込み一覧*/}
+        <div id="post-box">
+          {posts}
+        </div>
+      </div>      
     )
   }
 

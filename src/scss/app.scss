@@ -1,5 +1,13 @@
-body#app{
-  background: #efefef;
+input{
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  height: 22px;
+}
+
+.flex-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 #container>div{
@@ -9,6 +17,7 @@ body#app{
   height: 100vh;
 }
 
+/* -------- ヘッダー -------- */
 header{
   order: 1;
   width: 100%;
@@ -31,67 +40,20 @@ header{
   }
 }
 
-/* ---------- 一覧 ---------- */
-.list{
+#board-box,
+#thread-box{
   order: 2;
   width: 100%;
   height: 100%;
   overflow: scroll;
 }
 
-/* -------- 書き込み欄 -------- */
-#post-form{
-  order: 3;
-  width: 100%;
-  margin: 0px;
-  margin-bottom: -7px;
-  textarea{
-    width: 100%;
-    padding: 0px;
-    border-radius: 0px;
-  }
-  textarea:focus{
-    border-color: #ddd !important;
-    box-shadow: none !important;
-  }
-}
-
-footer{
-  order: 4;
-  width: 100%;
-  .flex-container{
-    // 最終更新時間
-    .flex-item.last-update{
-      order: 1;
-      flex-grow: 1;
-    }
-    // スレッド名
-    .flex-item.thread-title{
-      order: 2;
-      flex-grow: 3;
-      text-align: right;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-}
-
-input{
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  height: 22px;
-}
-
-.flex-container{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
-/* -------- スレッド一覧 -------- */
-#thread-box{
+/* ---------- 板一覧 ---------- */
+#board-box{
   background: #fff;
+}
+/* スレッド名一覧 */
+#subject-box{
   .thread{
     padding: 1px 10px;
   }
@@ -105,7 +67,11 @@ input{
   }
 }
 
-/* -------- 書き込み一覧 -------- */
+/* ------- スレッド一覧 ------- */
+#thread-box{
+  background: #efefef;
+}
+/* 書き込み一覧 */
 #post-box{
   .post{
     padding: 5px 10px;
@@ -146,6 +112,45 @@ input{
   }
   .post:last-child{
     padding-bottom: 25px;
+  }
+}
+
+/* -------- 書き込み欄 -------- */
+#post-form{
+  order: 3;
+  width: 100%;
+  margin: 0px;
+  margin-bottom: -7px;
+  textarea{
+    width: 100%;
+    padding: 0px;
+    border-radius: 0px;
+  }
+  textarea:focus{
+    border-color: #ddd !important;
+    box-shadow: none !important;
+  }
+}
+
+/* -------- フッター -------- */
+footer{
+  order: 4;
+  width: 100%;
+  .flex-container{
+    /* 最終更新時間 */
+    .flex-item.last-update{
+      order: 1;
+      flex-grow: 1;
+    }
+    /* スレッド名 */
+    .flex-item.thread-title{
+      order: 2;
+      flex-grow: 3;
+      text-align: right;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 }
 

@@ -2,11 +2,11 @@ import React from 'react'
 import { ipcRenderer } from 'electron'
 
 import Header from 'jsx/component/app/header'
+import BoardBox from 'jsx/component/app/board_box'
 import ThreadBox from 'jsx/component/app/thread_box'
-import PostBox from 'jsx/component/app/post_box'
 import Footer from 'jsx/component/app/footer'
 
-// アプリケーションのメインウィンドウ
+/* アプリケーションのメインウィンドウ */
 export default class App extends React.Component {
 
   constructor(props) {
@@ -23,10 +23,8 @@ export default class App extends React.Component {
       currentBoardIndex: 0,
       currentThreadIndex: 0,
       currentUrl: "",
-      listMode: "THREADS"
+      listMode: "BOARDS"
     }
-    this.bindEvents()
-    ipcRenderer.send('add-arg-board')
   }
 
   bindEvents() {
@@ -43,7 +41,7 @@ export default class App extends React.Component {
       boards: this.state.boards.concat(board),
       currentUrl: board.url,
       currentBoardIndex: this.state.boards.length,
-      listMode: "THREADS"
+      listMode: "BOARDS"
     })
   }
 
@@ -52,7 +50,7 @@ export default class App extends React.Component {
       threads: this.state.threads.concat(thread),
       currentUrl: thread.url,
       currentThreadIndex: this.state.threads.length,
-      listMode: "POSTS"
+      listMode: "THREADS"
     })
   }
 
@@ -68,9 +66,9 @@ export default class App extends React.Component {
   // 指定したリストモードの現在のURLを取得  
   getCurrentUrl(listMode) {
     let url = ""
-    if (listMode == "THREADS" && this.state.boards.length > 0) {
+    if (listMode == "BOARDS" && this.state.boards.length > 0) {
       url = this.state.boards[this.state.currentBoardIndex].url
-    } else if(listMode == "POSTS" && this.state.boards.length > 0) {
+    } else if(listMode == "THREADS" && this.state.boards.length > 0) {
       url = this.state.boards[this.state.currentBoardIndex].threads[this.state.currentThreadIndex].url
     }
     return url    
@@ -84,20 +82,24 @@ export default class App extends React.Component {
     this.setState({ listMode: listMode })
   }
 
+  componentDidMount() {
+    this.bindEvents()
+    ipcRenderer.send('add-arg-board')
+  }
+
   render() {
-    {/*一覧*/ }
-    var compornents = {
-      "THREADS": <ThreadBox state={this.state} />,
-      "POSTS": <PostBox state={this.state} posts={this.currentThread.posts} />
+    var components = {
+      "BOARDS": <BoardBox state={this.state} />,
+      "THREADS": <ThreadBox state={this.state} posts={this.currentThread.posts} />
     }
-    console.log(this.currentThreadPosts)
+
     return (
       <div>
         <Header state={this.state}
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl} />
-        {compornents[this.state.listMode]}
+        {components[this.state.listMode]}
         {/*書き込み欄*/}
         <div id="post-form" className="form-group">
           <textarea className="form-control" rows="3" />
