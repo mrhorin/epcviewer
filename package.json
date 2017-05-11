@@ -5,19 +5,19 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w",
-    "start": "electron ./dist/main.js http://jbbs.shitaraba.net/internet/22724/",
+    "start": "electron ./dist/main.js",
     "list": "npm list --depth=0"
   },
   "license": "MIT",
   "dependencies": {
-    "2ch-parser": "^0.0.7",
+    "2ch-parser": "^0.0.10",
     "electron-json-storage": "^3.0.5",
-    "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "photon": "https://github.com/connors/photon",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "superagent": "^3.5.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

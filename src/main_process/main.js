@@ -1,10 +1,10 @@
 import {app, BrowserWindow, ipcMain} from 'electron'
-import {Board, Thread} from '2ch-parser'
+import {Board, Thread, UrlParser} from '2ch-parser'
 
 var window = { app: null }
 
 // 引数URL
-const argUrl = global.process.argv[2] ? global.process.argv[2] : ""
+const argUrl = global.process.argv[2] ? UrlParser.getBoardUrl(global.process.argv[2]) : ""
 
 /*-----------------------------------------
   アプリケーション起動準備完了時
