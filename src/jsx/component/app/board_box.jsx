@@ -13,7 +13,7 @@ export default class BoardBox extends React.Component {
     var subjects = []
     if (this.props.state.boards.length > 0) {
       subjects = this.props.state.boards[this.props.state.currentBoardIndex].threads.map((subject, index) => {
-        return <Subject key={index} thread={subject} />
+        return <Subject key={index} thread={subject} threads={this.props.state.threads}/>
       })
     }
 

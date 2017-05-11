@@ -37,6 +37,16 @@ export default class App extends React.Component {
     ipcRenderer.on('add-thread-reply', (event, thread) => {
       this.addThread(thread)
     })
+    ipcRenderer.on('show-thread-reply', (event, threadUrl) => {
+      let index = _.findIndex(this.state.threads, { url: threadUrl })
+      if (index >= 0) {
+        this.setState({
+          currentUrl: threadUrl,
+          currentThreadIndex: index,
+          listMode: "THREADS"
+        })        
+      }
+    })
   }
 
   addBoard(board) {
