@@ -7,6 +7,17 @@ export default class ThreadBox extends React.Component {
 
   constructor(props) {
     super(props)
+    this.scrollBottom = this.scrollBottom.bind(this)
+  }
+
+  // 書き込み一覧の一番下までスクロール  
+  scrollBottom() {
+    this.postBox.scrollIntoView(false)
+  }
+
+  componentDidMount() {
+    this.postBox = window.document.getElementById("post-box")
+    this.scrollBottom()
   }
 
   render() {
