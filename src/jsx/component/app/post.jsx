@@ -7,6 +7,9 @@ export default class Post extends React.Component {
   }
 
   render() {
+    // IDがある場合は ID: を付加する
+    if(this.props.post.id) this.props.post.id = "ID:"+this.props.post.id
+
     return (
       <div className="post">
         <div className="post-header">
@@ -14,7 +17,7 @@ export default class Post extends React.Component {
           <span className="post-name">{this.props.post.name}</span>
           <span className="post-mail">[{this.props.post.mail}]</span>
           <span className="post-date">{this.props.post.date}</span>
-          <span className="post-id">ID:{this.props.post.id}</span>
+          <span className="post-id">{this.props.post.id}</span>
         </div>
         <div className="post-body">
           {this.props.post.body}
