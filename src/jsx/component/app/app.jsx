@@ -40,6 +40,7 @@ export default class App extends React.Component {
     this.getCurrentUrl = this.getCurrentUrl.bind(this)
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
     this.setListMode = this.setListMode.bind(this)
+    this.fetchCurrentBoard = this.fetchCurrentBoard.bind(this)
     this.fetchCurrentThread = this.fetchCurrentThread.bind(this)
     this.startUpdateTimer = this.startUpdateTimer.bind(this)
     this.stopUpdateTimer = this.stopUpdateTimer.bind(this)
@@ -78,6 +79,14 @@ export default class App extends React.Component {
         let threads = this.state.threads
         threads[index] = thread
         this.setState({ threads: threads })
+      }
+    })
+    ipcRenderer.on('update-board-reply', (event, board) => {
+      let index = _.findIndex(this.state.boards, { url: board.url })
+      if (index >= 0) {
+        let boards = this.state.boards
+        boards[index] = board
+        this.setState({ boards: boards })
       }
     })
   }
@@ -161,6 +170,10 @@ export default class App extends React.Component {
     this.setState({ listMode: listMode })
   }
 
+  fetchCurrentBoard() {
+    if(this.state.boards.length > 0) ipcRenderer.send('update-board', this.currentBoard)
+  }
+
   // 現在のスレッドの新着レスを取得
   fetchCurrentThread() {
     if (this.state.threads.length > 0 && this.state.updateThreadStatus == "WAIT") {
@@ -203,7 +216,7 @@ export default class App extends React.Component {
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}
-          updateCurrentBoard={this.updateCurrentBoard}
+          fetchCurrentBoard={this.fetchCurrentBoard}
           fetchCurrentThread={this.fetchCurrentThread} />
         {components[this.state.listMode]}
         {/*書き込み欄*/}

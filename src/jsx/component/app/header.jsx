@@ -19,7 +19,7 @@ export default class Header extends React.Component {
   updateList() {
     switch (this.props.state.listMode) {
       case "BOARDS":
-        this.props.updateCurrentBoard()
+        this.props.fetchCurrentBoard()
         break
       case "THREADS":
         this.props.fetchCurrentThread()

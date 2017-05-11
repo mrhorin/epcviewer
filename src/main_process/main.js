@@ -84,3 +84,11 @@ ipcMain.on('update-thread', (event, thread) => {
     event.sender.send('update-thread-reply', newThread)
   })
 })
+
+// ------- board更新して返す -------
+ipcMain.on('update-board', (event, board) => {
+  var newBoard = new Board(board.url)
+  newBoard.fetchThreads((res) => {
+    event.sender.send('update-board-reply', newBoard)
+  })
+})
