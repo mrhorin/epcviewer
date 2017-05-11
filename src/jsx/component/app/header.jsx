@@ -22,7 +22,7 @@ export default class Header extends React.Component {
         this.props.updateCurrentBoard()
         break
       case "THREADS":
-        this.props.updateCurrentThread()
+        this.props.fetchCurrentThread()
         break
       default:
         console.log("default")

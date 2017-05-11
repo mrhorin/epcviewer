@@ -1,3 +1,25 @@
+/*******************************************************
+state
+  boards: Board[]
+    追加済み板一覧を格納
+    Boardオブジェクトは2ch-parserを参照
+  threads: Thread[]
+    追加済みスレッド一覧を格納
+    Threadオブジェクトは2ch-parserを参照
+  currentBoardIndex: int
+    boards内で現在開いている板のindex
+  currentThreadIndex: int
+    threads内で現在開いているスレッドのindex
+  currentUrl: string
+    現在のURL欄の値を
+  listMode: string
+    現在開いている画面が板一覧かスレッド一覧かを示す
+    BOARDSは板一覧、THREADSはスレッド一覧
+  updateThreadStatus: string
+    スレッドの更新状態を示す
+    WAITは更新可能
+    UPDATINGは更新中
+********************************************************/
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import _ from 'lodash'
@@ -18,15 +40,17 @@ export default class App extends React.Component {
     this.getCurrentUrl = this.getCurrentUrl.bind(this)
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
     this.setListMode = this.setListMode.bind(this)
-    this.updateCurrentBoard = this.updateCurrentBoard.bind(this)
-    this.updateCurrentThread = this.updateCurrentThread.bind(this)
+    this.fetchCurrentThread = this.fetchCurrentThread.bind(this)
+    this.startUpdateTimer = this.startUpdateTimer.bind(this)
+    this.stopUpdateTimer = this.stopUpdateTimer.bind(this)
     this.state = {
       boards: [],
       threads: [],
       currentBoardIndex: 0,
       currentThreadIndex: 0,
       currentUrl: "",
-      listMode: "BOARDS"
+      listMode: "BOARDS",
+      updateThreadStatus: "WAIT"
     }
   }
 
@@ -48,11 +72,12 @@ export default class App extends React.Component {
       }
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {
+      this.setState({ updateThreadStatus: "WAIT" })
       let index = _.findIndex(this.state.threads, { url: thread.url })
       if (index >= 0) {
         let threads = this.state.threads
         threads[index] = thread
-        this.setState({ threads: threads })        
+        this.setState({ threads: threads })
       }
     })
   }
@@ -136,21 +161,34 @@ export default class App extends React.Component {
     this.setState({ listMode: listMode })
   }
 
-  // 現在の板を更新  
-  updateCurrentBoard() {
-    console.log("BOARD")
+  // 現在のスレッドの新着レスを取得
+  fetchCurrentThread() {
+    if (this.state.threads.length > 0 && this.state.updateThreadStatus == "WAIT") {
+      this.setState({ updateThreadStatus: "UPDATING" })
+      ipcRenderer.send('update-thread', this.currentThread)
+    }
   }
 
-  // 現在のスレッドを更新  
-  updateCurrentThread() {
-    if (this.state.threads.length > 0) {
-      ipcRenderer.send('update-thread', this.currentThread)    
-    }
+  // 自動更新タイマーの開始
+  startUpdateTimer() {
+    this.updateTimerId = setInterval(() => {
+      this.fetchCurrentThread()      
+    }, 7000)
+  }
+
+  // 自動更新タイマーの停止  
+  stopUpdateTimer() {
+    clearTimeout(this.updateTimerId)
   }
 
   componentDidMount() {
     this.bindEvents()
+    this.startUpdateTimer()
     ipcRenderer.send('add-arg-board')
+  }
+
+  componentWillUnmount() {
+    this.stopUpdateTimer()
   }
 
   render() {
@@ -166,7 +204,7 @@ export default class App extends React.Component {
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}
           updateCurrentBoard={this.updateCurrentBoard}
-          updateCurrentThread={this.updateCurrentThread} />
+          fetchCurrentThread={this.fetchCurrentThread} />
         {components[this.state.listMode]}
         {/*書き込み欄*/}
         <div id="post-form" className="form-group">
