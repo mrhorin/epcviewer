@@ -47,6 +47,14 @@ export default class App extends React.Component {
         })        
       }
     })
+    ipcRenderer.on('update-thread-reply', (event, thread) => {
+      let index = _.findIndex(this.state.threads, { url: thread.url })
+      if (index >= 0) {
+        let threads = this.state.threads
+        threads[index] = thread
+        this.setState({ threads: threads })        
+      }
+    })
   }
 
   addBoard(board) {
@@ -135,7 +143,9 @@ export default class App extends React.Component {
 
   // 現在のスレッドを更新  
   updateCurrentThread() {
-    console.log("THREAD")
+    if (this.state.threads.length > 0) {
+      ipcRenderer.send('update-thread', this.currentThread)    
+    }
   }
 
   componentDidMount() {

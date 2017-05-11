@@ -20,6 +20,10 @@ export default class ThreadBox extends React.Component {
     this.scrollBottom()
   }
 
+  componentDidUpdate() {
+    this.scrollBottom()
+  }
+
   render() {
     var posts = []
     if (this.props.state.boards.length > 0 && this.props.posts.length > 0) {

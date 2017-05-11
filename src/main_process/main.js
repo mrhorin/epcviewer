@@ -73,3 +73,14 @@ ipcMain.on('add-thread', (event, threadUrl) => {
 ipcMain.on('show-thread', (event, threadUrl) => {
   event.sender.send('show-thread-reply', threadUrl)
 })
+
+// ------- thread更新して返す -------
+ipcMain.on('update-thread', (event, thread) => {
+  var newThread = new Thread(thread.url)
+  newThread.headers = thread.headers
+  newThread.posts = thread.posts
+  newThread.title = thread.title
+  newThread.fetchNewPosts((res) => {
+    event.sender.send('update-thread-reply', newThread)
+  })
+})
