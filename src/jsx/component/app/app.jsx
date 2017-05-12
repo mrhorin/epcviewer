@@ -34,16 +34,6 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props)
-    this.bindEvents = this.bindEvents.bind(this)
-    this.addBoard = this.addBoard.bind(this)
-    this.addThread = this.addThread.bind(this)
-    this.getCurrentUrl = this.getCurrentUrl.bind(this)
-    this.setCurrentUrl = this.setCurrentUrl.bind(this)
-    this.setListMode = this.setListMode.bind(this)
-    this.fetchCurrentBoard = this.fetchCurrentBoard.bind(this)
-    this.fetchCurrentThread = this.fetchCurrentThread.bind(this)
-    this.startUpdateTimer = this.startUpdateTimer.bind(this)
-    this.stopUpdateTimer = this.stopUpdateTimer.bind(this)
     this.state = {
       boards: [],
       threads: [],
@@ -55,7 +45,7 @@ export default class App extends React.Component {
     }
   }
 
-  bindEvents() {
+  bindEvents = () => {
     ipcRenderer.on('add-board-reply', (event, board) => {
       this.addBoard(board)
     })
@@ -69,7 +59,7 @@ export default class App extends React.Component {
           currentUrl: threadUrl,
           currentThreadIndex: index,
           listMode: "THREADS"
-        })        
+        })
       }
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {
@@ -91,7 +81,7 @@ export default class App extends React.Component {
     })
   }
 
-  addBoard(board) {
+  addBoard = (board) => {
     // state.boards内のboardの位置
     let index = _.findIndex(this.state.boards, { url: board.url })
     if (index >= 0) {
@@ -108,11 +98,11 @@ export default class App extends React.Component {
         currentUrl: board.url,
         currentBoardIndex: this.state.boards.length,
         listMode: "BOARDS"
-      })      
+      })
     }
   }
 
-  addThread(thread) {
+  addThread = (thread) => {
     // state.threads内のthreadの位置
     let index = _.findIndex(this.state.threads, { url: thread.url })
     if (index >= 0) {
@@ -129,7 +119,7 @@ export default class App extends React.Component {
         currentUrl: thread.url,
         currentThreadIndex: this.state.threads.length,
         listMode: "THREADS"
-      })      
+      })
     }
   }
 
@@ -139,7 +129,7 @@ export default class App extends React.Component {
       return this.state.boards[this.state.currentBoardIndex]
     } else {
       return { subjectUrl: "", url: "", threads: [] }
-    }    
+    }
   }
 
   // 現在のスレッドを取得
@@ -147,35 +137,36 @@ export default class App extends React.Component {
     if (this.state.threads.length > 0) {
       return this.state.threads[this.state.currentThreadIndex]
     } else {
-      return { datUrl: "", headers: {},url: "", posts: [], title: "" }
+      return { datUrl: "", headers: {}, url: "", posts: [], title: "" }
     }
   }
 
   // 指定したリストモードの現在のURLを取得  
-  getCurrentUrl(listMode) {
+  getCurrentUrl = (listMode) => {
     let url = ""
     if (listMode == "BOARDS" && this.state.boards.length > 0) {
       url = this.state.boards[this.state.currentBoardIndex].url
-    } else if(listMode == "THREADS" && this.state.boards.length > 0) {
+    } else if (listMode == "THREADS" && this.state.boards.length > 0) {
       url = this.state.boards[this.state.currentBoardIndex].threads[this.state.currentThreadIndex].url
     }
-    return url    
+    return url
   }
 
-  setCurrentUrl(url) {
+  setCurrentUrl = (url) => {
     this.setState({ currentUrl: url })
   }
 
-  setListMode(listMode) {
+  setListMode = (listMode) => {
     this.setState({ listMode: listMode })
   }
 
-  fetchCurrentBoard() {
-    if(this.state.boards.length > 0) ipcRenderer.send('update-board', this.currentBoard)
+  // 現在の板を更新  
+  updateCurrentBoard = () => {
+    if (this.state.boards.length > 0) ipcRenderer.send('update-board', this.currentBoard)
   }
 
-  // 現在のスレッドの新着レスを取得
-  fetchCurrentThread() {
+  // 現在のスレッドを更新
+  updateCurrentThread = () => {
     if (this.state.threads.length > 0 && this.state.updateThreadStatus == "WAIT") {
       this.setState({ updateThreadStatus: "UPDATING" })
       ipcRenderer.send('update-thread', this.currentThread)
@@ -183,15 +174,32 @@ export default class App extends React.Component {
   }
 
   // 自動更新タイマーの開始
-  startUpdateTimer() {
+  startUpdateTimer = () => {
     this.updateTimerId = setInterval(() => {
-      this.fetchCurrentThread()      
+      this.updateCurrentThread()
     }, 7000)
   }
 
   // 自動更新タイマーの停止  
-  stopUpdateTimer() {
+  stopUpdateTimer = () => {
     clearTimeout(this.updateTimerId)
+  }
+
+  // 書き込み欄でkeyDownハンドラ
+  pressPostFormHandler = (event) => {
+    if (event.nativeEvent.key == 'Shift') {
+      // Shift押下状態を保持
+      this.pressShift = true
+    } else if (event.nativeEvent.key == 'Enter' && this.pressShift) {
+      // Shift+Enterで投稿
+      console.log("投稿処理！")
+    }
+  }
+
+  // 書き込み欄でkeyUpハンドラ  
+  releasePostFormHandler = (event) => {
+    // Shift押下状態を解放
+    this.pressShift = false
   }
 
   componentDidMount() {
@@ -216,12 +224,14 @@ export default class App extends React.Component {
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}
-          fetchCurrentBoard={this.fetchCurrentBoard}
-          fetchCurrentThread={this.fetchCurrentThread} />
+          updateCurrentBoard={this.updateCurrentBoard}
+          updateCurrentThread={this.updateCurrentThread} />
         {components[this.state.listMode]}
         {/*書き込み欄*/}
         <div id="post-form" className="form-group">
-          <textarea className="form-control" rows="3" />
+          <textarea className="form-control" rows="3"
+            onKeyDown={this.pressPostFormHandler}
+            onKeyUp={this.releasePostFormHandler} />
         </div>
         <Footer />
       </div>

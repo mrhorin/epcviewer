@@ -6,11 +6,10 @@ export default class Subject extends React.Component {
 
   constructor(props) {
     super(props)
-    this.addThread = this.addThread.bind(this)
   }
 
   // スレッドを追加 
-  addThread() {
+  addThread = () => {
     // 追加済みかスレッドか
     if (_.findIndex(this.props.threads, { url: this.props.thread.url }) >= 0) {
       ipcRenderer.send('show-thread', this.props.thread.url)

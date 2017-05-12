@@ -55,10 +55,12 @@ ipcMain.on('add-board', (event, url) => {
 
 // ------- 引数URLのBoardを返す -------
 ipcMain.on('add-arg-board', (event) => {
-  var board = new Board(argUrl)
-  board.fetchThreads((res)=>{
-    event.sender.send('add-board-reply', board)
-  })
+  if (argUrl) {
+    var board = new Board(argUrl)
+    board.fetchThreads((res)=>{
+      event.sender.send('add-board-reply', board)
+    }) 
+  }
 })
 
 // ------- URLのThreadを返す -------

@@ -4,10 +4,6 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props)
-    this.updateList = this.updateList.bind(this)
-    this.switchBoardsList = this.switchBoardsList.bind(this)
-    this.switchThreadsList = this.switchThreadsList.bind(this)
-    this.switchList = this.switchList.bind(this)
   }
 
   // 一覧が表示されているか
@@ -16,13 +12,13 @@ export default class Header extends React.Component {
   }
 
   // 一覧を更新  
-  updateList() {
+  updateList = () => {
     switch (this.props.state.listMode) {
       case "BOARDS":
-        this.props.fetchCurrentBoard()
+        this.props.updateCurrentBoard()
         break
       case "THREADS":
-        this.props.fetchCurrentThread()
+        this.props.updateCurrentThread()
         break
       default:
         console.log("default")
@@ -30,7 +26,7 @@ export default class Header extends React.Component {
   }
 
   // 掲示板一覧に表示切り替え
-  switchBoardsList() {
+  switchBoardsList = () => {
     this.props.setListMode("BOARDS")
     this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS"))
     if (this.isListShown && this.props.state.listMode != "BOARDS") return
@@ -38,7 +34,7 @@ export default class Header extends React.Component {
   }
 
   // スレッド一覧に表示切り替え
-  switchThreadsList() {
+  switchThreadsList = () => {
     this.props.setListMode("THREADS")
     this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))
     if (this.isListShown && this.props.state.listMode != "THREADS") return
@@ -46,7 +42,7 @@ export default class Header extends React.Component {
   }
 
   // 一覧の表示/非表示を切り替え
-  switchList() {
+  switchList = () => {
     if (this.isListShown) {
       window.resizeTo(window.outerWidth, 130)
     } else {
@@ -76,7 +72,7 @@ export default class Header extends React.Component {
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">
-            <input type="text" value={this.props.state.currentUrl} onChange={e=>{ this.props.setCurrentUrl(e.target.value) }}/>
+            <input type="text" value={this.props.state.currentUrl} onChange={e => { this.props.setCurrentUrl(e.target.value) }} />
           </div>
         </div>
       </header>
