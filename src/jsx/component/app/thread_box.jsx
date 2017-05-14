@@ -25,7 +25,7 @@ export default class ThreadBox extends React.Component {
 
   render() {
     var posts = []
-    if (this.props.state.boards.length > 0 && this.props.posts.length > 0) {
+    if (this.props.boards.length > 0 && this.props.posts.length > 0) {
       posts = this.props.posts.map((post, index) => {
         return <Post key={index} post={post} />
       })

@@ -4,6 +4,14 @@ input{
   height: 22px;
 }
 
+a{ color: #0000ff; }
+a:visited{ color: #000080; }
+a:hover{
+  color: #ff0000;
+  cursor: pointer;
+}
+a:active{ color: #ff8000; }
+
 .flex-container{
   display: flex;
   flex-direction: row;
@@ -108,6 +116,10 @@ header{
     .post-body{
       padding-left: 30px;
       word-wrap: break-word;
+      .post-body-line{
+        display: block;
+        line-height: 18px;
+      }
     }
   }
   .post:last-child{

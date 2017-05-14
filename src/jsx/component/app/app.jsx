@@ -66,12 +66,14 @@ export default class App extends React.Component {
       }
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {
-      this.setState({ updateStatus: "WAIT" })
+      // threadがthreadsの何番目に存在するか
       let index = _.findIndex(this.state.threads, { url: thread.url })
       if (index >= 0) {
         let threads = this.state.threads
         threads[index] = thread
-        this.setState({ threads: threads })
+        this.setState({ threads: threads, updateStatus: "WAIT" })
+      } else {
+        this.setState({ updateStatus: "WAIT" })      
       }
     })
     ipcRenderer.on('update-board-reply', (event, board) => {
@@ -239,13 +241,15 @@ export default class App extends React.Component {
 
   render() {
     var components = {
-      "BOARDS": <BoardBox state={this.state} />,
-      "THREADS": <ThreadBox state={this.state} posts={this.currentThread.posts} />
+      "BOARDS":
+        <BoardBox boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex} />,
+      "THREADS":
+        <ThreadBox boards={this.state.boards} posts={this.currentThread.posts} />
     }
 
     return (
       <div>
-        <Header state={this.state}
+        <Header listMode={this.state.listMode} currentUrl={this.state.currentUrl}
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}

@@ -13,7 +13,7 @@ export default class Header extends React.Component {
 
   // 一覧を更新  
   updateList = () => {
-    switch (this.props.state.listMode) {
+    switch (this.props.listMode) {
       case "BOARDS":
         this.props.updateCurrentBoard()
         break
@@ -29,7 +29,7 @@ export default class Header extends React.Component {
   switchBoardsList = () => {
     this.props.setListMode("BOARDS")
     this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS"))
-    if (this.isListShown && this.props.state.listMode != "BOARDS") return
+    if (this.isListShown && this.props.listMode != "BOARDS") return
     this.switchList()
   }
 
@@ -37,7 +37,7 @@ export default class Header extends React.Component {
   switchThreadsList = () => {
     this.props.setListMode("THREADS")
     this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))
-    if (this.isListShown && this.props.state.listMode != "THREADS") return
+    if (this.isListShown && this.props.listMode != "THREADS") return
     this.switchList()
   }
 
@@ -72,7 +72,7 @@ export default class Header extends React.Component {
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">
-            <input type="text" value={this.props.state.currentUrl} onChange={e => { this.props.setCurrentUrl(e.target.value) }} />
+            <input type="text" value={this.props.currentUrl} onChange={e => { this.props.setCurrentUrl(e.target.value) }} />
           </div>
         </div>
       </header>
