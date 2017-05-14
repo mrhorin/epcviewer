@@ -185,9 +185,17 @@ export default class App extends React.Component {
 
   // 書き込みの投稿
   postWriteForm = (message) => {
-    this.setState({ updateStatus: 'POSTING' })
-    this.writeFormTextarea.disabled = true
-    ipcRenderer.send('post-write', this.currentThread, message)
+    if (this.currentThread.posts.length > 0 && this.state.updateStatus == 'WAIT') {
+      // 書き込み処理
+      this.setState({ updateStatus: 'POSTING' })
+      this.writeFormTextarea.disabled = true
+      ipcRenderer.send('post-write', this.currentThread, message)      
+    } else if (this.currentThread.posts.length > 0 && this.state.updateStatus != 'WAIT') {
+      // 2秒後に再帰的に呼び出し
+      setInterval(() => { this.postWriteForm(message) }, 2000)
+    } else {
+      throw "The curentThread is empty. Please select thread from board."
+    }
   }
 
   // 自動更新タイマーの開始
