@@ -259,7 +259,7 @@ export default class App extends React.Component {
             onKeyDown={this.pressWriteFormHandler}
             onKeyUp={this.releaseWriteFormHandler} />
         </div>
-        <Footer />
+        <Footer updateStatus={this.state.updateStatus} currentThread={this.currentThread} />
       </div>
     )
   }
