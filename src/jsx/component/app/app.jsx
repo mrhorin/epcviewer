@@ -192,7 +192,7 @@ export default class App extends React.Component {
       ipcRenderer.send('post-write', this.currentThread, message)      
     } else if (this.currentThread.posts.length > 0 && this.state.updateStatus != 'WAIT') {
       // 2秒後に再帰的に呼び出し
-      setInterval(() => { this.postWriteForm(message) }, 2000)
+      setTimeout(() => { this.postWriteForm(message) }, 2000)
     } else {
       throw "The curentThread is empty. Please select thread from board."
     }
