@@ -12,6 +12,8 @@
   "dependencies": {
     "2ch-parser": "^0.0.10",
     "electron-json-storage": "^3.0.5",
+    "encoding-japanese": "^1.0.25",
+    "iconv-lite": "^0.4.17",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "photon": "https://github.com/connors/photon",

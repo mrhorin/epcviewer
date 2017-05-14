@@ -11,14 +11,16 @@ state
   currentThreadIndex: int
     threads内で現在開いているスレッドのindex
   currentUrl: string
-    現在のURL欄の値を
+    現在のURL欄の値
   listMode: string
     現在開いている画面が板一覧かスレッド一覧かを示す
-    BOARDSは板一覧、THREADSはスレッド一覧
-  updateThreadStatus: string
-    スレッドの更新状態を示す
-    WAITは更新可能
+    BOARDSは板一覧
+    THREADSはスレッド一覧
+  updateStatus: string
+    現在の更新状態を示す
+    WAITは待機中
     UPDATINGは更新中
+    POSTINGは投稿中
 ********************************************************/
 import React from 'react'
 import { ipcRenderer } from 'electron'
@@ -41,11 +43,12 @@ export default class App extends React.Component {
       currentThreadIndex: 0,
       currentUrl: "",
       listMode: "BOARDS",
-      updateThreadStatus: "WAIT"
+      updateStatus: "WAIT"
     }
   }
 
   bindEvents = () => {
+    this.writeFormTextarea = window.document.getElementById('write-form-textarea')
     ipcRenderer.on('add-board-reply', (event, board) => {
       this.addBoard(board)
     })
@@ -63,7 +66,7 @@ export default class App extends React.Component {
       }
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {
-      this.setState({ updateThreadStatus: "WAIT" })
+      this.setState({ updateStatus: "WAIT" })
       let index = _.findIndex(this.state.threads, { url: thread.url })
       if (index >= 0) {
         let threads = this.state.threads
@@ -78,6 +81,13 @@ export default class App extends React.Component {
         boards[index] = board
         this.setState({ boards: boards })
       }
+    })
+    ipcRenderer.on('post-write-reply', (event, res) => {
+      this.setState({ updateStatus: 'WAIT' })
+      this.writeFormTextarea.value = ""
+      this.writeFormTextarea.disabled = false
+      this.writeFormTextarea.focus()
+      console.log(res)
     })
   }
 
@@ -167,10 +177,17 @@ export default class App extends React.Component {
 
   // 現在のスレッドを更新
   updateCurrentThread = () => {
-    if (this.state.threads.length > 0 && this.state.updateThreadStatus == "WAIT") {
-      this.setState({ updateThreadStatus: "UPDATING" })
+    if (this.state.threads.length > 0 && this.state.updateStatus == "WAIT") {
+      this.setState({ updateStatus: "UPDATING" })
       ipcRenderer.send('update-thread', this.currentThread)
     }
+  }
+
+  // 書き込みの投稿
+  postWriteForm = (message) => {
+    this.setState({ updateStatus: 'POSTING' })
+    this.writeFormTextarea.disabled = true
+    ipcRenderer.send('post-write', this.currentThread, message)
   }
 
   // 自動更新タイマーの開始
@@ -186,18 +203,18 @@ export default class App extends React.Component {
   }
 
   // 書き込み欄でkeyDownハンドラ
-  pressPostFormHandler = (event) => {
+  pressWriteFormHandler = (event) => {
     if (event.nativeEvent.key == 'Shift') {
       // Shift押下状態を保持
       this.pressShift = true
     } else if (event.nativeEvent.key == 'Enter' && this.pressShift) {
       // Shift+Enterで投稿
-      console.log("投稿処理！")
+      this.postWriteForm(event.target.value)
     }
   }
 
   // 書き込み欄でkeyUpハンドラ  
-  releasePostFormHandler = (event) => {
+  releaseWriteFormHandler = (event) => {
     // Shift押下状態を解放
     this.pressShift = false
   }
@@ -226,12 +243,13 @@ export default class App extends React.Component {
           getCurrentUrl={this.getCurrentUrl}
           updateCurrentBoard={this.updateCurrentBoard}
           updateCurrentThread={this.updateCurrentThread} />
+        {/*リスト欄*/}
         {components[this.state.listMode]}
         {/*書き込み欄*/}
-        <div id="post-form" className="form-group">
-          <textarea className="form-control" rows="3"
-            onKeyDown={this.pressPostFormHandler}
-            onKeyUp={this.releasePostFormHandler} />
+        <div id="write-form" className="form-group">
+          <textarea id="write-form-textarea" className="form-control" rows="3"
+            onKeyDown={this.pressWriteFormHandler}
+            onKeyUp={this.releaseWriteFormHandler} />
         </div>
         <Footer />
       </div>

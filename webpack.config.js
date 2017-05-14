@@ -26,7 +26,9 @@ module.exports = {
     '2ch-parser',
     'electron',
     'electron-json-storage',
-    'ipc'
+    'ipc',
+    'superagent',
+    'encoding-japanese'
   ],
   plugins: [
     new WebpackNotifierPlugin()

@@ -116,7 +116,7 @@ header{
 }
 
 /* -------- 書き込み欄 -------- */
-#post-form{
+#write-form{
   order: 3;
   width: 100%;
   margin: 0px;
@@ -125,6 +125,7 @@ header{
     width: 100%;
     padding: 0px;
     border-radius: 0px;
+    border: 1px solid #ccc;
   }
   textarea:focus{
     border-color: #ddd !important;

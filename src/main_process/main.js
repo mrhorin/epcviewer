@@ -1,5 +1,7 @@
 import {app, BrowserWindow, ipcMain} from 'electron'
-import {Board, Thread, UrlParser} from '2ch-parser'
+import { Board, Thread, UrlParser } from '2ch-parser'
+import request from 'superagent'
+import Encoding from 'encoding-japanese'
 
 var window = { app: null }
 
@@ -17,13 +19,7 @@ app.on('ready', ()=>{
     minHeight: 130
   })
   window.app.loadURL(`file://${__dirname}/html/app.html`)
-
   window.app.openDevTools()
-
-  var jbbs = new Board("http://jbbs.shitaraba.net/internet/22724/")
-  // jbbs.fetchThreads((res)=>{
-  //   console.log(res)
-  // })
 
   // 閉じた時
   window.app.on('close', ()=>{
@@ -94,3 +90,41 @@ ipcMain.on('update-board', (event, board) => {
     event.sender.send('update-board-reply', newBoard)
   })
 })
+
+// ------- threadにmessageをPOSTする -------
+ipcMain.on('post-write', (event, thread, message) => {
+  if (UrlParser.isShitaraba(thread.url)) {
+    // したらばの時
+    const threadUrl = thread.url+"/"
+    const writeUrl = threadUrl.replace(/read\.cgi/, 'write.cgi')
+    const uri = threadUrl.split('/')
+    const body = escape({
+      DIR: uri[5],
+      BBS: uri[6],
+      KEY: uri[7],
+      NAME: '',
+      MAIL: 'sage',
+      MESSAGE: message,
+    })
+    request
+      .post(writeUrl)
+      .type('form')
+      .send(body)
+      .set('Referer', threadUrl)
+      .end((err, res) => {
+        if (err) console.log(err)
+        event.sender.send('post-write-reply', res)
+      })
+  }
+})
+
+const escape = (hash) => {
+  return Object.keys(hash).map((key) => {
+    return key + '=' + encode(hash[key])
+  }).join('&')
+}
+
+const encode = (text) => {
+  const eucjp = Encoding.convert(text, 'eucjp')
+  return Encoding.urlEncode(eucjp)
+}
