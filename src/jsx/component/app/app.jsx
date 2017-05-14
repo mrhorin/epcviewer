@@ -207,7 +207,7 @@ export default class App extends React.Component {
 
   // 自動更新タイマーの停止  
   stopUpdateTimer = () => {
-    clearTimeout(this.updateTimerId)
+    clearInterval(this.updateTimerId)
   }
 
   // 書き込み欄でkeyDownハンドラ
