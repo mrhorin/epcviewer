@@ -20,7 +20,8 @@ export default class ThreadBox extends React.Component {
   }
 
   componentDidUpdate() {
-    this.scrollBottom()
+    // オートスクロール
+    if(this.props.autoScroll) this.scrollBottom()
   }
 
   render() {

@@ -32,14 +32,27 @@ header{
   padding: 3px;
   min-height: 28px !important;
   .flex-container{
-    .flex-header-btns{
+    .flex-header-common-btns{
       order: 1;
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 3px;
     }
-    .flex-header-url{
+    .flex-header-thread-btns{
       order: 2;
+      flex-grow: 1;
+      display: -webkit-inline-box;
+      margin-right: 3px;
+      .active{
+        background: #6d6c6d;
+        border: 1px solid transparent;
+        .icon{
+          color: #fff;
+        }
+      }
+    }
+    .flex-header-url{
+      order: 3;
       flex-grow: 300;
       input{
         width: 100%;
@@ -53,7 +66,7 @@ header{
   order: 2;
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 
 /* ---------- 板一覧 ---------- */

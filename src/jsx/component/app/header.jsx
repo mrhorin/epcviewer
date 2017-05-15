@@ -51,10 +51,14 @@ export default class Header extends React.Component {
   }
 
   render() {
+    var autoScrollClass = this.props.autoScroll ? 'active ' : ''
+    autoScrollClass += 'btn btn-default btn-mini'
+
     return (
       <header className="toolbar toolbar-header">
         <div className="flex-container">
-          <div className="flex-header-btns">
+          {/*共通ボタン*/}
+          <div className="flex-header-common-btns">
             <div className="btn-group">
               {/*更新*/}
               <button className="btn btn-default btn-mini" onClick={this.updateList}>
@@ -69,6 +73,13 @@ export default class Header extends React.Component {
                 <span className="icon icon-window"></span>
               </button>
             </div>
+          </div>
+          {/*スレッドボタン*/}
+          <div className="flex-header-thread-btns">
+            {/*自動スクロール*/}
+            <button className={autoScrollClass} onClick={this.props.switchAutoScroll}>
+              <span className="icon icon-down-bold"></span>
+            </button>
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">
