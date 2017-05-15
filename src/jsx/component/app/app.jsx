@@ -89,7 +89,6 @@ export default class App extends React.Component {
       this.writeFormTextarea.value = ""
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
-      console.log(res)
     })
   }
 
