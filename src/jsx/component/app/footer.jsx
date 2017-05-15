@@ -2,6 +2,14 @@ import React from 'react'
 
 export default class Footer extends React.Component {
 
+  get currentThreadTitle() {
+    var title = this.props.currentThread.title
+    if (this.props.currentThread.posts.length > 0) {
+      title += `(${this.props.currentThread.posts.length+1})`
+    }
+    return title
+  }
+
   render() {
     var status = ''
     switch (this.props.updateStatus) {
@@ -22,7 +30,7 @@ export default class Footer extends React.Component {
             {status}
           </div>
           <div className="flex-item thread-title">
-            {this.props.currentThread.title}
+            {this.currentThreadTitle}
           </div>
         </div>
       </footer>
