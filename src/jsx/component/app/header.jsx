@@ -51,6 +51,8 @@ export default class Header extends React.Component {
   }
 
   render() {
+    var autoUpdateClass = this.props.autoUpdate ? 'active ' : ''
+    autoUpdateClass += 'btn btn-default btn-mini'
     var autoScrollClass = this.props.autoScroll ? 'active ' : ''
     autoScrollClass += 'btn btn-default btn-mini'
 
@@ -76,10 +78,16 @@ export default class Header extends React.Component {
           </div>
           {/*スレッドボタン*/}
           <div className="flex-header-thread-btns">
-            {/*自動スクロール*/}
-            <button className={autoScrollClass} onClick={this.props.switchAutoScroll}>
-              <span className="icon icon-down-bold"></span>
-            </button>
+            <div className="btn-group">
+              {/*自動更新*/}
+              <button className={autoUpdateClass} onClick={this.props.switchAutoUpdate}>
+                <span className="icon icon-clock"></span>
+              </button>
+              {/*自動スクロール*/}
+              <button className={autoScrollClass} onClick={this.props.switchAutoScroll}>
+                <span className="icon icon-down-bold"></span>
+              </button>
+            </div>  
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">

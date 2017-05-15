@@ -43,13 +43,6 @@ header{
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 3px;
-      .active{
-        background: #6d6c6d;
-        border: 1px solid transparent;
-        .icon{
-          color: #fff;
-        }
-      }
     }
     .flex-header-url{
       order: 3;
@@ -187,4 +180,8 @@ footer{
 /* photonKit override */
 .btn-group{
   display: -webkit-inline-box;
+}
+
+.btn-group .btn + .btn.active:last-child{
+  border-left: 1px solid #c2c0c2;
 }

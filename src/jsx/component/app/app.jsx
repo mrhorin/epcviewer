@@ -44,6 +44,7 @@ export default class App extends React.Component {
       currentUrl: "",
       listMode: "BOARDS",
       updateStatus: "WAIT",
+      autoUpdate: true,
       autoScroll: true
     }
   }
@@ -200,6 +201,11 @@ export default class App extends React.Component {
     }
   }
 
+  // スレッドの自動更新のON/OFF切り替え  
+  switchAutoUpdate = () => {
+    this.setState({ autoUpdate: !this.state.autoUpdate })
+  }
+
   // スレッドのオートスクロールのON/OFF切り替え  
   switchAutoScroll = () => {
     this.setState({ autoScroll: !this.state.autoScroll })
@@ -208,7 +214,7 @@ export default class App extends React.Component {
   // 自動更新タイマーの開始
   startUpdateTimer = () => {
     this.updateTimerId = setInterval(() => {
-      this.updateCurrentThread()
+      if(this.state.autoUpdate) this.updateCurrentThread()
     }, 7000)
   }
 
@@ -254,12 +260,14 @@ export default class App extends React.Component {
 
     return (
       <div>
-        <Header listMode={this.state.listMode} currentUrl={this.state.currentUrl} autoScroll={this.state.autoScroll}
+        <Header
+          listMode={this.state.listMode} currentUrl={this.state.currentUrl} autoUpdate={this.state.autoUpdate} autoScroll={this.state.autoScroll}
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}
           updateCurrentBoard={this.updateCurrentBoard}
           updateCurrentThread={this.updateCurrentThread}
+          switchAutoUpdate={this.switchAutoUpdate}
           switchAutoScroll={this.switchAutoScroll} />
         {/*リスト欄*/}
         {components[this.state.listMode]}
