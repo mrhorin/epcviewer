@@ -5,8 +5,10 @@ import Encoding from 'encoding-japanese'
 
 var window = { app: null }
 
-// 引数URL
-const argUrl = global.process.argv[2] ? UrlParser.getBoardUrl(global.process.argv[2]) : ""
+// 引数で最初に出現するURL
+const argUrl = UrlParser.getBoardUrl(global.process.argv.find((arg) => {
+  return arg.match(/h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
+}))
 
 /*-----------------------------------------
   アプリケーション起動準備完了時
