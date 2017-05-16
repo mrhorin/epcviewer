@@ -8,6 +8,11 @@ export default class Post extends React.Component {
     super(props)
   }
 
+  // IDがある場合は ID: を付加  
+  printId = (id) => {
+    return id ? `ID:${id}` : ''
+  }
+
   parseBody = (text) => {
     return this.replaceUrl(_.unescape(text))
   }
@@ -62,18 +67,19 @@ export default class Post extends React.Component {
     shell.openExternal(url)
   }
 
-  // 安価ホバー時  
+  // レス安価onMouseOverハンドラ
   onAnkerMouseOverrHandler = (e) => {
     const no = Number(_.unescape(e.target.innerHTML).replace(/^>>/, ''))
-    const anker = this.props.getPost(no)
-    if (anker) {
+    const post = this.props.getPost(no)
+    if (post) {
       this.postElement.children[0].style.display = 'block'
       this.postElement.children[0].style.top = `${e.clientY}px`
       this.postElement.children[0].style.left = `${e.clientX+10}px`
-      this.postElement.children[0].innerHTML = `${no}:${anker.name}[${anker.mail}]${anker.date} ID:${anker.id}<br>${anker.body}`      
+      this.postElement.children[0].innerHTML = `${no}:${post.name}[${post.mail}]${post.date} ${this.printId(post.id)}<br>${post.body}`      
     }
   }
 
+  // レス安価onMouseOutハンドラ
   onAnkerMouseOutHandler = (e) => {
     this.postElement.children[0].style.display = 'none'
     this.postElement.children[0].innerHTML = ''
@@ -84,9 +90,6 @@ export default class Post extends React.Component {
   }
 
   render() {
-    // IDがある場合は ID: を付加する
-    if(this.props.post.id) this.props.post.id = "ID:"+this.props.post.id
-
     return (
       <div id={`post-${this.props.no}`} className="post">
         <div className="post-anker">
@@ -96,7 +99,7 @@ export default class Post extends React.Component {
           <span className="post-name">{this.props.post.name}</span>
           <span className="post-mail">[{this.props.post.mail}]</span>
           <span className="post-date">{this.props.post.date}</span>
-          <span className="post-id">{this.props.post.id}</span>
+          <span className="post-id">{this.printId(this.props.post.id)}</span>
         </div>
         <div className="post-body">
           {this.parseBody(this.props.post.body)}
