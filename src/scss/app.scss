@@ -89,6 +89,15 @@ header{
 #post-box{
   .post{
     padding: 5px 10px;
+    .post-anker{
+      position: fixed;
+      padding: 2px;
+      display: none;
+      background: #ffffcc;
+      font-size: 9px;
+      box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
+      z-index: 1000;
+    }
     .post-header{
       display: block;
       word-break: break-all;

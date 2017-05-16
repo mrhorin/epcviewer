@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 
 import Post from 'jsx/component/app/post'
 
@@ -7,6 +8,11 @@ export default class ThreadBox extends React.Component {
 
   constructor(props) {
     super(props)
+  }
+
+  getPost = (no) => {
+    const index = _.findIndex(this.props.posts, { no: no })
+    return this.props.posts[index]
   }
 
   // 書き込み一覧の一番下までスクロール  
@@ -28,7 +34,7 @@ export default class ThreadBox extends React.Component {
     var posts = []
     if (this.props.boards.length > 0 && this.props.posts.length > 0) {
       posts = this.props.posts.map((post, index) => {
-        return <Post key={index} post={post} />
+        return <Post key={index} no={index + 2} post={post} getPost={this.getPost}/>
       })
     }
 

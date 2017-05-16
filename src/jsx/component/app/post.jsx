@@ -1,14 +1,15 @@
 import React from 'react'
 import { shell } from 'electron'
+import _ from 'lodash'
 
 export default class Post extends React.Component {
 
   constructor(props) {
     super(props)
   }
-  
+
   parseBody = (text) => {
-    return this.replaceUrl(text)
+    return this.replaceUrl(_.unescape(text))
   }
 
   // URLを置換  
@@ -32,9 +33,28 @@ export default class Post extends React.Component {
   replaceBr = (text) => {
     return text.split("<br>").map((line, index) => {
       return (
-        <div className="post-body-line" key={index}>{line}</div>
+        <div className="post-body-line" key={index}>{this.replaceAnker(line)}</div>
       )
     })
+  }
+
+  // 安価を置換  
+  replaceAnker = (text) => {
+    var elements = []
+    const ptn = /(<a href=.+)(>>[0-9]+)(<\/a>)/i
+    text = text.replace(ptn, (match, astart, anker, aend) => { return `<>${anker}<>` })
+    text.split('<>').map((element, index) => {
+      if (element.match(/^(>>)([0-9]+)$/)) {
+        elements.push(
+          <a key={index} onMouseOver={this.onAnkerMouseOverrHandler} onMouseOut={this.onAnkerMouseOutHandler}>
+            {element}
+          </a>
+        )
+      } else {
+        elements.push(element)
+      }
+    })
+    return elements
   }
 
   // 規定ブラウザで開く
@@ -42,12 +62,35 @@ export default class Post extends React.Component {
     shell.openExternal(url)
   }
 
+  // 安価ホバー時  
+  onAnkerMouseOverrHandler = (e) => {
+    const no = Number(_.unescape(e.target.innerHTML).replace(/^>>/, ''))
+    const anker = this.props.getPost(no)
+    if (anker) {
+      this.postElement.children[0].style.display = 'block'
+      this.postElement.children[0].style.top = `${e.clientY}px`
+      this.postElement.children[0].style.left = `${e.clientX+10}px`
+      this.postElement.children[0].innerHTML = `${no}:${anker.name}[${anker.mail}]${anker.date} ID:${anker.id}<br>${anker.body}`      
+    }
+  }
+
+  onAnkerMouseOutHandler = (e) => {
+    this.postElement.children[0].style.display = 'none'
+    this.postElement.children[0].innerHTML = ''
+  }
+
+  componentDidMount() {
+    this.postElement = window.document.getElementById(`post-${this.props.no}`)
+  }
+
   render() {
     // IDがある場合は ID: を付加する
     if(this.props.post.id) this.props.post.id = "ID:"+this.props.post.id
 
     return (
-      <div className="post">
+      <div id={`post-${this.props.no}`} className="post">
+        <div className="post-anker">
+        </div>
         <div className="post-header">
           <span className="post-no">{this.props.post.no}</span>
           <span className="post-name">{this.props.post.name}</span>
