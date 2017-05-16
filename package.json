@@ -1,7 +1,7 @@
 {
   "name": "epcviewer",
   "version": "0.0.1",
-  "main": "./dist/index.js",
+  "main": "./dist/main.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w",
@@ -15,7 +15,7 @@
     "encoding-japanese": "^1.0.25",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "photon": "https://github.com/connors/photon",
+    "photonkit": "^0.1.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "superagent": "^3.5.2"
@@ -30,6 +30,7 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.0",
     "del": "^2.2.2",
+    "electron-packager": "^8.7.0",
     "gulp": "^3.9.1",
     "gulp-jade": "^1.1.0",
     "gulp-plumber": "^1.1.0",

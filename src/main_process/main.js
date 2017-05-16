@@ -19,7 +19,6 @@ app.on('ready', ()=>{
     minHeight: 130
   })
   window.app.loadURL(`file://${__dirname}/html/app.html`)
-  window.app.openDevTools()
 
   // 閉じた時
   window.app.on('close', ()=>{
