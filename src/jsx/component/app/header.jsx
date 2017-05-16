@@ -8,7 +8,7 @@ export default class Header extends React.Component {
 
   // 一覧が表示されているか
   get isListShown() {
-    return window.outerHeight > 130
+    return window.outerHeight > 133
   }
 
   // 一覧を更新  
@@ -44,7 +44,7 @@ export default class Header extends React.Component {
   // 一覧の表示/非表示を切り替え
   switchList = () => {
     if (this.isListShown) {
-      window.resizeTo(window.outerWidth, 130)
+      window.resizeTo(window.outerWidth, 133)
     } else {
       window.resizeTo(window.outerWidth, 600)
     }

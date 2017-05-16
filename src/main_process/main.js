@@ -3,6 +3,8 @@ import { Board, Thread, UrlParser } from '2ch-parser'
 import request from 'superagent'
 import Encoding from 'encoding-japanese'
 
+import Storage from 'js/storage'
+
 var window = { app: null }
 
 // 引数で最初に出現するURL
@@ -15,16 +17,24 @@ const argUrl = UrlParser.getBoardUrl(global.process.argv.find((arg) => {
 -----------------------------------------*/
 app.on('ready', ()=>{
 
-  window.app = new BrowserWindow({
-    width: 320,
-    height: 130,
-    minHeight: 130
-  })
-  window.app.loadURL(`file://${__dirname}/html/app.html`)
+  // 設定を読み込む  
+  Storage.configPromise.then((config) => {
+    console.log(config)
+    window.app = new BrowserWindow({
+      width: config.width,
+      height: config.height,
+      x: config.x,
+      y: config.y,
+      minHeight: 133
+    })
+    window.app.loadURL(`file://${__dirname}/html/app.html`)
 
-  // 閉じた時
-  window.app.on('close', ()=>{
-    window.main = null
+    // 閉じた時
+    window.app.on('close', () => {
+      Storage.setConfig(window.app.getBounds(), () => {
+        window.main = null      
+      })
+    })
   })
 
 })
