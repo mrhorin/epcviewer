@@ -8,9 +8,10 @@ import Storage from 'js/storage'
 var window = { app: null }
 
 // 引数で最初に出現するURL
-const argUrl = UrlParser.getBoardUrl(global.process.argv.find((arg) => {
+
+const argUrl = global.process.argv.find((arg) => {
   return arg.match(/h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
-}))
+})
 
 /*-----------------------------------------
   アプリケーション起動準備完了時
@@ -19,7 +20,6 @@ app.on('ready', ()=>{
 
   // 設定を読み込む  
   Storage.configPromise.then((config) => {
-    console.log(config)
     window.app = new BrowserWindow({
       width: config.width,
       height: config.height,
@@ -63,7 +63,7 @@ ipcMain.on('add-board', (event, url) => {
 // ------- 引数URLのBoardを返す -------
 ipcMain.on('add-arg-board', (event) => {
   if (argUrl) {
-    var board = new Board(argUrl)
+    var board = new Board(UrlParser.getBoardUrl(argUrl))
     board.fetchThreads((res)=>{
       event.sender.send('add-board-reply', board)
     }) 
