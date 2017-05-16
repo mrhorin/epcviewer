@@ -30,7 +30,7 @@ gulp.task('package:darwin', ['default'], function (done) {
     arch: 'x64',
     platform: 'darwin',
     overwrite: true,
-    version: '1.4.13',
+    version: '1.6.7',
     ignore: ['release']
   }, function (err, path) {
     done();
