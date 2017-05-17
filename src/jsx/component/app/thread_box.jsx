@@ -21,8 +21,12 @@ export default class ThreadBox extends React.Component {
     this.postBox.scrollIntoView(false)
   }
 
+  _removeThread = (threadUrl) => {
+    this.props.removeThread(threadUrl)
+  }
+
   componentDidMount() {
-    this.postBox = window.document.getElementById("post-box")
+    this.postBox = window.document.getElementById("post-box-end")
     this.scrollBottom()
   }
 
@@ -41,10 +45,10 @@ export default class ThreadBox extends React.Component {
     let tabs = []
     if (this.props.threads.length > 0) {
       tabs = this.props.threads.map((thread, index) => {
-        return <Tab key={index} name={thread.title} />
+        return <Tab key={index} name={thread.title} url={thread.url} removeTab={this._removeThread} />
       })
     }
-    
+
     return (
       <div id="thread-box">
         {/*スレッドタブ*/}
@@ -56,6 +60,7 @@ export default class ThreadBox extends React.Component {
         {/*書き込み一覧*/}
         <div id="post-box">
           {posts}
+          <div id="post-box-end"/>
         </div>
       </div>
     )

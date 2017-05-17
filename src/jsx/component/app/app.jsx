@@ -136,6 +136,26 @@ export default class App extends React.Component {
     }
   }
 
+  removeThread = (threadUrl) => {
+    // 削除する要素
+    const removeIndex = _.findIndex(this.state.threads, { url: threadUrl })
+    if(removeIndex<0) return
+    // state.threadsをコピー
+    let threads = this.state.threads.concat()
+    threads.splice(removeIndex, 1)
+    // 削除後のcurrentIndex
+    let afterCurrentIndex = this.state.currentThreadIndex >= removeIndex ? (
+      this.state.currentThreadIndex - 1
+    ) : (
+      this.state.currentThreadIndex
+      )
+    if(afterCurrentIndex<0) afterCurrentIndex = 0
+    this.setState({
+      threads: threads,
+      currentThreadIndex: afterCurrentIndex
+    })
+  }
+
   // 現在の板を取得  
   get currentBoard() {
     if (this.state.boards.length > 0) {
@@ -180,7 +200,7 @@ export default class App extends React.Component {
 
   // 現在のスレッドを更新
   updateCurrentThread = () => {
-    if (this.state.threads.length > 0 && this.state.updateStatus == "WAIT") {
+    if ((this.state.threads.length > 0) && (this.state.updateStatus == "WAIT")) {
       this.setState({ updateStatus: "UPDATING" })
       ipcRenderer.send('update-thread', this.currentThread)
     }
@@ -255,7 +275,9 @@ export default class App extends React.Component {
       "BOARDS":
         <BoardBox boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex} />,
       "THREADS":
-        <ThreadBox boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts} autoScroll={this.state.autoScroll} />
+        <ThreadBox
+          boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts} autoScroll={this.state.autoScroll}
+          removeThread={this.removeThread} />
     }
 
     return (
