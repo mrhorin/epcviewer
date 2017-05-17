@@ -12,8 +12,9 @@ export default class Tab extends React.Component {
   }
 
   render() {
+    const activeClass = this.props.active ? ' tab-item-active' : ''
     return (
-      <div className="tab-item">
+      <div className={`tab-item${activeClass}`}>
         <span className="icon icon-cancel icon-close-tab" onClick={this._removeTab} />
         {this.props.name}
       </div>

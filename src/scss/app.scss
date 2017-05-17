@@ -209,8 +209,12 @@ footer{
   border-left: 1px solid #c2c0c2 !important;
 }
 
+.tab-group{
+  border-bottom: 1px solid #7d7d7d;
+}
+
 .tab-item{
-  background: #ccc;
+  background: #abaaaa;
   font-size: 10px !important;
   padding: 1px 3px !important;
   white-space: nowrap !important;
@@ -219,6 +223,10 @@ footer{
   .icon-close-tab{
     left: 3px;
   }
+}
+
+.tab-item-active{
+  background: #ccc !important;
 }
 
 .tab-item:hover{

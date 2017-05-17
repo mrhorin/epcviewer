@@ -45,7 +45,8 @@ export default class ThreadBox extends React.Component {
     let tabs = []
     if (this.props.threads.length > 0) {
       tabs = this.props.threads.map((thread, index) => {
-        return <Tab key={index} name={thread.title} url={thread.url} removeTab={this._removeThread} />
+        const active = this.props.currentThreadIndex==index
+        return <Tab key={index} name={thread.title} url={thread.url} removeTab={this._removeThread} active={active} />
       })
     }
 

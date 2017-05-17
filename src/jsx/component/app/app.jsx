@@ -276,8 +276,8 @@ export default class App extends React.Component {
         <BoardBox boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex} />,
       "THREADS":
         <ThreadBox
-          boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts} autoScroll={this.state.autoScroll}
-          removeThread={this.removeThread} />
+          boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
+          autoScroll={this.state.autoScroll} currentThreadIndex={this.state.currentThreadIndex} removeThread={this.removeThread} />
     }
 
     return (
