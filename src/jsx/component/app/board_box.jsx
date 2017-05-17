@@ -21,6 +21,8 @@ export default class BoardBox extends React.Component {
       <div id="board-box">
         {/*板タブ*/}
         <div id="board-tab-box">
+          <div className="tab-group">
+          </div>
         </div>
         {/*スレッド名一覧*/}
         <div id="subject-box">

@@ -25,7 +25,7 @@ app.on('ready', ()=>{
       height: config.height,
       x: config.x,
       y: config.y,
-      minHeight: 133
+      minHeight: 151
     })
     window.app.loadURL(`file://${__dirname}/html/app.html`)
 

@@ -210,7 +210,9 @@ footer{
 }
 
 .tab-group{
-  border-bottom: 1px solid #7d7d7d;
+  background: #ccc;
+  border-bottom: 1px solid #999;
+  min-height: 20px;
 }
 
 .tab-item{
@@ -234,6 +236,11 @@ footer{
     background: #bcbcbc;
   }
   .icon-close-tab:hover{
-    background: #a2a2a2;
+    background: #d65858;
+    color: #fff;
   }
+}
+
+.toolbar-header{
+  border-bottom: none;
 }
