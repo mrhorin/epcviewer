@@ -267,6 +267,11 @@ export default class App extends React.Component {
     clearInterval(this.updateTimerId)
   }
 
+  // stateを初期化
+  initialize(){
+    Storage.clearState()
+  }
+
   // 書き込み欄でkeyDownハンドラ
   _pressWriteFormHandler = (event) => {
     if (event.nativeEvent.key == 'Shift') {

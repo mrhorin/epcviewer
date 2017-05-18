@@ -64,11 +64,16 @@ export default class Storage {
 
   // stateを保存  
   static setState(state, callback = () => { }) {
-    console.log(state)
     state.updateStatus = 'WAIT'
     storage.set('state', state, (error) => {
       if (error) throw `Error: ${error}`
       callback()
+    })
+  }
+
+  static clearState(callback = () => { }) {
+    storage.remove('state', (error) => {
+      callback(error)
     })
   }
 
