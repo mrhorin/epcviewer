@@ -7,20 +7,24 @@ state
     追加済みスレッド一覧を格納
     Threadオブジェクトは2ch-parserを参照
   currentBoardIndex: int
-    boards内で現在開いている板のindex
+    state.boards内で現在開いている板のindex
   currentThreadIndex: int
-    threads内で現在開いているスレッドのindex
+    state.threads内で現在開いているスレッドのindex
   currentUrl: string
     現在のURL欄の値
   listMode: string
     現在開いている画面が板一覧かスレッド一覧かを示す
-    BOARDSは板一覧
-    THREADSはスレッド一覧
+    BOARDSは板一覧画面
+    THREADSはスレッド一覧画面
   updateStatus: string
     現在の更新状態を示す
     WAITは待機中
     UPDATINGは更新中
     POSTINGは投稿中
+  autoUpdate: bool
+    スレッドの自動更新のON/OFF状態
+  autoScroll: bool
+    スレッドのオートスクロールのON/OFF状態
 ********************************************************/
 import React from 'react'
 import { ipcRenderer } from 'electron'
@@ -113,6 +117,26 @@ export default class App extends React.Component {
         listMode: "BOARDS"
       })
     }
+  }
+
+  removeBoard = (boardUrl) => {
+    // 削除する要素
+    const removeIndex = _.findIndex(this.state.boards, { url: boardUrl })
+    if(removeIndex<0) return
+    // state.boardsをコピー
+    let boards = this.state.boards.concat()
+    boards.splice(removeIndex, 1)
+    // 削除後のcurrentIndex
+    let afterCurrentIndex = this.state.currentBoardIndex >= removeIndex ? (
+      this.state.currentBoardIndex - 1
+    ) : (
+      this.state.currentBoardIndex
+      )
+    if(afterCurrentIndex<0) afterCurrentIndex = 0
+    this.setState({
+      boards: boards,
+      currentBoardIndex: afterCurrentIndex
+    })
   }
 
   addThread = (thread) => {
@@ -244,7 +268,7 @@ export default class App extends React.Component {
   }
 
   // 書き込み欄でkeyDownハンドラ
-  pressWriteFormHandler = (event) => {
+  _pressWriteFormHandler = (event) => {
     if (event.nativeEvent.key == 'Shift') {
       // Shift押下状態を保持
       this.pressShift = true
@@ -255,7 +279,7 @@ export default class App extends React.Component {
   }
 
   // 書き込み欄でkeyUpハンドラ  
-  releaseWriteFormHandler = (event) => {
+  _releaseWriteFormHandler = (event) => {
     // Shift押下状態を解放
     this.pressShift = false
   }
@@ -273,7 +297,9 @@ export default class App extends React.Component {
   render() {
     var components = {
       "BOARDS":
-        <BoardBox boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex} />,
+        <BoardBox
+          boards={this.state.boards} threads={this.state.threads}
+          currentBoardIndex={this.state.currentBoardIndex} removeBoard={this.removeBoard} />,
       "THREADS":
         <ThreadBox
           boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
@@ -296,8 +322,8 @@ export default class App extends React.Component {
         {/*書き込み欄*/}
         <div id="write-form" className="form-group">
           <textarea id="write-form-textarea" className="form-control" rows="3"
-            onKeyDown={this.pressWriteFormHandler}
-            onKeyUp={this.releaseWriteFormHandler} />
+            onKeyDown={this._pressWriteFormHandler}
+            onKeyUp={this._releaseWriteFormHandler} />
         </div>
         <Footer updateStatus={this.state.updateStatus} currentThread={this.currentThread} />
       </div>

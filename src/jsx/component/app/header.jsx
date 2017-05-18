@@ -1,4 +1,5 @@
 import React from 'react'
+import { ipcRenderer } from 'electron'
 
 export default class Header extends React.Component {
 
@@ -50,6 +51,12 @@ export default class Header extends React.Component {
     }
   }
 
+  _onKeyUpUrlHandler = (event) => {
+    if (event.nativeEvent.key == 'Enter') {
+      ipcRenderer.send('add-board', event.target.value)
+    }
+  }
+
   render() {
     var autoUpdateClass = this.props.autoUpdate ? 'active ' : ''
     autoUpdateClass += 'btn btn-default btn-mini'
@@ -91,7 +98,9 @@ export default class Header extends React.Component {
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">
-            <input type="text" value={this.props.currentUrl} onChange={e => { this.props.setCurrentUrl(e.target.value) }} />
+            <input type="text" value={this.props.currentUrl}
+              onChange={e => { this.props.setCurrentUrl(e.target.value) }}
+              onKeyUp={this._onKeyUpUrlHandler}/>
           </div>
         </div>
       </header>
