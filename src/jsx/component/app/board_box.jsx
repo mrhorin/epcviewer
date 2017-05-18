@@ -14,6 +14,10 @@ export default class BoardBox extends React.Component {
     this.props.removeBoard(boardUrl)
   }
 
+  _selectBoard = (index) => {
+    this.props.selectBoard(index)
+  }
+
   render() {
     var subjects = []
     if (this.props.boards.length > 0) {
@@ -25,7 +29,10 @@ export default class BoardBox extends React.Component {
     if (this.props.boards.length > 0) {
       tabs = this.props.boards.map((board, index) => {
         const active = this.props.currentBoardIndex==index
-        return <Tab key={index} name={board.url} url={board.url} removeTab={this._removeBoard} active={active} />
+        return (
+          <Tab key={index} index={index} name={board.url} url={board.url} active={active}
+            removeTab={this._removeBoard} selectTab={this._selectBoard} />
+        )
       })
     }
 

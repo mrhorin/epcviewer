@@ -25,6 +25,10 @@ export default class ThreadBox extends React.Component {
     this.props.removeThread(threadUrl)
   }
 
+  _selectThread = (index) => {
+    this.props.selectThread(index)
+  }
+
   componentDidMount() {
     this.postBox = window.document.getElementById("post-box-end")
     this.scrollBottom()
@@ -46,7 +50,10 @@ export default class ThreadBox extends React.Component {
     if (this.props.threads.length > 0) {
       tabs = this.props.threads.map((thread, index) => {
         const active = this.props.currentThreadIndex==index
-        return <Tab key={index} name={thread.title} url={thread.url} removeTab={this._removeThread} active={active} />
+        return (
+          <Tab key={index} index={index} name={thread.title} url={thread.url} active={active}
+            removeTab={this._removeThread} selectTab={this._selectThread} />
+        )
       })
     }
 

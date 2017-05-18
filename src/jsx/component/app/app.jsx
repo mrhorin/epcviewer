@@ -139,6 +139,10 @@ export default class App extends React.Component {
     })
   }
 
+  selectBoard = (index) => {
+    this.setState({ currentBoardIndex: index })
+  }
+
   addThread = (thread) => {
     // state.threads内のthreadの位置
     let index = _.findIndex(this.state.threads, { url: thread.url })
@@ -178,6 +182,10 @@ export default class App extends React.Component {
       threads: threads,
       currentThreadIndex: afterCurrentIndex
     })
+  }
+
+  selectThread = (index) => {
+    this.setState({ currentThreadIndex: index })
   }
 
   // 現在の板を取得  
@@ -298,12 +306,13 @@ export default class App extends React.Component {
     var components = {
       "BOARDS":
         <BoardBox
-          boards={this.state.boards} threads={this.state.threads}
-          currentBoardIndex={this.state.currentBoardIndex} removeBoard={this.removeBoard} />,
+          boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex}
+          removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
       "THREADS":
         <ThreadBox
           boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
-          autoScroll={this.state.autoScroll} currentThreadIndex={this.state.currentThreadIndex} removeThread={this.removeThread} />
+          autoScroll={this.state.autoScroll} currentThreadIndex={this.state.currentThreadIndex}
+          removeThread={this.removeThread} selectThread={this.selectThread} />
     }
 
     return (
