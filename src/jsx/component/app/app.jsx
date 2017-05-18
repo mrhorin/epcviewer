@@ -29,6 +29,7 @@ state
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import _ from 'lodash'
+import Storage from 'js/storage'
 
 import Header from 'jsx/component/app/header'
 import BoardBox from 'jsx/component/app/board_box'
@@ -40,17 +41,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      boards: [],
-      threads: [],
-      currentBoardIndex: 0,
-      currentThreadIndex: 0,
-      currentUrl: "",
-      listMode: "BOARDS",
-      updateStatus: "WAIT",
-      autoUpdate: true,
-      autoScroll: true
-    }
+    this.state = Storage.defaultState
   }
 
   bindEvents = () => {
@@ -266,7 +257,8 @@ export default class App extends React.Component {
   // 自動更新タイマーの開始
   startUpdateTimer = () => {
     this.updateTimerId = setInterval(() => {
-      if(this.state.autoUpdate) this.updateCurrentThread()
+      if (this.state.autoUpdate) this.updateCurrentThread()
+      Storage.setState(this.state)
     }, 7000)
   }
 
@@ -293,6 +285,9 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    Storage.statePromise.then((state) => {
+      this.setState(state)
+    })
     this.bindEvents()
     this.startUpdateTimer()
     ipcRenderer.send('add-arg-board')
