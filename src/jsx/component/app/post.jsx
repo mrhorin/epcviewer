@@ -20,7 +20,7 @@ export default class Post extends React.Component {
   // URLを置換  
   replaceUrl = (text) => {
     var elements = []
-    const ptn = /h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i
+    const ptn = /h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/ig
     // URLをセパレータで区切る
     text = text.replace(ptn, (url) => { return `<>${url}<>` })
     text.split("<>").map((element, index) => {
