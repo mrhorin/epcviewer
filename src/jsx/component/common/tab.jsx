@@ -19,9 +19,9 @@ export default class Tab extends React.Component {
   render() {
     const activeClass = this.props.active ? ' tab-item-active' : ''
     return (
-      <div className={`tab-item${activeClass}`} onClick={this._clickTabHandler}>
-        <span className="icon icon-cancel icon-close-tab" onClick={this._clickCloseHandler} />
-        {this.props.name}
+      <div className={`tab-item${activeClass}`}>
+        <span className="icon icon-cancel icon-close-tab" onClick={this._clickCloseHandler}></span>
+        <div className="tab-item-name" onClick={this._clickTabHandler}>{this.props.name}</div>
       </div>
     )
   }

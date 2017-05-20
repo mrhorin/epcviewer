@@ -219,11 +219,18 @@ footer{
   background: #abaaaa;
   font-size: 10px !important;
   padding: 1px 3px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
   .icon-close-tab{
     left: 3px;
+  }
+  .tab-item-name{
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    // マウスイベントを検知する為の記述
+    display: block;
+    width: 100%;
+    position: absolute;
+    z-index: 9;
   }
 }
 

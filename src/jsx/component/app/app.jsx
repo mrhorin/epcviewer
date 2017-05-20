@@ -167,12 +167,10 @@ export default class App extends React.Component {
       this.state.currentThreadIndex - 1
     ) : (
       this.state.currentThreadIndex
-      )
-    if(afterCurrentIndex<0) afterCurrentIndex = 0
-    this.setState({
-      threads: threads,
-      currentThreadIndex: afterCurrentIndex
-    })
+    )
+    if (afterCurrentIndex < 0) afterCurrentIndex = 0
+    this.selectThread(afterCurrentIndex)
+    this.setState({ threads: threads })
   }
 
   selectThread = (index) => {
@@ -268,8 +266,10 @@ export default class App extends React.Component {
   }
 
   // stateを初期化
-  initialize(){
-    Storage.clearState()
+  initialize = () => {
+    Storage.clearState((error) => {
+      if(!error) this.setState(Storage.defaultState)
+    })
   }
 
   // 書き込み欄でkeyDownハンドラ
@@ -303,16 +303,19 @@ export default class App extends React.Component {
   }
 
   render() {
-    var components = {
-      "BOARDS":
-        <BoardBox
+    let listBox
+    switch (this.state.listMode) {
+      case 'BOARDS':
+        listBox = <BoardBox
           boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex}
-          removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
-      "THREADS":
-        <ThreadBox
+          removeBoard={this.removeBoard} selectBoard={this.selectBoard} />
+        break
+      case 'THREADS':
+        listBox = <ThreadBox
           boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
           autoScroll={this.state.autoScroll} currentThreadIndex={this.state.currentThreadIndex}
           removeThread={this.removeThread} selectThread={this.selectThread} />
+        break
     }
 
     return (
@@ -327,7 +330,7 @@ export default class App extends React.Component {
           switchAutoUpdate={this.switchAutoUpdate}
           switchAutoScroll={this.switchAutoScroll} />
         {/*リスト欄*/}
-        {components[this.state.listMode]}
+        {listBox}
         {/*書き込み欄*/}
         <div id="write-form" className="form-group">
           <textarea id="write-form-textarea" className="form-control" rows="3"
