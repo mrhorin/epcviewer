@@ -17,8 +17,8 @@ export default class Storage {
       currentUrl: "",
       listMode: "BOARDS",
       updateStatus: "WAIT",
-      autoUpdate: true,
-      autoScroll: true
+      isAutoUpdate: true,
+      isAutoScroll: true
     }
   }
 

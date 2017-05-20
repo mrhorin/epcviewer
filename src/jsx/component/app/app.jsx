@@ -21,9 +21,9 @@ state
     WAITは待機中
     UPDATINGは更新中
     POSTINGは投稿中
-  autoUpdate: bool
+  isAutoUpdate: bool
     スレッドの自動更新のON/OFF状態
-  autoScroll: bool
+  isAutoScroll: bool
     スレッドのオートスクロールのON/OFF状態
 ********************************************************/
 import React from 'react'
@@ -244,18 +244,18 @@ export default class App extends React.Component {
 
   // スレッドの自動更新のON/OFF切り替え  
   switchAutoUpdate = () => {
-    this.setState({ autoUpdate: !this.state.autoUpdate })
+    this.setState({ isAutoUpdate: !this.state.isAutoUpdate })
   }
 
   // スレッドのオートスクロールのON/OFF切り替え  
   switchAutoScroll = () => {
-    this.setState({ autoScroll: !this.state.autoScroll })
+    this.setState({ isAutoScroll: !this.state.isAutoScroll })
   }
 
   // 自動更新タイマーの開始
   startUpdateTimer = () => {
     this.updateTimerId = setInterval(() => {
-      if (this.state.autoUpdate) this.updateCurrentThread()
+      if (this.state.isAutoUpdate) this.updateCurrentThread()
       Storage.setState(this.state)
     }, 7000)
   }
@@ -313,7 +313,7 @@ export default class App extends React.Component {
       case 'THREADS':
         listBox = <ThreadBox
           boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
-          autoScroll={this.state.autoScroll} currentThreadIndex={this.state.currentThreadIndex}
+          isAutoScroll={this.state.isAutoScroll} currentThreadIndex={this.state.currentThreadIndex}
           removeThread={this.removeThread} selectThread={this.selectThread} />
         break
     }
@@ -321,7 +321,7 @@ export default class App extends React.Component {
     return (
       <div>
         <Header
-          listMode={this.state.listMode} currentUrl={this.state.currentUrl} autoUpdate={this.state.autoUpdate} autoScroll={this.state.autoScroll}
+          listMode={this.state.listMode} currentUrl={this.state.currentUrl} isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll}
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}

@@ -58,9 +58,10 @@ export default class Header extends React.Component {
   }
 
   render() {
-    var autoUpdateClass = this.props.autoUpdate ? 'active ' : ''
+    // ボタンのアクティブ状態
+    var autoUpdateClass = this.props.isAutoUpdate ? 'active ' : ''
     autoUpdateClass += 'btn btn-default btn-mini'
-    var autoScrollClass = this.props.autoScroll ? 'active ' : ''
+    var autoScrollClass = this.props.isAutoScroll ? 'active ' : ''
     autoScrollClass += 'btn btn-default btn-mini'
 
     return (
