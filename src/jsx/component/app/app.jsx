@@ -108,6 +108,7 @@ export default class App extends React.Component {
         listMode: "BOARDS"
       })
     }
+    Storage.setState(this.state)
   }
 
   removeBoard = (boardUrl) => {
@@ -128,6 +129,7 @@ export default class App extends React.Component {
       boards: boards,
       currentBoardIndex: afterCurrentIndex
     })
+    Storage.setState(this.state)
   }
 
   selectBoard = (index) => {
@@ -153,6 +155,7 @@ export default class App extends React.Component {
         listMode: "THREADS"
       })
     }
+    Storage.setState(this.state)
   }
 
   removeThread = (threadUrl) => {
@@ -171,6 +174,7 @@ export default class App extends React.Component {
     if (afterCurrentIndex < 0) afterCurrentIndex = 0
     this.selectThread(afterCurrentIndex)
     this.setState({ threads: threads })
+    Storage.setState(this.state)
   }
 
   selectThread = (index) => {
@@ -225,6 +229,7 @@ export default class App extends React.Component {
       this.setState({ updateStatus: "UPDATING" })
       ipcRenderer.send('update-thread', this.currentThread)
     }
+    Storage.setState(this.state)
   }
 
   // 書き込みの投稿
@@ -250,19 +255,6 @@ export default class App extends React.Component {
   // スレッドのオートスクロールのON/OFF切り替え  
   switchAutoScroll = () => {
     this.setState({ isAutoScroll: !this.state.isAutoScroll })
-  }
-
-  // 自動更新タイマーの開始
-  startUpdateTimer = () => {
-    this.updateTimerId = setInterval(() => {
-      if (this.state.isAutoUpdate) this.updateCurrentThread()
-      Storage.setState(this.state)
-    }, 7000)
-  }
-
-  // 自動更新タイマーの停止  
-  stopUpdateTimer = () => {
-    clearInterval(this.updateTimerId)
   }
 
   // stateを初期化
@@ -294,12 +286,7 @@ export default class App extends React.Component {
       this.setState(state)
     })
     this.bindEvents()
-    this.startUpdateTimer()
     ipcRenderer.send('add-arg-board')
-  }
-
-  componentWillUnmount() {
-    this.stopUpdateTimer()
   }
 
   render() {
@@ -337,7 +324,8 @@ export default class App extends React.Component {
             onKeyDown={this._pressWriteFormHandler}
             onKeyUp={this._releaseWriteFormHandler} />
         </div>
-        <Footer updateStatus={this.state.updateStatus} currentThread={this.currentThread} />
+        <Footer updateStatus={this.state.updateStatus} isAutoUpdate={this.state.isAutoUpdate} currentThread={this.currentThread}
+          updateCurrentThread={this.updateCurrentThread} />
       </div>
     )
   }
