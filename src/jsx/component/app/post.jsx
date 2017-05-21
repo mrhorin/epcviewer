@@ -56,10 +56,17 @@ export default class Post extends React.Component {
           </a>
         )
       } else {
-        elements.push(element)
+        elements.push(this.decodeNumRefToString(element))
       }
     })
     return elements
+  }
+
+  // 数値文字参照を文字列に
+  decodeNumRefToString = (text) => {
+    return text.replace(/&#(\d+);/ig, (match, $1, idx, all)=> {
+      return String.fromCharCode($1);
+    })
   }
 
   // 規定ブラウザで開く
