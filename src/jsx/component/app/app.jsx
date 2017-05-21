@@ -330,6 +330,7 @@ export default class App extends React.Component {
     } else if (event.nativeEvent.key == 'Enter' && this.pressShift) {
       // Shift+Enterで投稿
       this.postWriteForm(event.target.value)
+      this.pressShift = false
     }
   }
 
