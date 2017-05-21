@@ -48,6 +48,10 @@ export default class Footer extends React.Component {
     }, 1000)
   }
 
+  _onClickFooterHandler = () => {
+    this.props.switchShowWriteForm()
+  }
+
   // 自動更新タイマーの停止  
   stopUpdateTimer = () => {
     clearInterval(this.updateTimerId)
@@ -76,7 +80,7 @@ export default class Footer extends React.Component {
         break
     }
     return(
-      <footer className="toolbar toolbar-footer">
+      <footer className="toolbar toolbar-footer" onClick={this._onClickFooterHandler}>
         <div className="flex-container">
           <div className="flex-item update-status">
             {status}

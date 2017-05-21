@@ -18,7 +18,8 @@ export default class Storage {
       listMode: "BOARDS",
       updateStatus: "WAIT",
       isAutoUpdate: true,
-      isAutoScroll: true
+      isAutoScroll: true,
+      isShowWriteForm: true
     }
   }
 

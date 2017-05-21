@@ -155,8 +155,8 @@ header{
         }
       }
     }
-    .post:last-child{
-      padding-bottom: 25px;
+    #post-box-end{
+      padding-bottom: 10px;
     }
   }
 }
@@ -185,6 +185,7 @@ footer{
   width: 100%;
   font-size: 11px;
   line-height: 20px;
+  z-index: 2;
   .flex-container{
     /* 更新状態 */
     .flex-item.update-status{

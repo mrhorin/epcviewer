@@ -310,6 +310,11 @@ export default class App extends React.Component {
     this.setState({ isAutoScroll: !this.state.isAutoScroll })
   }
 
+  // 書き込み欄の表示/非表示切り替え  
+  switchShowWriteForm = () => {
+    this.setState({ isShowWriteForm: !this.state.isShowWriteForm })
+  }
+
   // stateを初期化
   initialize = () => {
     Storage.clearState((error) => {
@@ -334,10 +339,19 @@ export default class App extends React.Component {
     this.pressShift = false
   }
 
+  componentDidUpdate() {
+    if (this.state.isShowWriteForm) {
+      this.writeForm.style.display = "block"
+    } else {
+      this.writeForm.style.display = "none"
+    }
+  }
+
   componentDidMount() {
     Storage.statePromise.then((state) => {
       this.setState(state)
     })
+    this.writeForm = document.getElementById('write-form-textarea')
     this.bindEvents()
     ipcRenderer.send('add-arg-board')
   }
@@ -378,7 +392,8 @@ export default class App extends React.Component {
             onKeyUp={this._releaseWriteFormHandler} />
         </div>
         <Footer updateStatus={this.state.updateStatus} isAutoUpdate={this.state.isAutoUpdate} currentThread={this.currentThread}
-          updateCurrentThread={this.updateCurrentThread} />
+          updateCurrentThread={this.updateCurrentThread}
+          switchShowWriteForm={this.switchShowWriteForm} />
       </div>
     )
   }
