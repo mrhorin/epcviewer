@@ -136,6 +136,9 @@ const escape = (hash) => {
 }
 
 const encode = (text) => {
-  const eucjp = Encoding.convert(text, 'eucjp')
-  return Encoding.urlEncode(eucjp)
+  const eucjp = Encoding.convert(text, 'EUCJP')
+  return Encoding.urlEncode(eucjp).replace(/%8F(%A1%C1)/gi, (match, $1) => {
+    // macOS環境「〜」入力対策
+    return $1
+  })
 }
