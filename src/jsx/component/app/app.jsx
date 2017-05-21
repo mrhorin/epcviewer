@@ -88,10 +88,10 @@ export default class App extends React.Component {
       this.writeFormTextarea.focus()
     })
     ipcRenderer.on('shortcut-tab-left', (event) => {
-      console.log('shortcut-tab-left')
+      this.moveLeftTab()
     })
     ipcRenderer.on('shortcut-tab-right', (event) => {
-      console.log('shortcut-tab-right')
+      this.moveRightTab()
     })
   }
 
@@ -185,6 +185,46 @@ export default class App extends React.Component {
 
   selectThread = (index) => {
     this.setState({ currentThreadIndex: index })
+  }
+
+  // タブを左に移動  
+  moveLeftTab = () => {
+    switch (this.state.listMode) {
+      case 'BOARDS':
+        if (this.state.currentBoardIndex <= 0) {
+          this.setState({ currentBoardIndex: this.state.boards.length-1 })
+        } else {
+          this.setState({ currentBoardIndex: this.state.currentBoardIndex-1 })
+        }
+        break  
+      case 'THREADS':
+        if (this.state.currentThreadIndex <= 0) {
+          this.setState({ currentThreadIndex: this.state.threads.length-1 })
+        } else {
+          this.setState({ currentThreadIndex: this.state.currentThreadIndex-1 })
+        }
+        break  
+    }
+  }
+
+  // タブを右に移動  
+  moveRightTab = () => {
+    switch (this.state.listMode) {
+      case 'BOARDS':
+        if (this.state.currentBoardIndex >= this.state.boards.length-1) {
+          this.setState({ currentBoardIndex: 0 })
+        } else {
+          this.setState({ currentBoardIndex: this.state.currentBoardIndex+1 })
+        }
+        break  
+      case 'THREADS':
+        if (this.state.currentThreadIndex >= this.state.threads.length-1) {
+          this.setState({ currentThreadIndex: 0 })
+        } else {
+          this.setState({ currentThreadIndex: this.state.currentThreadIndex+1 })
+        }
+        break  
+    }  
   }
 
   // 現在の板を取得  
