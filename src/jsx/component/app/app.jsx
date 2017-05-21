@@ -93,6 +93,12 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-tab-right', (event) => {
       this.moveRightTab()
     })
+    ipcRenderer.on('shortcut-show-boards', (event) => {
+      if(this.state.listMode!='BOARDS') this.setState({ listMode: 'BOARDS' })
+    })
+    ipcRenderer.on('shortcut-show-threads', (event) => {
+      if(this.state.listMode!='THREADS') this.setState({ listMode: 'THREADS' })
+    })
   }
 
   addBoard = (board) => {

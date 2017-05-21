@@ -60,25 +60,44 @@ app.on('ready', ()=>{
         {
           label: '検索',
           accelerator: 'CmdOrCtrl+F',
-          click: ()=>{
+          click: () => {
             // window.main.webContents.send('shortcut-search')
           }
         },
-        { type: 'separator' },
+      ]
+    },
+    {
+      label: '移動',
+      submenu: [
         {
           label: 'タブ左移動',
           accelerator: 'CmdOrCtrl+Left',
-          click: ()=>{
+          click: () => {
             window.app.webContents.send('shortcut-tab-left')
           }
         },
         {
           label: 'タブ右移動',
           accelerator: 'CmdOrCtrl+Right',
-          click: ()=>{
+          click: () => {
             window.app.webContents.send('shortcut-tab-right')
           }
         },
+        { type: 'separator' },
+        {
+          label: '板一覧',
+          accelerator: 'CmdOrCtrl+b',
+          click: () => {
+            window.app.webContents.send('shortcut-show-boards')
+          }
+        },
+        {
+          label: 'スレッド一覧',
+          accelerator: 'CmdOrCtrl+t',
+          click: () => {
+            window.app.webContents.send('shortcut-show-threads')
+          }
+        }
       ]
     },
     {
