@@ -4,12 +4,19 @@ state
     自動更新用カウンター（単位: 秒）
 ********************************************************/
 import React from 'react'
+import { ipcRenderer } from 'electron'
 
 export default class Footer extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = { autoUpdateCount: 10 }
+  }
+
+  bindEvents = () => {
+    ipcRenderer.on('update-thread-reply', (event) => {
+      this.setState({ autoUpdateCount: 10 })
+    })
   }
 
   // スレタイ(レス数) を取得
@@ -48,12 +55,12 @@ export default class Footer extends React.Component {
 
   componentDidMount() {
     this.startUpdateTimer()
+    this.bindEvents()
   }
 
   componentWillUnmount() {
     this.stopUpdateTimer()
   }
-
 
   render() {
     var status = ''
