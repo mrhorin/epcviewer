@@ -1,11 +1,14 @@
-import {app, BrowserWindow, ipcMain} from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { Board, Thread, UrlParser } from '2ch-parser'
 import request from 'superagent'
 import Encoding from 'encoding-japanese'
 
+import MenuManager from 'main_process/menu_manager'
 import Storage from 'js/storage'
 
-var window = { app: null }
+let menu = new MenuManager()
+
+let window = { app: null }
 
 // 引数で最初に出現するURL
 
@@ -17,6 +20,84 @@ const argUrl = global.process.argv.find((arg) => {
   アプリケーション起動準備完了時
 -----------------------------------------*/
 app.on('ready', ()=>{
+
+  menu.setContextMenu([
+    {
+      label: '編集',
+      submenu: [
+        {
+          label: 'コピー',
+          accelerator: 'CmdOrCtrl+C',
+          role: 'copy'
+        },
+        {
+          label: 'カット',
+          accelerator: 'CmdOrCtrl+X',
+          role: 'cut'
+        },
+        {
+          label: 'ペースト',
+          accelerator: 'CmdOrCtrl+V',
+          role: 'paste'
+        },
+        {
+          label: '全選択',
+          accelerator: 'CmdOrCtrl+A',
+          role: 'selectall'
+        },
+        { type: 'separator' },
+        {
+          label: '戻る',
+          accelerator: 'CmdOrCtrl+Z',
+          role: 'undo'
+        },
+        {
+          label: '進む',
+          accelerator: 'Shift+CmdOrCtrl+Z',
+          role: 'redo'
+        },
+        { type: 'separator' },
+        {
+          label: '検索',
+          accelerator: 'CmdOrCtrl+F',
+          click: ()=>{
+            // window.main.webContents.send('shortcut-search')
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'タブ左移動',
+          accelerator: 'CmdOrCtrl+Left',
+          click: ()=>{
+            window.app.webContents.send('shortcut-tab-left')
+          }
+        },
+        {
+          label: 'タブ右移動',
+          accelerator: 'CmdOrCtrl+Right',
+          click: ()=>{
+            window.app.webContents.send('shortcut-tab-right')
+          }
+        },
+      ]
+    },
+    {
+      label: 'ヘルプ',
+      submenu: [
+        { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
+        { label: "問題を報告する", click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer/issues") } }
+      ]
+    }
+  ])
+  menu.setMacContextMenu({
+      label: app.getName(),
+      submenu: [
+        { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
+        { type: 'separator' },
+        { label: '終了', accelerator: 'Command+Q', click: ()=>{ app.quit() } }
+      ]
+  })
+  menu.show()
 
   // 設定を読み込む  
   Storage.configPromise.then((config) => {

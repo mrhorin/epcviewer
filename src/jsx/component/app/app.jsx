@@ -87,6 +87,12 @@ export default class App extends React.Component {
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
     })
+    ipcRenderer.on('shortcut-tab-left', (event) => {
+      console.log('shortcut-tab-left')
+    })
+    ipcRenderer.on('shortcut-tab-right', (event) => {
+      console.log('shortcut-tab-right')
+    })
   }
 
   addBoard = (board) => {
