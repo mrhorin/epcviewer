@@ -71,15 +71,15 @@ export default class Header extends React.Component {
           <div className="flex-header-common-btns">
             <div className="btn-group">
               {/*更新*/}
-              <button className="btn btn-default btn-mini" onClick={this.updateList}>
+              <button id="btn-update" className="btn btn-default btn-mini" onClick={this.updateList}>
                 <span className="icon icon-arrows-ccw"></span>
               </button>
               {/*掲示板一覧*/}
-              <button className="btn btn-default btn-mini" onClick={this.switchBoardsList}>
+              <button id="btn-boards" className="btn btn-default btn-mini" onClick={this.switchBoardsList}>
                 <span className="icon icon-menu"></span>
               </button>
               {/*スレッド一覧*/}
-              <button className="btn btn-default btn-mini" onClick={this.switchThreadsList}>
+              <button id="btn-threads" className="btn btn-default btn-mini" onClick={this.switchThreadsList}>
                 <span className="icon icon-window"></span>
               </button>
             </div>
@@ -88,11 +88,11 @@ export default class Header extends React.Component {
           <div className="flex-header-thread-btns">
             <div className="btn-group">
               {/*自動更新*/}
-              <button className={autoUpdateClass} onClick={this.props.switchAutoUpdate}>
+              <button id="btn-auto-update" className={autoUpdateClass} onClick={this.props.switchAutoUpdate}>
                 <span className="icon icon-clock"></span>
               </button>
               {/*自動スクロール*/}
-              <button className={autoScrollClass} onClick={this.props.switchAutoScroll}>
+              <button id="btn-auto-scroll" className={autoScrollClass} onClick={this.props.switchAutoScroll}>
                 <span className="icon icon-down-bold"></span>
               </button>
             </div>  

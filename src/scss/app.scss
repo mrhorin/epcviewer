@@ -209,10 +209,42 @@ footer{
 /* photonKit override */
 .btn-group{
   display: -webkit-inline-box !important;
-}
-
-.btn-group .btn + .btn.active:last-child{
-  border-left: 1px solid #c2c0c2 !important;
+  button.btn:hover{
+    z-index: 10 !important;
+  }
+  button.btn:hover::after,
+  button.btn.active::after{
+    position: absolute;
+    bottom: -25px;
+    right: -20px;
+    font-size: 9px;
+    padding: 1px 3px;
+    background: #fff;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+    border: 1px solid #666;
+    color: #000;
+  }
+  #btn-update:hover::after{
+    content: '更新';
+  }
+  #btn-boards:hover::after{
+    content: '板一覧';
+  }
+  #btn-threads:hover::after{
+    content: 'スレッド一覧';
+  }
+  #btn-auto-update:hover::after{
+    content: '自動更新';
+  }
+  #btn-auto-scroll:hover::after{
+    content: 'オートスクロール';
+  }
+  button.btn.active:first-child{
+    border-right: 1px solid #c2c0c2 !important;
+  }
+  button.btn.active:last-child{
+    border-left: 1px solid #c2c0c2 !important;
+  }
 }
 
 .tab-group{
