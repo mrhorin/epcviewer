@@ -102,7 +102,7 @@ export default class Post extends React.Component {
         <div className="post-anker">
         </div>
         <div className="post-header">
-          <span className="post-no">{this.props.post.no}</span>
+          <span className="post-no">{this.props.post.no}</span>:
           <span className="post-name">{this.props.post.name}</span>
           <span className="post-mail">[{this.props.post.mail}]</span>
           <span className="post-date">{this.props.post.date}</span>

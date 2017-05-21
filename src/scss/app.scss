@@ -64,6 +64,7 @@ header{
 /* ---------- 板一覧 ---------- */
 #board-box{
   background: #fff;
+  overflow-x: hidden;
 }
 /* スレッド名一覧 */
 #subject-box{
@@ -86,7 +87,7 @@ header{
   background: #efefef;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
@@ -110,23 +111,24 @@ header{
         font-size: 9px;
         box-shadow: 3px 3px 3px rgba(0,0,0,0.4);
         z-index: 1000;
+        user-select: text;
       }
       .post-header{
         display: block;
         word-break: break-all;
+        user-select: text;
+        .post-no,.post-name,.post-mail,.post-date,.post-id{
+          user-select: text;
+        }
         .post-no{
           display: inline;
-          margin-right: 3px;
           text-align: left;
-        }
-        .post-no::after{
-          content: ":";
-          margin-right: 3px;
         }
         .post-name{
           display: inline;
           color: #008800;
           font-weight: bold;
+          margin-left: 3px;
           margin-right: 3px;
         }
         .post-mail{
@@ -147,6 +149,8 @@ header{
         .post-body-line{
           display: block;
           line-height: 18px;
+          user-select: text;
+          a{ user-select: text; }
         }
       }
     }
@@ -226,6 +230,7 @@ footer{
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    padding-right: 5px;
     // マウスイベントを検知する為の記述
     display: block;
     width: 100%;

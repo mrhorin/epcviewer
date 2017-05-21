@@ -1,4 +1,5 @@
 import React from 'react'
+import { shell, remote } from 'electron'
 import _ from 'lodash'
 
 import Tab from 'jsx/component/common/tab'
@@ -19,6 +20,33 @@ export default class ThreadBox extends React.Component {
   // 書き込み一覧の一番下までスクロール  
   scrollBottom = () => {
     this.postBox.scrollIntoView(false)
+  }
+
+  showContextMenu = (e) => {
+    const clipboard = remote.clipboard
+    const Menu =  remote.Menu
+    const MenuItem =  remote.MenuItem
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'コピー',
+      click: () => {
+        clipboard.writeText(document.getSelection().toString())
+      }
+    }))
+    menu.append(new MenuItem({
+      label: 'Googleで検索',
+      click: () => {
+        let q = document.getSelection().toString().replace(/\s/gi, '+')
+        this.openBrowser(`https://www.google.co.jp/search?q=${q}`)  
+      }
+    }))
+    e.preventDefault()
+    menu.popup(remote.getCurrentWindow())
+  }
+
+  // 規定ブラウザで開く
+  openBrowser = (url) => {
+    shell.openExternal(url)
   }
 
   _removeThread = (threadUrl) => {
@@ -66,7 +94,7 @@ export default class ThreadBox extends React.Component {
           </div>
         </div>
         {/*書き込み一覧*/}
-        <div id="post-box">
+        <div id="post-box" onContextMenu={this.showContextMenu}>
           {posts}
           <div id="post-box-end"/>
         </div>
