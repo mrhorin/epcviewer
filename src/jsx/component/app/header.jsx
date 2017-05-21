@@ -101,7 +101,8 @@ export default class Header extends React.Component {
           <div className="flex-header-url">
             <input type="text" value={this.props.currentUrl}
               onChange={e => { this.props.setCurrentUrl(e.target.value) }}
-              onKeyUp={this._onKeyUpUrlHandler}/>
+              onKeyUp={this._onKeyUpUrlHandler}
+              onFocus={e => { e.target.select() }}/>
           </div>
         </div>
       </header>
