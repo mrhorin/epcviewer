@@ -86,6 +86,7 @@ export default class App extends React.Component {
       this.writeFormTextarea.value = ""
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
+      this.updateCurrentThread()
     })
     ipcRenderer.on('shortcut-tab-left', (event) => {
       this.moveLeftTab()
