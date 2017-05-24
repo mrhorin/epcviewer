@@ -97,6 +97,14 @@ app.on('ready', () => {
         },
         { type: 'separator' },
         {
+          label: 'タブを閉じる',
+          accelerator: 'CmdOrCtrl+w',
+          click: () => {
+            window.app.webContents.send('shortcut-tab-close')
+          }
+        },
+        { type: 'separator' },
+        {
           label: '板一覧',
           accelerator: 'CmdOrCtrl+b',
           click: () => {

@@ -101,6 +101,9 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-tab-right', (event) => {
       this.moveRightTab()
     })
+    ipcRenderer.on('shortcut-tab-close', (event) => {
+      this.closeCurrentTab()
+    })
     ipcRenderer.on('shortcut-show-boards', (event) => {
       if(this.state.listMode!='BOARDS') this.setState({ listMode: 'BOARDS' })
     })
@@ -239,6 +242,18 @@ export default class App extends React.Component {
         }
         break  
     }  
+  }
+
+  // 現在のタブを閉じる  
+  closeCurrentTab = () => {
+    switch (this.state.listMode) {
+      case 'BOARDS':
+        if(this.currentBoard.url) this.removeBoard(this.currentBoard.url)  
+        break
+      case 'THREADS':
+        if(this.currentThread.url) this.removeThread(this.currentThread.url)
+        break  
+    }
   }
 
   // 現在の板を取得  
