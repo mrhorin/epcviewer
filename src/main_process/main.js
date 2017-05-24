@@ -6,20 +6,32 @@ import Encoding from 'encoding-japanese'
 import MenuManager from 'main_process/menu_manager'
 import Storage from 'js/storage'
 
-let menu = new MenuManager()
-
 let window = { app: null }
+let menu = new MenuManager()
+// 引数URL
+const argUrl = getUrlFromArray(global.process.argv)
 
-// 引数で最初に出現するURL
 
-const argUrl = global.process.argv.find((arg) => {
-  return arg.match(/h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
+/*-----------------------------------------
+  アプリの多重起動を禁止
+-----------------------------------------*/
+var shouldQuit = app.makeSingleInstance((argv, workingDirectory) => {
+  // 多重起動時の引数URL
+  const subArgUrl = getUrlFromArray(argv)
+  if (window.app && subArgUrl) {
+    let board = new Board(UrlParser.getBoardUrl(subArgUrl))
+    board.fetchThreads((res) => {
+      window.app.focus()
+      window.app.webContents.send('add-board-reply', board)
+    })      
+  }
 })
+if(shouldQuit) app.exit()
 
 /*-----------------------------------------
   アプリケーション起動準備完了時
 -----------------------------------------*/
-app.on('ready', ()=>{
+app.on('ready', () => {
 
   menu.setContextMenu([
     {
@@ -164,9 +176,11 @@ ipcMain.on('add-board', (event, url) => {
 ipcMain.on('add-arg-board', (event) => {
   if (argUrl) {
     var board = new Board(UrlParser.getBoardUrl(argUrl))
-    board.fetchThreads((res)=>{
-      event.sender.send('add-board-reply', board)
+    board.fetchThreads((res) => {
+      event.sender.send('add-arg-board-reply', board)
     }) 
+  } else {
+    event.sender.send('add-arg-board-reply', "")
   }
 })
 
@@ -176,11 +190,6 @@ ipcMain.on('add-thread', (event, threadUrl) => {
   thread.fetchAllPosts((res) => {
     event.sender.send('add-thread-reply', thread)
   })
-})
-
-// ------- URLのThreadを表示する -------
-ipcMain.on('show-thread', (event, threadUrl) => {
-  event.sender.send('show-thread-reply', threadUrl)
 })
 
 // ------- thread更新して返す -------
@@ -229,13 +238,28 @@ ipcMain.on('post-write', (event, thread, message) => {
   }
 })
 
-const escape = (hash) => {
+// ------- URLのThreadを表示する -------
+ipcMain.on('show-thread', (event, threadUrl) => {
+  event.sender.send('show-thread-reply', threadUrl)
+})
+
+/*-----------------------------------------
+  functions
+-----------------------------------------*/
+// arrayから最初に出現するURLを取得する
+function getUrlFromArray(array) {
+  return array.find((arg) => {
+    return arg.match(/https?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
+  })
+}
+
+function escape(hash) {
   return Object.keys(hash).map((key) => {
     return key + '=' + encode(hash[key])
   }).join('&')
 }
 
-const encode = (text) => {
+function encode(text) {
   const eucjp = Encoding.convert(text, 'EUCJP')
   return Encoding.urlEncode(eucjp).replace(/%8F(%A1%C1)/gi, (match, $1) => {
     // macOS環境「〜」入力対策

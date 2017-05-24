@@ -46,6 +46,13 @@ export default class App extends React.Component {
 
   bindEvents = () => {
     this.writeFormTextarea = window.document.getElementById('write-form-textarea')
+    // 初回起動時に引数URL取得したboardを受け取る
+    ipcRenderer.on('add-arg-board-reply', (event, board) => {
+      Storage.statePromise.then((state) => {
+        this.setState(state)
+        if(board) this.addBoard(board)
+      })
+    })
     ipcRenderer.on('add-board-reply', (event, board) => {
       this.addBoard(board)
     })
@@ -349,9 +356,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    Storage.statePromise.then((state) => {
-      this.setState(state)
-    })
     this.writeForm = document.getElementById('write-form-textarea')
     this.bindEvents()
     ipcRenderer.send('add-arg-board')
