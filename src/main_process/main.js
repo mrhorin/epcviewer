@@ -121,6 +121,12 @@ app.on('ready', () => {
       ]
     },
     {
+      label: '設定',
+      submenu: [
+        { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } }
+      ]
+    },
+    {
       label: 'ヘルプ',
       submenu: [
         { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
@@ -133,9 +139,7 @@ app.on('ready', () => {
       submenu: [
         { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
         { type: 'separator' },
-        {
-          label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() }
-        },
+        { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
         { type: 'separator' },
         { label: '終了', accelerator: 'CmdOrCtrl+Q', click: ()=>{ app.quit() } }
       ]
