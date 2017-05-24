@@ -48,8 +48,17 @@ export default class App extends React.Component {
     this.writeFormTextarea = window.document.getElementById('write-form-textarea')
     // 初回起動時に引数URL取得したboardを受け取る
     ipcRenderer.on('add-arg-board-reply', (event, board) => {
-      Storage.statePromise.then((state) => {
-        this.setState(state)
+      Promise.all([Storage.statePromise, Storage.preferencesPromise]).then((values) => {
+        // 環境設定の適用
+        if (!values[1].isReturnBoards) {
+          values[0].boards = []
+          values[0].currentBoardIndex = 0
+        }
+        if (!values[1].isReturnThreads) {
+          values[0].threads = []
+          values[0].currentThreadIndex = 0
+        }
+        this.setState(values[0])
         if(board) this.addBoard(board)
       })
     })

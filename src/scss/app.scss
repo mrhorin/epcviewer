@@ -25,6 +25,48 @@ a:active{ color: #ff8000; }
   height: 100vh;
 }
 
+/* -------- 環境設定 -------- */
+#preferences-flex-container{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding: 15px;
+  background: #efefef;
+  color: #333;
+  height: 100vh;
+  .preferences-title{
+    font-size: 11px;
+    font-weight: bold;
+  }
+  #preferences-save-boards{
+    order: 1;
+  }
+  #preferences-save-threads{
+    order: 2;
+  }
+  .preferences-item{
+    padding-left: 2px;
+    input[type="checkbox"]{
+      margin: 0;
+      margin-right: 3px;
+      line-height: 11px;
+      vertical-align: bottom;
+    }
+    .checkbox-label{
+      line-height: 11px;
+      font-size: 11px;
+    }
+  }
+  #preferences-btns{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    button{
+      margin: 0px 3px;
+    }
+  }
+}
+
 /* -------- ヘッダー -------- */
 header{
   order: 1;

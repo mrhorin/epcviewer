@@ -4,6 +4,7 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 module.exports = {
   entry: {
     "app": './src/jsx/component/app/index.jsx',
+    "preferences": './src/jsx/component/preferences/index.jsx',
     "main": './src/main_process/main.js'
   },
   output: {

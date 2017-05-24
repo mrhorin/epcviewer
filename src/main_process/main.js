@@ -6,7 +6,7 @@ import Encoding from 'encoding-japanese'
 import MenuManager from 'main_process/menu_manager'
 import Storage from 'js/storage'
 
-let window = { app: null }
+let window = { app: null, preferences: null }
 let menu = new MenuManager()
 // 引数URL
 const argUrl = getUrlFromArray(global.process.argv)
@@ -133,7 +133,11 @@ app.on('ready', () => {
       submenu: [
         { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
         { type: 'separator' },
-        { label: '終了', accelerator: 'Command+Q', click: ()=>{ app.quit() } }
+        {
+          label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() }
+        },
+        { type: 'separator' },
+        { label: '終了', accelerator: 'CmdOrCtrl+Q', click: ()=>{ app.quit() } }
       ]
   })
   menu.show()
@@ -251,9 +255,47 @@ ipcMain.on('show-thread', (event, threadUrl) => {
   event.sender.send('show-thread-reply', threadUrl)
 })
 
+// ------- 環境設定ウィンドウを閉じる -------
+ipcMain.on('close-preferences-window', (event) => {
+  closePreferencesWindow()
+})
+
 /*-----------------------------------------
   functions
 -----------------------------------------*/
+function openPreferencesWindow() {
+  let bounds = getChildBoundsFromApp(320, 240)
+  window.preferences = new BrowserWindow({
+    width: bounds.width,
+    height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
+    alwaysOnTop: true,
+    resizable: false,
+    center: true
+  })
+  window.preferences.loadURL(`file://${__dirname}/html/preferences.html`)
+  window.app.setIgnoreMouseEvents(true)
+}
+
+function closePreferencesWindow() {
+  window.preferences.close()
+  window.preferences = null
+  window.app.setIgnoreMouseEvents(false)  
+}
+
+// window.appの中心の相対座標を取得
+function getChildBoundsFromApp(childWidth, childHeight) {
+  let parrent = window.app.getBounds()
+  let x = Math.round(
+    parrent.x + (parrent.width/2) - (childWidth/2)
+  )
+  let y = Math.round(
+    parrent.y + (parrent.height/2) - (childHeight/2)
+  )
+  return { x: x, y: y, width: childWidth, height: childHeight }
+}
+
 // arrayから最初に出現するURLを取得する
 function getUrlFromArray(array) {
   return array.find((arg) => {

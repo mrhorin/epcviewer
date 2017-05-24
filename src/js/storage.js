@@ -23,7 +23,15 @@ export default class Storage {
     }
   }
 
-  // 設定を取得  
+  // 環境設定の初期値  
+  static get defaultPreferences() {
+    return {
+      isReturnBoards: false,
+      isReturnThreads: false
+    }
+  }
+
+  // mainプロセスの設定を取得  
   static get configPromise() {
     return new Promise((resolve, reject) => {
       storage.get('config', (error, config) => {
@@ -54,8 +62,23 @@ export default class Storage {
       })
     })
   }
-  
-  // 設定を保存  
+
+  static get preferencesPromise() {
+    return new Promise((resolve, reject) => {
+      storage.get('preferences', (error, preferences) => {
+        if (error) {
+          reject(error)
+        } else {
+          if (Object.keys(preferences).length == 0) {
+            preferences = this.defaultPreferences
+          }
+          resolve(preferences)
+        }
+      })
+    })
+  }
+
+  // mainプロセス設定を保存  
   static setConfig(bounds, callback = ()=>{}) {
     storage.set('config', bounds, (error) => {
       if (error) throw `Error: ${error}`
@@ -63,10 +86,17 @@ export default class Storage {
     })
   }
 
-  // stateを保存  
+  // Appのstateを保存  
   static setState(state, callback = () => { }) {
     state.updateStatus = 'WAIT'
     storage.set('state', state, (error) => {
+      if (error) throw `Error: ${error}`
+      callback()
+    })
+  }
+
+  static setPreferences(preferences, callback = () => { }) {
+    storage.set('preferences', preferences, (error) => {
       if (error) throw `Error: ${error}`
       callback()
     })
