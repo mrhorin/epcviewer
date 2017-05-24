@@ -32,20 +32,26 @@ header{
   padding: 3px;
   min-height: 28px !important;
   .flex-container{
-    .flex-header-common-btns{
+    .flex-header-update-btns{
       order: 1;
       flex-grow: 1;
       display: -webkit-inline-box;
-      margin-right: 3px;
+      margin-right: 2px;
+    }
+    .flex-header-list-btns{
+      order: 2;
+      flex-grow: 1;
+      display: -webkit-inline-box;
+      margin-right: 2px;
     }
     .flex-header-thread-btns{
-      order: 2;
+      order: 3;
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 3px;
     }
     .flex-header-url{
-      order: 3;
+      order: 4;
       flex-grow: 300;
       input{
         width: 100%;

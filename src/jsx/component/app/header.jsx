@@ -12,6 +12,26 @@ export default class Header extends React.Component {
     return window.outerHeight > 151
   }
 
+  // ボタン用のCSSクラス
+  get btnCssClassName() {
+    let css = { boardsList: '', threadsList: '', autoUpdate: '', autoScroll: '' }
+    for (var key in css) {
+      css[key] = 'btn btn-default btn-mini'
+    }
+    // アクティブ状態を付加
+    if (this.props.isAutoUpdate) css.autoUpdate += ' active'
+    if (this.props.isAutoScroll) css.autoScroll += ' active'
+    switch (this.props.listMode) {
+      case 'BOARDS':
+        css.boardsList += ' active'
+        break
+      case 'THREADS':
+        css.threadsList += ' active'
+        break
+    }
+    return css
+  }
+
   // 一覧を更新  
   updateList = () => {
     switch (this.props.listMode) {
@@ -58,28 +78,26 @@ export default class Header extends React.Component {
   }
 
   render() {
-    // ボタンのアクティブ状態
-    var autoUpdateClass = this.props.isAutoUpdate ? 'active ' : ''
-    autoUpdateClass += 'btn btn-default btn-mini'
-    var autoScrollClass = this.props.isAutoScroll ? 'active ' : ''
-    autoScrollClass += 'btn btn-default btn-mini'
+    let css = this.btnCssClassName
 
     return (
       <header className="toolbar toolbar-header">
         <div className="flex-container">
-          {/*共通ボタン*/}
-          <div className="flex-header-common-btns">
+          {/*更新ボタン*/}
+          <div className="flex-header-update-btns">
+            <button id="btn-update" className="btn btn-default btn-mini" onClick={this.updateList}>
+              <span className="icon icon-arrows-ccw"></span>
+            </button>
+          </div>
+          {/*リストボタン*/}
+          <div className="flex-header-list-btns">
             <div className="btn-group">
-              {/*更新*/}
-              <button id="btn-update" className="btn btn-default btn-mini" onClick={this.updateList}>
-                <span className="icon icon-arrows-ccw"></span>
-              </button>
               {/*掲示板一覧*/}
-              <button id="btn-boards" className="btn btn-default btn-mini" onClick={this.switchBoardsList}>
+              <button id="btn-boards" className={css.boardsList} onClick={this.switchBoardsList}>
                 <span className="icon icon-menu"></span>
               </button>
               {/*スレッド一覧*/}
-              <button id="btn-threads" className="btn btn-default btn-mini" onClick={this.switchThreadsList}>
+              <button id="btn-threads" className={css.threadsList} onClick={this.switchThreadsList}>
                 <span className="icon icon-window"></span>
               </button>
             </div>
@@ -88,11 +106,11 @@ export default class Header extends React.Component {
           <div className="flex-header-thread-btns">
             <div className="btn-group">
               {/*自動更新*/}
-              <button id="btn-auto-update" className={autoUpdateClass} onClick={this.props.switchAutoUpdate}>
+              <button id="btn-auto-update" className={css.autoUpdate} onClick={this.props.switchAutoUpdate}>
                 <span className="icon icon-clock"></span>
               </button>
               {/*自動スクロール*/}
-              <button id="btn-auto-scroll" className={autoScrollClass} onClick={this.props.switchAutoScroll}>
+              <button id="btn-auto-scroll" className={css.autoScroll} onClick={this.props.switchAutoScroll}>
                 <span className="icon icon-down-bold"></span>
               </button>
             </div>  
