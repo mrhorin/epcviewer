@@ -152,11 +152,10 @@ app.on('ready', () => {
       minHeight: 151
     })
     window.app.loadURL(`file://${__dirname}/html/app.html`)
-
     // 閉じた時
     window.app.on('close', () => {
       Storage.setConfig(window.app.getBounds(), () => {
-        window.main = null      
+        window.app = null      
       })
     })
   })
