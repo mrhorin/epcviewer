@@ -123,7 +123,9 @@ app.on('ready', () => {
     {
       label: '設定',
       submenu: [
-        { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } }
+        { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
+        { type: 'separator' },
+        { label: '設定を初期化', click: ()=>{ window.app.webContents.send('shortcut-clear-storage') } }
       ]
     },
     {

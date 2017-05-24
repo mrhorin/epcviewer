@@ -119,6 +119,11 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-show-threads', (event) => {
       if(this.state.listMode!='THREADS') this.setState({ listMode: 'THREADS' })
     })
+    ipcRenderer.on('shortcut-clear-storage', (event) => {
+      Storage.clearStorage(() => {
+        this.setState(Storage.defaultState)
+      })
+    })
   }
 
   addBoard = (board) => {

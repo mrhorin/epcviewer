@@ -108,4 +108,11 @@ export default class Storage {
     })
   }
 
+  static clearStorage(callback = () => { }) {
+    storage.clear((error) => {
+      if (error) throw error
+      callback()
+    })
+  }
+
 }
