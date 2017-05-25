@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"2ch-parser@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.0.14.tgz#52fd4ede818fa4db4c48d70c337773f0ca990398"
+"2ch-parser@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.0.15.tgz#47f3e52e3dda90a27fcc6583c995347b140897bc"
   dependencies:
     iconv-lite "^0.4.15"
     then-request "^2.2.0"

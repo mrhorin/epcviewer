@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "2ch-parser": "^0.0.14",
+    "2ch-parser": "^0.0.15",
     "electron-json-storage": "^3.0.5",
     "encoding-japanese": "^1.0.25",
     "lodash": "^4.17.4",
