@@ -2,12 +2,11 @@
 # yarn lockfile v1
 
 
-"2ch-parser@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.0.11.tgz#c0275a149770ce729dacf2bfac43aec205e068db"
+"2ch-parser@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.0.14.tgz#52fd4ede818fa4db4c48d70c337773f0ca990398"
   dependencies:
     iconv-lite "^0.4.15"
-    jschardet "^1.4.2"
     then-request "^2.2.0"
 
 abbrev@1:
@@ -2571,10 +2570,6 @@ js-yaml@~3.7.0:
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
-
-jschardet@^1.4.2:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/jschardet/-/jschardet-1.4.2.tgz#2aa107f142af4121d145659d44f50830961e699a"
 
 jsesc@^1.3.0:
   version "1.3.0"
