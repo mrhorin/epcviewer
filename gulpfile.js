@@ -25,6 +25,7 @@ gulp.task('package:darwin', ['default'], function (done) {
     dir: './',
     out: 'release/darwin',
     name: package["name"],
+    icon: "./src/img/darwin/icon_1024x1024.png.icns",
     "app-version": package["version"],
     "app-copyright": "Copyright (C) 2017 "+package["author"]+".",
     arch: 'x64',
