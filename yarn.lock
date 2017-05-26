@@ -3968,6 +3968,10 @@ react-dom@^15.5.4:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
+react-emojione@^3.1.10:
+  version "3.1.10"
+  resolved "https://registry.yarnpkg.com/react-emojione/-/react-emojione-3.1.10.tgz#2c233446c61f676381358b0573ea8d39b71e45b8"
+
 react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"

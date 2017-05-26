@@ -1,4 +1,5 @@
 import React from 'react'
+import { emojify } from 'react-emojione'
 import { shell } from 'electron'
 import _ from 'lodash'
 
@@ -56,7 +57,9 @@ export default class Post extends React.Component {
           </a>
         )
       } else {
-        elements.push(this.decodeNumRefToString(element))
+        element = this.decodeNumRefToString(element)
+        element = this.decodeEmoji(element)
+        elements.push(element)
       }
     })
     return elements
@@ -64,9 +67,23 @@ export default class Post extends React.Component {
 
   // 数値文字参照を文字列に
   decodeNumRefToString = (text) => {
-    return text.replace(/&#(\d+);/ig, (match, $1, idx, all)=> {
-      return String.fromCharCode($1);
+    return text.replace(/&#(\d+);/ig, (match, $code, idx, all) => {
+      return String.fromCodePoint($code)
     })
+  }
+
+  // 絵文字  
+  decodeEmoji = (text) => {
+    const options = {
+          convertShortnames: true,
+          convertUnicode: true,
+          convertAscii: true,
+          style: {
+            backgroundImage: 'url("../../src/img/common/emojione.sprites.png")',
+            width: 14, height: 14, margin: 0, top: -2
+          }
+    }
+    return emojify(text, options)
   }
 
   // 規定ブラウザで開く
