@@ -2,15 +2,16 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import { Board, Thread, UrlParser } from '2ch-parser'
 import request from 'superagent'
 import Encoding from 'encoding-japanese'
+import emojiRegex from 'emoji-regex/text.js'
 
 import MenuManager from 'main_process/menu_manager'
 import Storage from 'js/storage'
 
 let window = { app: null, preferences: null }
 let menu = new MenuManager()
+
 // 引数URL
 const argUrl = getUrlFromArray(global.process.argv)
-
 
 /*-----------------------------------------
   アプリの多重起動を禁止
@@ -235,7 +236,7 @@ ipcMain.on('post-write', (event, thread, message) => {
     const threadUrl = thread.url+"/"
     const writeUrl = threadUrl.replace(/read\.cgi/, 'write.cgi')
     const uri = threadUrl.split('/')
-    const body = escape({
+    const body = escapeForShitaraba({
       DIR: uri[5],
       BBS: uri[6],
       KEY: uri[7],
@@ -308,13 +309,17 @@ function getUrlFromArray(array) {
   })
 }
 
-function escape(hash) {
+function escapeForShitaraba(hash) {
   return Object.keys(hash).map((key) => {
-    return key + '=' + encode(hash[key])
+    return key + '=' + encodeForShitaraba(hash[key])
   }).join('&')
 }
 
-function encode(text) {
+function encodeForShitaraba(text) {
+  // 絵文字を数値参照に置換
+  text = text.replace(emojiRegex(), (emoji) => {
+    return `&#${emoji.codePointAt()};`
+  })
   const eucjp = Encoding.convert(text, 'EUCJP')
   return Encoding.urlEncode(eucjp).replace(/%8F(%A1%C1)/gi, (match, $1) => {
     // macOS環境「〜」入力対策

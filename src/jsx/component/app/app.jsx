@@ -29,6 +29,7 @@ state
 import React from 'react'
 import { ipcRenderer } from 'electron'
 import _ from 'lodash'
+
 import Storage from 'js/storage'
 
 import Header from 'jsx/component/app/header'
