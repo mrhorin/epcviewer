@@ -1,5 +1,5 @@
 # epcviewer
-![hidden](https://cloud.githubusercontent.com/assets/6502717/26480238/a16b587a-4213-11e7-9912-d095fb31201a.png)
+![hidden](https://cloud.githubusercontent.com/assets/6502717/26480716/ce1345d8-4216-11e7-9556-f9fffb874bb6.png)
 
 主にpeercast実況用途のレスクライアント
 
