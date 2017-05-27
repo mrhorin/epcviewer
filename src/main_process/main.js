@@ -216,8 +216,10 @@ ipcMain.on('update-thread', (event, thread) => {
   newThread.headers = thread.headers
   newThread.posts = thread.posts
   newThread.title = thread.title
-  newThread.fetchNewPosts((res) => {
+  newThread.newPostsPromise.then((res) => {
     event.sender.send('update-thread-reply', newThread)
+  }).catch((res) => {
+    event.sender.send('update-thread-reply', thread)
   })
 })
 

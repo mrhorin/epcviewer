@@ -2,11 +2,13 @@
 # yarn lockfile v1
 
 
-"2ch-parser@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.0.15.tgz#47f3e52e3dda90a27fcc6583c995347b140897bc"
+"2ch-parser@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.1.3.tgz#e02a910ae4a1c0a2e47a8667eb38b8aca39ea384"
   dependencies:
     iconv-lite "^0.4.15"
+    superagent "^3.5.2"
+    superagent-charset "^1.2.0"
     then-request "^2.2.0"
 
 abbrev@1:
@@ -2283,7 +2285,7 @@ https-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
 
-iconv-lite@^0.4.15, iconv-lite@~0.4.13:
+iconv-lite@^0.4.15, iconv-lite@^0.4.16, iconv-lite@~0.4.13:
   version "0.4.17"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.17.tgz#4fdaa3b38acbc2c031b045d0edcdfe1ecab18c8d"
 
@@ -4560,6 +4562,12 @@ sumchecker@^2.0.1:
   resolved "https://registry.yarnpkg.com/sumchecker/-/sumchecker-2.0.2.tgz#0f42c10e5d05da5d42eea3e56c3399a37d6c5b3e"
   dependencies:
     debug "^2.2.0"
+
+superagent-charset@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/superagent-charset/-/superagent-charset-1.2.0.tgz#9eeba5a9275f6f1cd3d6b13861f94463f3c3a348"
+  dependencies:
+    iconv-lite "^0.4.16"
 
 superagent@^3.5.2:
   version "3.5.2"
