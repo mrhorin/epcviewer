@@ -282,12 +282,35 @@ function openPreferencesWindow() {
   })
   window.preferences.loadURL(`file://${__dirname}/html/preferences.html`)
   window.app.setIgnoreMouseEvents(true)
+  // 閉じた時
+  window.preferences.on('close', () => {
+    window.preferences = null
+    window.app.setIgnoreMouseEvents(false)
+  })
 }
 
 function closePreferencesWindow() {
   window.preferences.close()
   window.preferences = null
-  window.app.setIgnoreMouseEvents(false)  
+  window.app.setIgnoreMouseEvents(false)
+}
+
+// threadの新着レスを取得するPromise
+function getNewPostsPromise(thread) {
+  return new Promise((resolve, reject) => {
+    var newThread = new Thread(thread.url)
+    newThread.headers = thread.headers
+    newThread.posts = thread.posts
+    newThread.title = thread.title
+    newThread
+    newThread.fetchNewPosts((res) => {
+      if (res.statusCode==200 || res.statusCode==206 || res.statusCode==304) {
+        resolve(newThread)
+      } else {
+        reject(res)
+      }
+    })
+  })
 }
 
 // window.appの中心の相対座標を取得
