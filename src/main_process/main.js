@@ -226,9 +226,9 @@ ipcMain.on('update-thread', (event, thread) => {
 // ------- board更新して返す -------
 ipcMain.on('update-board', (event, board) => {
   var newBoard = new Board(board.url)
-  newBoard.fetchThreads((res) => {
+  newBoard.threadsPromise.then((res) => [
     event.sender.send('update-board-reply', newBoard)
-  })
+  ])
 })
 
 // ------- threadにmessageをPOSTする -------
