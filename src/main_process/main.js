@@ -297,24 +297,6 @@ function closePreferencesWindow() {
   window.app.setIgnoreMouseEvents(false)
 }
 
-// threadの新着レスを取得するPromise
-function getNewPostsPromise(thread) {
-  return new Promise((resolve, reject) => {
-    var newThread = new Thread(thread.url)
-    newThread.headers = thread.headers
-    newThread.posts = thread.posts
-    newThread.title = thread.title
-    newThread
-    newThread.fetchNewPosts((res) => {
-      if (res.statusCode==200 || res.statusCode==206 || res.statusCode==304) {
-        resolve(newThread)
-      } else {
-        reject(res)
-      }
-    })
-  })
-}
-
 // window.appの中心の相対座標を取得
 function getChildBoundsFromApp(childWidth, childHeight) {
   let parrent = window.app.getBounds()
