@@ -233,23 +233,26 @@ footer{
   width: 100%;
   font-size: 11px;
   line-height: 20px;
+  max-height: 22px;
   z-index: 2;
   .flex-container{
+    flex-wrap: nowrap;
+    justify-content: space-between;
     /* 更新状態 */
     .flex-item.update-status{
       order: 1;
-      flex-grow: 1;
       padding-left: 5px;
+      text-align: left;
+      min-width: 50px;
     }
     /* スレッド名 */
     .flex-item.thread-title{
       order: 2;
-      flex-grow: 3;
+      padding-right: 5px;
       text-align: right;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      padding-right: 5px;
     }
   }
 }
