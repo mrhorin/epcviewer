@@ -21,11 +21,7 @@ export default class BoardBox extends React.Component {
   }
 
   get currentBoard() {
-    if(this.hasBoard) return this.props.boards[this.props.currentBoardIndex]
-  }
-
-  get hasBoard() {
-    return this.props.boards.length > 0
+    if(this.props.hasBoard) return this.props.boards[this.props.currentBoardIndex]
   }
 
   // Subjectコンポーネントに渡す用のハッシュ
@@ -54,17 +50,17 @@ export default class BoardBox extends React.Component {
   }
 
   _removeBoard = (boardUrl) => {
-    if(this.hasBoard) this.props.removeBoard(boardUrl)
+    if(this.props.hasBoard) this.props.removeBoard(boardUrl)
   }
 
   _selectBoard = (index) => {
-    if(this.hasBoard) this.props.selectBoard(index)
+    if(this.props.hasBoard) this.props.selectBoard(index)
   }
 
   render() {
     let subjects = []
     let tabs = []
-    if (this.hasBoard) {
+    if (this.props.hasBoard) {
       subjects = this.getSubjects(this.currentBoard).map((subject) => {
         return <Subject key={subject.no} subject={subject} threads={this.props.threads}/>
       })

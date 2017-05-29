@@ -271,6 +271,16 @@ export default class App extends React.Component {
     }
   }
 
+  // 板が存在するか  
+  get hasBoard() {
+    return this.state.boards.length > 0
+  }
+
+  // スレッドが存在するか  
+  get hasThread() {
+    return this.state.threads.length > 0
+  }
+  
   // 現在の板を取得  
   get currentBoard() {
     if (this.state.boards.length > 0) {
@@ -396,13 +406,14 @@ export default class App extends React.Component {
     switch (this.state.listMode) {
       case 'BOARDS':
         listBox = <BoardBox
-          boards={this.state.boards} threads={this.state.threads} currentBoardIndex={this.state.currentBoardIndex}
+          boards={this.state.boards} threads={this.state.threads} hasBoard={this.hasBoard} currentBoardIndex={this.state.currentBoardIndex}
           removeBoard={this.removeBoard} selectBoard={this.selectBoard} />
         break
       case 'THREADS':
         listBox = <ThreadBox
           boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
-          isAutoScroll={this.state.isAutoScroll} currentThreadIndex={this.state.currentThreadIndex}
+          isAutoScroll={this.state.isAutoScroll} hasBoard={this.hasBoard} hasThread={this.hasThread}
+          currentThreadIndex={this.state.currentThreadIndex}
           removeThread={this.removeThread} selectThread={this.selectThread} />
         break
     }

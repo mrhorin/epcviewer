@@ -12,17 +12,35 @@ export default class ThreadBox extends React.Component {
     super(props)
   }
 
+  get hasPost() {
+    return this.props.posts.length > 0
+  }
+
+  // 引数の番号のレスを取得  
   getPost = (no) => {
     const index = _.findIndex(this.props.posts, { no: no })
     return this.props.posts[index]
   }
 
-  // 書き込み一覧の一番下までスクロール  
+  // 書き込み一覧の一番下までスクロール
   scrollBottom = () => {
     this.postBox.scrollIntoView(false)
   }
 
-  showContextMenu = (e) => {
+  // 規定ブラウザで開く
+  openBrowser = (url) => {
+    shell.openExternal(url)
+  }
+  
+  _removeThread = (threadUrl) => {
+    this.props.removeThread(threadUrl)
+  }
+
+  _selectThread = (index) => {
+    this.props.selectThread(index)
+  }
+
+  _onContextMenuPostBoxHandler = (e) => {
     const clipboard = remote.clipboard
     const Menu =  remote.Menu
     const MenuItem =  remote.MenuItem
@@ -44,19 +62,6 @@ export default class ThreadBox extends React.Component {
     menu.popup(remote.getCurrentWindow())
   }
 
-  // 規定ブラウザで開く
-  openBrowser = (url) => {
-    shell.openExternal(url)
-  }
-
-  _removeThread = (threadUrl) => {
-    this.props.removeThread(threadUrl)
-  }
-
-  _selectThread = (index) => {
-    this.props.selectThread(index)
-  }
-
   componentDidMount() {
     this.postBox = window.document.getElementById("post-box-end")
     this.scrollBottom()
@@ -69,13 +74,13 @@ export default class ThreadBox extends React.Component {
 
   render() {
     let posts = []
-    if (this.props.boards.length > 0 && this.props.posts.length > 0) {
+    if (this.props.hasBoard && this.hasPost) {
       posts = this.props.posts.map((post, index) => {
         return <Post key={index} no={index + 2} post={post} getPost={this.getPost}/>
       })
     }
     let tabs = []
-    if (this.props.threads.length > 0) {
+    if (this.props.hasThread) {
       tabs = this.props.threads.map((thread, index) => {
         const active = this.props.currentThreadIndex==index
         return (
@@ -94,7 +99,7 @@ export default class ThreadBox extends React.Component {
           </div>
         </div>
         {/*書き込み一覧*/}
-        <div id="post-box" onContextMenu={this.showContextMenu}>
+        <div id="post-box" onContextMenu={this._onContextMenuPostBoxHandler}>
           {posts}
           <div id="post-box-end"/>
         </div>
