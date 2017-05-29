@@ -181,7 +181,7 @@ app.on('window-all-closed', ()=>{
 -----------------------------------------*/
 // ------- URLのBoardを返す -------
 ipcMain.on('add-board', (event, url) => {
-  var board = new Board(url)
+  var board = new Board(UrlParser.getBoardUrl(url))
   board.fetchThreads((res)=>{
     event.sender.send('add-board-reply', {
       url: board.url,

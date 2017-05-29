@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "2ch-parser": "^0.2.0",
+    "2ch-parser": "^0.2.1",
     "electron-json-storage": "^3.0.5",
     "emoji-regex": "^6.4.2",
     "encoding-japanese": "^1.0.25",
