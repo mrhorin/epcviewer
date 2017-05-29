@@ -1,3 +1,12 @@
+/*******************************************************
+  state
+    subjectsMode: string
+      スレッド一覧の並び順を示す
+      PEERCAST:
+        peercast実況向けモード
+        進んでいるスレを上に、1000到達しているスレは下に配置
+*******************************************************/
+
 import React from 'react'
 
 import Tab from 'jsx/component/common/tab'
@@ -8,6 +17,7 @@ export default class BoardBox extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = { subjectsSortMode: 'PEERCAST' }
   }
 
   get currentBoard() {
@@ -25,14 +35,22 @@ export default class BoardBox extends React.Component {
       const match = thread.title.match(/^(.+)\((\d+)\)$/)
       return { 'no': Number(index+1), 'title': match[1], 'count': Number(match[2]), 'url': thread.url }
     })
-    // ソート処理
-    let disabledSubject = subjects.filter(subject => { if (subject.count >= 1000) return true })
-    let enabledSubject = subjects.filter(subject => { if (subject.count < 1000) return true }).sort((a, b) => {
-      // 1000レス未満のスレッドはレス数が多い順に
-      if (a.count > b.count) return -1
-      return 1
-    })
-    return enabledSubject.concat(disabledSubject)
+    return this.sortSubjects(subjects)
+  }
+
+  sortSubjects = (subjects) => {
+    switch (this.state.subjectsSortMode) {
+      case 'PEERCAST':
+        let disabledSubject = subjects.filter(subject => { if (subject.count >= 1000) return true })
+        let enabledSubject = subjects.filter(subject => { if (subject.count < 1000) return true }).sort((a, b) => {
+          // 1000レス未満のスレッドはレス数が多い順に
+          if (a.count > b.count) return -1
+          return 1
+        })
+        subjects = enabledSubject.concat(disabledSubject)
+        break
+    }
+    return subjects
   }
 
   _removeBoard = (boardUrl) => {
