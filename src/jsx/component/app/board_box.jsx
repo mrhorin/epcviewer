@@ -10,23 +10,46 @@ export default class BoardBox extends React.Component {
     super(props)
   }
 
+  get currentBoard() {
+    if(this.hasBoard) return this.props.boards[this.props.currentBoardIndex]
+  }
+
+  get hasBoard() {
+    return this.props.boards.length > 0
+  }
+
+  // Subjectコンポーネントに渡す用のハッシュ
+  getSubjects = (board) => {
+    let subjects= board.threads.map((thread, index) => {
+      // スレッド名とレス数を抽出
+      const match = thread.title.match(/^(.+)\((\d+)\)$/)
+      return { 'no': Number(index+1), 'title': match[1], 'count': Number(match[2]), 'url': thread.url }
+    })
+    // ソート処理
+    let disabledSubject = subjects.filter(subject => { if (subject.count >= 1000) return true })
+    let enabledSubject = subjects.filter(subject => { if (subject.count < 1000) return true }).sort((a, b) => {
+      // 1000レス未満のスレッドはレス数が多い順に
+      if (a.count > b.count) return -1
+      return 1
+    })
+    return enabledSubject.concat(disabledSubject)
+  }
+
   _removeBoard = (boardUrl) => {
-    this.props.removeBoard(boardUrl)
+    if(this.hasBoard) this.props.removeBoard(boardUrl)
   }
 
   _selectBoard = (index) => {
-    this.props.selectBoard(index)
+    if(this.hasBoard) this.props.selectBoard(index)
   }
 
   render() {
-    var subjects = []
-    if (this.props.boards.length > 0) {
-      subjects = this.props.boards[this.props.currentBoardIndex].threads.map((subject, index) => {
-        return <Subject key={index} thread={subject} threads={this.props.threads}/>
-      })
-    }
+    let subjects = []
     let tabs = []
-    if (this.props.boards.length > 0) {
+    if (this.hasBoard) {
+      subjects = this.getSubjects(this.currentBoard).map((subject) => {
+        return <Subject key={subject.no} subject={subject} threads={this.props.threads}/>
+      })
       tabs = this.props.boards.map((board, index) => {
         const active = this.props.currentBoardIndex==index
         return (

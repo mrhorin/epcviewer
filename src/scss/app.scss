@@ -116,15 +116,15 @@ header{
 }
 /* スレッド名一覧 */
 #subject-box{
-  .thread{
+  .subject{
     padding: 1px 10px;
   }
-  .thread:hover{
+  .subject:hover{
     cursor: pointer;
     text-decoration: underline;
     color: #3f9aff;
   }
-  .thread:nth-child(even){
+  .subject:nth-child(even){
     background: #f4f0ff;
   }
 }
