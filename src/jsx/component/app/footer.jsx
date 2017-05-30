@@ -22,7 +22,7 @@ export default class Footer extends React.Component {
   // スレタイ(レス数) を取得
   get currentThreadTitle() {
     var title = this.props.currentThread.title
-    if (this.isCurrentThread) {
+    if (this.hasCurrentThread) {
       // レス数を付加
       title += `(${this.props.currentThread.posts.length+1})`
     }
@@ -30,31 +30,43 @@ export default class Footer extends React.Component {
   }
 
   // 現在のスレッドが存在するか  
-  get isCurrentThread() {
+  get hasCurrentThread() {
     return this.props.currentThread.posts.length > 0
+  }
+
+  // 更新状態がWAITか  
+  get isWait() {
+    return this.props.updateStatus=='WAIT'
+  }
+
+  // スレッドを更新  
+  updateThread = () => {
+    var state = {}
+    if (this.isWait && this.props.isAutoUpdate && this.state.autoUpdateCount<=0) {
+      // 更新処理
+      this.props.updateCurrentThread()
+      state['autoUpdateCount'] = 10
+    } else if (this.isWait && this.props.isAutoUpdate) {
+      // 1秒カウントダウン
+      state['autoUpdateCount'] = this.state.autoUpdateCount - 1
+    }
+    this.setState(state)    
   }
 
   // 自動更新タイマーの開始
   startUpdateTimer = () => {
     this.updateTimerId = setInterval(() => {
-      if (this.props.updateStatus=='WAIT' && this.props.isAutoUpdate && this.state.autoUpdateCount<=0) {
-        // 更新処理
-        this.props.updateCurrentThread()
-        this.setState({ autoUpdateCount: 10 })
-      } else if (this.props.updateStatus=='WAIT' && this.props.isAutoUpdate) {
-        // 1秒カウントダウン
-        this.setState({ autoUpdateCount: this.state.autoUpdateCount-1 })
-      }
+      this.updateThread()
     }, 1000)
-  }
-
-  _onClickFooterHandler = () => {
-    this.props.switchShowWriteForm()
   }
 
   // 自動更新タイマーの停止  
   stopUpdateTimer = () => {
     clearInterval(this.updateTimerId)
+  }
+
+  _onClickFooterHandler = () => {
+    this.props.switchShowWriteForm()
   }
 
   componentDidMount() {
@@ -67,23 +79,22 @@ export default class Footer extends React.Component {
   }
 
   render() {
-    var status = ''
     switch (this.props.updateStatus) {
       case 'WAIT':
-        status = this.props.isAutoUpdate && this.isCurrentThread ? this.state.autoUpdateCount : '停止中'
+        this.status = this.props.isAutoUpdate && this.hasCurrentThread ? this.state.autoUpdateCount : '停止中'
         break
       case 'UPDATING':
-        status = '更新中'
+        this.status = '更新中'
         break
       case 'POSTING':
-        status = '書き込み中'
+        this.status = '書き込み中'
         break
     }
     return(
       <footer className="toolbar toolbar-footer" onClick={this._onClickFooterHandler}>
         <div className="flex-container">
           <div className="flex-item update-status">
-            {status}
+            {this.status}
           </div>
           <div className="flex-item thread-title">
             {this.currentThreadTitle}

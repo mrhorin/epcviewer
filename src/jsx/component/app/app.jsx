@@ -421,7 +421,8 @@ export default class App extends React.Component {
     return (
       <div>
         <Header
-          listMode={this.state.listMode} currentUrl={this.state.currentUrl} isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll}
+          listMode={this.state.listMode} currentUrl={this.state.currentUrl}
+          isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll}
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}
@@ -437,7 +438,10 @@ export default class App extends React.Component {
             onKeyDown={this._pressWriteFormHandler}
             onKeyUp={this._releaseWriteFormHandler} />
         </div>
-        <Footer updateStatus={this.state.updateStatus} isAutoUpdate={this.state.isAutoUpdate} currentThread={this.currentThread}
+        <Footer
+          updateStatus={this.state.updateStatus}
+          isAutoUpdate={this.state.isAutoUpdate}
+          currentThread={this.currentThread}
           updateCurrentThread={this.updateCurrentThread}
           switchShowWriteForm={this.switchShowWriteForm} />
       </div>
