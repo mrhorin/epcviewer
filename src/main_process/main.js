@@ -196,7 +196,7 @@ ipcMain.on('add-arg-board', (event) => {
     var board = new Board(UrlParser.getBoardUrl(argUrl))
     board.fetchThreads((res) => {
       event.sender.send('add-arg-board-reply', board)
-    }) 
+    })
   } else {
     event.sender.send('add-arg-board-reply', "")
   }
@@ -214,7 +214,6 @@ ipcMain.on('add-thread', (event, threadUrl) => {
 ipcMain.on('update-thread', (event, thread) => {
   var newThread = new Thread(thread.url)
   newThread.headers = thread.headers
-  newThread.posts = thread.posts
   newThread.title = thread.title
   newThread.newPostsPromise.then((res) => {
     event.sender.send('update-thread-reply', newThread)
