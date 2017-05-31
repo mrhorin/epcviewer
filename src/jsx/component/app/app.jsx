@@ -43,10 +43,11 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = Storage.defaultState
+    // Shiftの押下状態
+    this.isPressShift = false
   }
 
   bindEvents = () => {
-    this.writeFormTextarea = window.document.getElementById('write-form-textarea')
     // 初回起動時に引数URL取得したboardを受け取る
     ipcRenderer.on('add-arg-board-reply', (event, board) => {
       Promise.all([Storage.statePromise, Storage.preferencesPromise]).then((values) => {
@@ -63,12 +64,8 @@ export default class App extends React.Component {
         if(board) this.addBoard(board)
       })
     })
-    ipcRenderer.on('add-board-reply', (event, board) => {
-      this.addBoard(board)
-    })
-    ipcRenderer.on('add-thread-reply', (event, thread) => {
-      this.addThread(thread)
-    })
+    ipcRenderer.on('add-board-reply', (event, board) => { this.addBoard(board) })
+    ipcRenderer.on('add-thread-reply', (event, thread) => { this.addThread(thread) })
     ipcRenderer.on('show-thread-reply', (event, threadUrl) => {
       let index = _.findIndex(this.state.threads, { url: threadUrl })
       if (index >= 0) {
@@ -88,7 +85,7 @@ export default class App extends React.Component {
         Array.prototype.push.apply(threads[index].posts, thread.posts)
         this.setState({ threads: threads, updateStatus: "WAIT" })
       } else {
-        this.setState({ updateStatus: "WAIT" })      
+        this.setUpdateStatus('WAIT')
       }
     })
     ipcRenderer.on('update-board-reply', (event, board) => {
@@ -100,27 +97,17 @@ export default class App extends React.Component {
       }
     })
     ipcRenderer.on('post-write-reply', (event, res) => {
-      this.setState({ updateStatus: 'WAIT' })
+      this.setUpdateStatus('WAIT')
       this.writeFormTextarea.value = ""
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
       this.updateCurrentThread()
     })
-    ipcRenderer.on('shortcut-tab-left', (event) => {
-      this.moveLeftTab()
-    })
-    ipcRenderer.on('shortcut-tab-right', (event) => {
-      this.moveRightTab()
-    })
-    ipcRenderer.on('shortcut-tab-close', (event) => {
-      this.closeCurrentTab()
-    })
-    ipcRenderer.on('shortcut-show-boards', (event) => {
-      if(this.state.listMode!='BOARDS') this.setState({ listMode: 'BOARDS' })
-    })
-    ipcRenderer.on('shortcut-show-threads', (event) => {
-      if(this.state.listMode!='THREADS') this.setState({ listMode: 'THREADS' })
-    })
+    ipcRenderer.on('shortcut-tab-left', (event) => { this.moveLeftTab() })
+    ipcRenderer.on('shortcut-tab-right', (event) => { this.moveRightTab() })
+    ipcRenderer.on('shortcut-tab-close', (event) => { this.closeCurrentTab() })
+    ipcRenderer.on('shortcut-show-boards', (event) => { this.setListMode('BOARDS') })
+    ipcRenderer.on('shortcut-show-threads', (event) => { this.setListMode('THREADS') })
     ipcRenderer.on('shortcut-clear-storage', (event) => {
       Storage.clearStorage(() => {
         this.setState(Storage.defaultState)
@@ -272,6 +259,11 @@ export default class App extends React.Component {
     }
   }
 
+  // 更新状態がWAITか  
+  get isWait() {
+    return this.state.updateStatus == 'WAIT'
+  }
+
   // 板が存在するか  
   get hasBoard() {
     return this.state.boards.length > 0
@@ -284,7 +276,7 @@ export default class App extends React.Component {
   
   // 現在の板を取得  
   get currentBoard() {
-    if (this.state.boards.length > 0) {
+    if (this.hasBoard) {
       return this.state.boards[this.state.currentBoardIndex]
     } else {
       return { subjectUrl: "", url: "", threads: [] }
@@ -293,7 +285,7 @@ export default class App extends React.Component {
 
   // 現在のスレッドを取得
   get currentThread() {
-    if (this.state.threads.length > 0) {
+    if (this.hasThread) {
       return this.state.threads[this.state.currentThreadIndex]
     } else {
       return { datUrl: "", headers: {}, url: "", posts: [], title: "" }
@@ -303,9 +295,9 @@ export default class App extends React.Component {
   // 指定したリストモードの現在のURLを取得  
   getCurrentUrl = (listMode) => {
     let url = ""
-    if (listMode == "BOARDS" && this.state.boards.length > 0) {
+    if (listMode == "BOARDS" && this.hasBoard) {
       url = this.state.boards[this.state.currentBoardIndex].url
-    } else if (listMode == "THREADS" && this.state.boards.length > 0) {
+    } else if (listMode == "THREADS" && this.hasThread) {
       url = this.state.boards[this.state.currentBoardIndex].threads[this.state.currentThreadIndex].url
     }
     return url
@@ -316,18 +308,39 @@ export default class App extends React.Component {
   }
 
   setListMode = (listMode) => {
-    this.setState({ listMode: listMode })
+    switch (listMode) {
+      case 'BOARDS':
+        this.setState({ listMode: 'BOARDS' })
+        break
+      case 'THREADS':
+        this.setState({ listMode: 'THREADS' })
+        break        
+    }
+  }
+
+  setUpdateStatus = (updateStatus) => {
+    switch (updateStatus) {
+      case 'WAIT':
+        this.setState({ updateStatus: 'WAIT' })
+        break
+      case 'UPDATING':
+        this.setState({ updateStatus: 'UPDATING' })
+        break
+      case 'POSTING':
+        this.setState({ updateStatus: 'POSTING' })
+        break
+    }
   }
 
   // 現在の板を更新  
   updateCurrentBoard = () => {
-    if (this.state.boards.length > 0) ipcRenderer.send('update-board', this.currentBoard)
+    if (this.hasBoard) ipcRenderer.send('update-board', this.currentBoard)
   }
 
   // 現在のスレッドを更新
   updateCurrentThread = () => {
-    if ((this.state.threads.length > 0) && (this.state.updateStatus == "WAIT")) {
-      this.setState({ updateStatus: "UPDATING" })
+    if (this.hasThread && this.isWait) {
+      this.setUpdateStatus('UPDATING')
       ipcRenderer.send('update-thread', this.currentThread)
     }
     Storage.setState(this.state)
@@ -335,12 +348,12 @@ export default class App extends React.Component {
 
   // 書き込みの投稿
   postWriteForm = (message) => {
-    if (this.currentThread.posts.length > 0 && this.state.updateStatus == 'WAIT') {
+    if (this.currentThread.posts.length > 0 && this.isWait) {
       // 書き込み処理
-      this.setState({ updateStatus: 'POSTING' })
+      this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
       ipcRenderer.send('post-write', this.currentThread, message)      
-    } else if (this.currentThread.posts.length > 0 && this.state.updateStatus != 'WAIT') {
+    } else if (this.currentThread.posts.length > 0 && !this.isWait) {
       // 2秒後に再帰的に呼び出し
       setTimeout(() => { this.postWriteForm(message) }, 2000)
     } else {
@@ -374,30 +387,30 @@ export default class App extends React.Component {
   _pressWriteFormHandler = (event) => {
     if (event.nativeEvent.key == 'Shift') {
       // Shift押下状態を保持
-      this.pressShift = true
-    } else if (event.nativeEvent.key == 'Enter' && this.pressShift) {
+      this.isPressShift = true
+    } else if (event.nativeEvent.key == 'Enter' && this.isPressShift) {
       // Shift+Enterで投稿
       this.postWriteForm(event.target.value)
-      this.pressShift = false
+      this.isPressShift = false
     }
   }
 
   // 書き込み欄でkeyUpハンドラ  
   _releaseWriteFormHandler = (event) => {
     // Shift押下状態を解放
-    this.pressShift = false
+    this.isPressShift = false
   }
 
   componentDidUpdate() {
     if (this.state.isShowWriteForm) {
-      this.writeForm.style.display = "block"
+      this.writeFormTextarea.style.display = 'block'
     } else {
-      this.writeForm.style.display = "none"
+      this.writeFormTextarea.style.display = 'none'
     }
   }
 
   componentDidMount() {
-    this.writeForm = document.getElementById('write-form-textarea')
+    this.writeFormTextarea = document.getElementById('write-form-textarea')
     this.bindEvents()
     ipcRenderer.send('add-arg-board')
   }
