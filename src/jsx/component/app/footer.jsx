@@ -13,12 +13,6 @@ export default class Footer extends React.Component {
     this.state = { autoUpdateCount: 10 }
   }
 
-  bindEvents = () => {
-    ipcRenderer.on('update-thread-reply', (event) => {
-      this.setState({ autoUpdateCount: 10 })
-    })
-  }
-
   // スレタイ(レス数) を取得
   get currentThreadTitle() {
     var title = this.props.currentThread.title
@@ -71,7 +65,6 @@ export default class Footer extends React.Component {
 
   componentDidMount() {
     this.startUpdateTimer()
-    this.bindEvents()
   }
 
   componentWillUnmount() {
