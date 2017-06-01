@@ -38,11 +38,7 @@ export default class BoardBox extends React.Component {
     switch (this.state.subjectsSortMode) {
       case 'PEERCAST':
         let disabledSubject = subjects.filter(subject => { if (subject.count >= 1000) return true })
-        let enabledSubject = subjects.filter(subject => { if (subject.count < 1000) return true }).sort((a, b) => {
-          // 1000レス未満のスレッドはレス数が多い順に
-          if (a.count > b.count) return -1
-          return 1
-        })
+        let enabledSubject = subjects.filter(subject => { if (subject.count < 1000) return true })
         subjects = enabledSubject.concat(disabledSubject)
         break
     }
