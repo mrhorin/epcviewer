@@ -207,7 +207,7 @@ app.on('ready', () => {
   すべてのウィンドウが閉じられた時
 -----------------------------------------*/
 app.on('window-all-closed', ()=>{
-  if(!isDarwin) app.quit()
+  if(process.platform != 'darwin') app.quit()
 })
 
 /*-----------------------------------------
@@ -271,7 +271,7 @@ ipcMain.on('post-write', (event, thread, message) => {
     const threadUrl = thread.url+"/"
     const writeUrl = threadUrl.replace(/read\.cgi/, 'write.cgi')
     const uri = threadUrl.split('/')
-    const body = escapeForShitaraba({
+    const body = escapeShitaraba({
       DIR: uri[5],
       BBS: uri[6],
       KEY: uri[7],
@@ -284,6 +284,29 @@ ipcMain.on('post-write', (event, thread, message) => {
       .type('form')
       .send(body)
       .set('Referer', threadUrl)
+      .end((err, res) => {
+        if (err) console.log(err)
+        event.sender.send('post-write-reply', res)
+      })
+  } else {
+    const threadUrl = thread.url+"/"
+    const uri = threadUrl.split('/')
+    const writeUrl = `${uri[0]}//${uri[2]}/test/bbs.cgi`
+    const body = escape2ch({
+      bbs: uri[5],
+      key: uri[6],
+      time: Number(Date.now()-100).toString(),
+      FROM: '',
+      mail: 'sage',
+      submit: '書き込む',
+      MESSAGE: message
+    })
+    request
+      .post(writeUrl)
+      .type('form')
+      .send(body)
+      .set('Referer', threadUrl)
+      .set('User-Agent', 'Monazilla/5.0')
       .end((err, res) => {
         if (err) console.log(err)
         event.sender.send('post-write-reply', res)
@@ -332,7 +355,7 @@ function closePreferencesWindow() {
 
 // Mac環境か
 function isDarwin() {
-  return global.process.platform == 'darwin'
+  return process.platform == 'darwin'
 }
 
 // window.appの中心の相対座標を取得
@@ -354,18 +377,40 @@ function getUrlFromArray(array) {
   })
 }
 
-function escapeForShitaraba(hash) {
+function escapeShitaraba(hash) {
   return Object.keys(hash).map((key) => {
-    return key + '=' + encodeForShitaraba(hash[key])
+    return key + '=' + encodeShitaraba(hash[key])
   }).join('&')
 }
 
-function encodeForShitaraba(text) {
+function encodeShitaraba(text) {
   // 絵文字を数値参照に置換
   text = text.replace(emojiRegex(), (emoji) => {
     return `&#${emoji.codePointAt()};`
   })
   const eucjp = Encoding.convert(text, 'EUCJP')
+  return Encoding.urlEncode(eucjp).replace(/%8F(%A1%C1)/gi, (match, $1) => {
+    // macOS環境「〜」入力対策
+    return $1
+  })
+}
+
+function escape2ch(hash) {
+  return Object.keys(hash).map((key) => {
+    if (key == 'bbs' || key == 'key' || key == 'time') {
+      return key + '=' + hash[key]
+    } else {
+      return key + '=' + encode2ch(hash[key]) 
+    }
+  }).join('&')
+}
+
+function encode2ch(text) {
+  // 絵文字を数値参照に置換
+  text = text.replace(emojiRegex(), (emoji) => {
+    return `&#${emoji.codePointAt()};`
+  })
+  const eucjp = Encoding.convert(text, 'SJIS')
   return Encoding.urlEncode(eucjp).replace(/%8F(%A1%C1)/gi, (match, $1) => {
     // macOS環境「〜」入力対策
     return $1
