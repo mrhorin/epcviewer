@@ -82,7 +82,7 @@ export default class App extends React.Component {
       if (index >= 0) {
         let threads = this.state.threads
         // 新着レスを追加
-        Array.prototype.push.apply(threads[index].posts, thread.posts)
+        threads[index].posts = threads[index].posts.concat(thread.posts)
         this.setState({ threads: threads, updateStatus: "WAIT" })
       } else {
         this.setUpdateStatus('WAIT')

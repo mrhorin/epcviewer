@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"2ch-parser@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.2.1.tgz#89f20007d95b244e001925e7b6a1b78564a29658"
+"2ch-parser@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.2.2.tgz#8ca0cfa1e72a7fba0cb78129f5b53740ba43215d"
   dependencies:
     superagent "^3.5.2"
     superagent-charset "^1.2.0"
