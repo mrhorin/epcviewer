@@ -8,6 +8,7 @@
 ## 特徴
 - クロスプラットフォーム
 - シンプルUI
+- タッチバー対応(macOS)
 
 ## License
 [GPL-2.0](https://opensource.org/licenses/GPL-2.0)

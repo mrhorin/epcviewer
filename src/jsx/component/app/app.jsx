@@ -108,6 +108,9 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-tab-close', (event) => { this.closeCurrentTab() })
     ipcRenderer.on('shortcut-show-boards', (event) => { this.setListMode('BOARDS') })
     ipcRenderer.on('shortcut-show-threads', (event) => { this.setListMode('THREADS') })
+    ipcRenderer.on('shortcut-switch-auto-update', (event) => { this.switchAutoUpdate() })
+    ipcRenderer.on('shortcut-switch-auto-scroll', (event) => { this.switchAutoScroll() })
+    ipcRenderer.on('shortcut-update-current-list', (event) => { this.updateCurrentList() })
     ipcRenderer.on('shortcut-clear-storage', (event) => {
       Storage.clearStorage(() => {
         this.setState(Storage.defaultState)
@@ -332,6 +335,17 @@ export default class App extends React.Component {
     }
   }
 
+  updateCurrentList = () => {
+    switch (this.state.listMode) {
+      case "BOARDS":
+        this.updateCurrentBoard()
+        break
+      case "THREADS":
+        this.updateCurrentThread()
+        break
+    }
+  }
+
   // 現在の板を更新  
   updateCurrentBoard = () => {
     if (this.hasBoard) ipcRenderer.send('update-board', this.currentBoard)
@@ -440,8 +454,7 @@ export default class App extends React.Component {
           setListMode={this.setListMode}
           setCurrentUrl={this.setCurrentUrl}
           getCurrentUrl={this.getCurrentUrl}
-          updateCurrentBoard={this.updateCurrentBoard}
-          updateCurrentThread={this.updateCurrentThread}
+          updateCurrentList={this.updateCurrentList}
           switchAutoUpdate={this.switchAutoUpdate}
           switchAutoScroll={this.switchAutoScroll} />
         {/*リスト欄*/}

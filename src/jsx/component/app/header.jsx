@@ -32,20 +32,6 @@ export default class Header extends React.Component {
     return css
   }
 
-  // 一覧を更新  
-  updateList = () => {
-    switch (this.props.listMode) {
-      case "BOARDS":
-        this.props.updateCurrentBoard()
-        break
-      case "THREADS":
-        this.props.updateCurrentThread()
-        break
-      default:
-        console.log("default")
-    }
-  }
-
   // 掲示板一覧に表示切り替え
   switchBoardsList = () => {
     this.props.setListMode("BOARDS")
@@ -85,7 +71,7 @@ export default class Header extends React.Component {
         <div className="flex-container">
           {/*更新ボタン*/}
           <div className="flex-header-update-btns">
-            <button id="btn-update" className="btn btn-default btn-mini" onClick={this.updateList}>
+            <button id="btn-update" className="btn btn-default btn-mini" onClick={this.props.updateCurrentList}>
               <span className="icon icon-arrows-ccw"></span>
             </button>
           </div>

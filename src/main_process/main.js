@@ -5,10 +5,13 @@ import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
 
 import MenuManager from 'main_process/menu_manager'
+import TouchBarManager from 'main_process/touch_bar_manager'
+
 import Storage from 'js/storage'
 
-let window = { app: null, preferences: null }
 let menu = new MenuManager()
+let touchBar = new TouchBarManager()
+let window = { app: null, preferences: null }
 
 // 引数URL
 const argUrl = getUrlFromArray(global.process.argv)
@@ -68,14 +71,6 @@ app.on('ready', () => {
           label: '進む',
           accelerator: 'Shift+CmdOrCtrl+Z',
           role: 'redo'
-        },
-        { type: 'separator' },
-        {
-          label: '検索',
-          accelerator: 'CmdOrCtrl+F',
-          click: () => {
-            // window.main.webContents.send('shortcut-search')
-          }
         },
       ]
     },
@@ -149,6 +144,44 @@ app.on('ready', () => {
   })
   menu.show()
 
+  touchBar.addItem({
+    label: '更新',
+    backgroundColor: '#3f51b5',
+    click: () => {
+      window.app.webContents.send('shortcut-update-current-list')
+    }
+  })  
+  touchBar.addSpacer('small')
+  touchBar.addItem({
+    label: '板一覧',
+    backgroundColor: '#3f51b5',
+    click: () => {
+      window.app.webContents.send('shortcut-show-boards')
+    }
+  })  
+  touchBar.addItem({
+    label: 'スレッド一覧',
+    backgroundColor: '#3f51b5',
+    click: () => {
+      window.app.webContents.send('shortcut-show-threads')
+    }
+  })
+  touchBar.addSpacer('small')
+  touchBar.addItem({
+    label: '自動更新',
+    backgroundColor: '#3f51b5',
+    click: () => {
+      window.app.webContents.send('shortcut-switch-auto-update')
+    }
+  })
+  touchBar.addItem({
+    label: 'オートスクロール',
+    backgroundColor: '#3f51b5',
+    click: () => {
+      window.app.webContents.send('shortcut-switch-auto-scroll')
+    }
+  })
+
   // 設定を読み込む  
   Storage.configPromise.then((config) => {
     window.app = new BrowserWindow({
@@ -159,6 +192,7 @@ app.on('ready', () => {
       minHeight: 151
     })
     window.app.loadURL(`file://${__dirname}/html/app.html`)
+    if(isDarwin) window.app.setTouchBar(touchBar.touchBar)
     // 閉じた時
     window.app.on('close', () => {
       Storage.setConfig(window.app.getBounds(), () => {
@@ -173,7 +207,7 @@ app.on('ready', () => {
   すべてのウィンドウが閉じられた時
 -----------------------------------------*/
 app.on('window-all-closed', ()=>{
-  if(process.platform != 'darwin') app.quit()
+  if(!isDarwin) app.quit()
 })
 
 /*-----------------------------------------
@@ -294,6 +328,11 @@ function closePreferencesWindow() {
   window.preferences.close()
   window.preferences = null
   window.app.setIgnoreMouseEvents(false)
+}
+
+// Mac環境か
+function isDarwin() {
+  return global.process.platform == 'darwin'
 }
 
 // window.appの中心の相対座標を取得
