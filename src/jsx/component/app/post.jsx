@@ -113,11 +113,13 @@ export default class Post extends React.Component {
     this.postElement = window.document.getElementById(`post-${this.props.no}`)
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.post != nextProps.post
+  }
+
   render() {
     return (
       <div id={`post-${this.props.no}`} className="post">
-        <div className="post-anker">
-        </div>
         <div className="post-header">
           <span className="post-no">{this.props.post.no}</span>:
           <span className="post-name">{this.props.post.name}</span>

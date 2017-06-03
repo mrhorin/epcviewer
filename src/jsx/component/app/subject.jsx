@@ -21,6 +21,10 @@ export default class Subject extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.subject != nextProps.subject
+  }
+
   render() {
     return (
       <div className="subject" onClick={this._onClickSubjectHandler}>
