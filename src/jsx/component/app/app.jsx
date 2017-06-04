@@ -96,12 +96,16 @@ export default class App extends React.Component {
         this.setState({ boards: boards })
       }
     })
-    ipcRenderer.on('post-write-reply', (event, res) => {
+    ipcRenderer.on('post-write-reply', (event, res, err) => {
       this.setUpdateStatus('WAIT')
-      this.writeFormTextarea.value = ""
+      if (err) {
+        console.log(err.status)
+      } else {
+        this.writeFormTextarea.value = ""
+        this.updateCurrentThread()
+      }
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
-      this.updateCurrentThread()
     })
     ipcRenderer.on('shortcut-tab-left', (event) => { this.moveLeftTab() })
     ipcRenderer.on('shortcut-tab-right', (event) => { this.moveRightTab() })

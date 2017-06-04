@@ -288,7 +288,7 @@ ipcMain.on('post-write', (event, thread, message) => {
       .set('Referer', threadUrl)
       .end((err, res) => {
         if (err) console.log(err)
-        event.sender.send('post-write-reply', res)
+        event.sender.send('post-write-reply', res, err)
       })
   } else {
     const threadUrl = thread.url+"/"
