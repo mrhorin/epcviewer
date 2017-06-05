@@ -1,5 +1,6 @@
 # epcviewer
 [![Build Status](https://travis-ci.org/mrhorin/2ch-parser.svg?branch=master)](https://travis-ci.org/mrhorin/epcviewer)
+[![GitHub license](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/mrhorin/epcviewer/master/LICENSE)
 
 ![hidden](https://cloud.githubusercontent.com/assets/6502717/26480716/ce1345d8-4216-11e7-9556-f9fffb874bb6.png)
 
