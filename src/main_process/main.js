@@ -146,7 +146,6 @@ app.on('ready', () => {
 
   touchBar.addItem({
     label: '更新',
-    backgroundColor: '#3f51b5',
     click: () => {
       window.app.webContents.send('shortcut-update-current-list')
     }
@@ -154,14 +153,12 @@ app.on('ready', () => {
   touchBar.addSpacer('small')
   touchBar.addItem({
     label: '板一覧',
-    backgroundColor: '#3f51b5',
     click: () => {
       window.app.webContents.send('shortcut-show-boards')
     }
   })  
   touchBar.addItem({
     label: 'スレッド一覧',
-    backgroundColor: '#3f51b5',
     click: () => {
       window.app.webContents.send('shortcut-show-threads')
     }
@@ -169,14 +166,12 @@ app.on('ready', () => {
   touchBar.addSpacer('small')
   touchBar.addItem({
     label: '自動更新',
-    backgroundColor: '#3f51b5',
     click: () => {
       window.app.webContents.send('shortcut-switch-auto-update')
     }
   })
   touchBar.addItem({
     label: 'オートスクロール',
-    backgroundColor: '#3f51b5',
     click: () => {
       window.app.webContents.send('shortcut-switch-auto-scroll')
     }
