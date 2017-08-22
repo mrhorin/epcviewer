@@ -145,33 +145,33 @@ app.on('ready', () => {
   menu.show()
 
   touchBar.addItem({
-    label: '更新',
+    icon: `${__dirname}/../src/img/darwin/touchbar/arrow.png`,
     click: () => {
       window.app.webContents.send('shortcut-update-current-list')
     }
   })  
-  touchBar.addSpacer('small')
+  touchBar.addSpacer('large')
   touchBar.addItem({
-    label: '板一覧',
+    icon: `${__dirname}/../src/img/darwin/touchbar/menu.png`,
     click: () => {
       window.app.webContents.send('shortcut-show-boards')
     }
   })  
   touchBar.addItem({
-    label: 'スレッド一覧',
+    icon: `${__dirname}/../src/img/darwin/touchbar/window.png`,
     click: () => {
       window.app.webContents.send('shortcut-show-threads')
     }
   })
-  touchBar.addSpacer('small')
+  touchBar.addSpacer('large')
   touchBar.addItem({
-    label: '自動更新',
+    icon: `${__dirname}/../src/img/darwin/touchbar/clock.png`,
     click: () => {
       window.app.webContents.send('shortcut-switch-auto-update')
     }
   })
   touchBar.addItem({
-    label: 'オートスクロール',
+    icon: `${__dirname}/../src/img/darwin/touchbar/down.png`,
     click: () => {
       window.app.webContents.send('shortcut-switch-auto-scroll')
     }
