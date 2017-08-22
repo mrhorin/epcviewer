@@ -36,13 +36,15 @@ export default class Footer extends React.Component {
   // スレッドを更新  
   updateThread = () => {
     var state = {}
-    if (this.isWait && this.props.isAutoUpdate && this.state.autoUpdateCount<=0) {
+    if (this.isWait && this.props.isAutoUpdate && this.state.autoUpdateCount <= 0) {
       // 更新処理
       this.props.updateCurrentThread()
       state['autoUpdateCount'] = 10
     } else if (this.isWait && this.props.isAutoUpdate) {
       // 1秒カウントダウン
       state['autoUpdateCount'] = this.state.autoUpdateCount - 1
+    } else {
+      state['autoUpdateCount'] = 10
     }
     this.setState(state)    
   }
