@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { Board, Thread, UrlParser } from '2ch-parser'
 import request from 'superagent'
 import Encoding from 'encoding-japanese'
