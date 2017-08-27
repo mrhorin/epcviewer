@@ -13,19 +13,20 @@ let menu = new MenuManager()
 let touchBar = new TouchBarManager()
 let window = { app: null, preferences: null }
 
-// 引数URL
-const argUrl = getUrlFromArray(global.process.argv)
-
 /*-----------------------------------------
   アプリの多重起動を禁止
+  アプリ起動済みの場合は新しい板として登録する
 -----------------------------------------*/
 var shouldQuit = app.makeSingleInstance((argv, workingDirectory) => {
   // 多重起動時の引数URL
-  const subArgUrl = getUrlFromArray(argv)
-  if (window.app && subArgUrl) {
-    let board = new Board(UrlParser.getBoardUrl(subArgUrl))
+  const urlIndex = findUrlIndex(argv)
+  if (window.app && (urlIndex >= 0)) {
+    const url = argv[urlIndex]
+    var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res) => {
       window.app.focus()
+      // 板名
+      board['name'] = argv[urlIndex+1] ? argv[urlIndex+1] : url
       window.app.webContents.send('add-board-reply', board)
     })      
   }
@@ -221,9 +222,13 @@ ipcMain.on('add-board', (event, url) => {
 
 // ------- 引数URLのBoardを返す -------
 ipcMain.on('add-arg-board', (event) => {
-  if (argUrl) {
-    var board = new Board(UrlParser.getBoardUrl(argUrl))
+  let urlIndex = findUrlIndex(global.process.argv)  
+  if (urlIndex >= 0) {
+    const url = global.process.argv[urlIndex]
+    var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res) => {
+      // 板名
+      board['name'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url
       event.sender.send('add-arg-board-reply', board)
     })
   } else {
@@ -367,11 +372,11 @@ function getChildBoundsFromApp(childWidth, childHeight) {
   return { x: x, y: y, width: childWidth, height: childHeight }
 }
 
-// arrayから最初に出現するURLを取得する
-function getUrlFromArray(array) {
-  return array.find((arg) => {
-    return arg.match(/https?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
-  })
+// arrayから最初に出現するURLのindexを取得する
+function findUrlIndex(array) {
+  return array.findIndex((element, index) => {
+    return element.match(/https?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
+  })  
 }
 
 function escapeShitaraba(hash) {
