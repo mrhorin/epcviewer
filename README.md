@@ -17,7 +17,7 @@ peercast実況用のBBSブラウザ
 - タッチバー対応(macOS)
 
 ## 使い方
-[epcyp](https://github.com/mrhorin/epcyp)などのYPブラウザにBBSブラウザとして登録して使用
+[epcyp](https://github.com/mrhorin/epcyp)などのYPブラウザにBBSブラウザとして登録して使用
 
 ## License
 [GPL-2.0](https://opensource.org/licenses/GPL-2.0)
