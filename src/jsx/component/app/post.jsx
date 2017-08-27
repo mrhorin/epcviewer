@@ -88,6 +88,8 @@ export default class Post extends React.Component {
 
   // 規定ブラウザで開く
   openBrowser = (url) => {
+    // hなしの場合をhを付加
+    if(url[0] != 'h') url = 'h' + url
     shell.openExternal(url)
   }
 
