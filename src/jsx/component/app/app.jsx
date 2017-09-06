@@ -92,6 +92,7 @@ export default class App extends React.Component {
       let index = _.findIndex(this.state.boards, { url: board.url })
       if (index >= 0) {
         let boards = this.state.boards
+        board.name = boards[index].name
         boards[index] = board
         this.setState({ boards: boards })
       }
