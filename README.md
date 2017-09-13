@@ -4,11 +4,9 @@
 
 ![show](https://user-images.githubusercontent.com/6502717/26838433-08802a08-4b1b-11e7-8f81-9aafc7dddb62.png)  
 peercast実況用のBBSブラウザ
-  
-![hidden](https://user-images.githubusercontent.com/6502717/26838455-191f6ba8-4b1b-11e7-894d-f2a99b709e32.png)  
-レスは配信画面に表示される字幕で確認するという人は  
-よりコンパクトなレスモードで
 
+## ダウンロード
+[epcviewer v0.1.0 for macOS](https://github.com/mrhorin/epcviewer/releases/download/v0.1.0/epcviewer_v0.1.0_macos.zip)
 
 ## 特徴
 - シンプルUI
