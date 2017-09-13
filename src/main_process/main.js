@@ -80,14 +80,14 @@ app.on('ready', () => {
       submenu: [
         {
           label: 'タブ左移動',
-          accelerator: 'CmdOrCtrl+Left',
+          accelerator: 'CmdOrCtrl+Alt+Left',
           click: () => {
             window.app.webContents.send('shortcut-tab-left')
           }
         },
         {
           label: 'タブ右移動',
-          accelerator: 'CmdOrCtrl+Right',
+          accelerator: 'CmdOrCtrl+Alt+Right',
           click: () => {
             window.app.webContents.send('shortcut-tab-right')
           }
