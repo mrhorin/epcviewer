@@ -13,6 +13,21 @@ export default class Footer extends React.Component {
     this.state = { autoUpdateCount: 10 }
   }
 
+  // 更新状態
+  get updateStatus() {
+    switch (this.props.updateStatus) {
+      case 'WAIT':
+        return this.props.isAutoUpdate && this.hasCurrentThread ? this.state.autoUpdateCount : '停止中'
+        break
+      case 'UPDATING':
+        return '更新中'
+        break
+      case 'POSTING':
+        return '書き込み中'
+        break
+    }
+  }
+
   // スレタイ(レス数) を取得
   get currentThreadTitle() {
     var title = this.props.currentThread.title
@@ -74,24 +89,13 @@ export default class Footer extends React.Component {
   }
 
   render() {
-    switch (this.props.updateStatus) {
-      case 'WAIT':
-        this.status = this.props.isAutoUpdate && this.hasCurrentThread ? this.state.autoUpdateCount : '停止中'
-        break
-      case 'UPDATING':
-        this.status = '更新中'
-        break
-      case 'POSTING':
-        this.status = '書き込み中'
-        break
-    }
     return(
       <footer className="toolbar toolbar-footer" onClick={this._onClickFooterHandler}>
         <div className="flex-container">
-          <div className="flex-item update-status">
-            {this.status}
+          <div id="footer-update-status">
+            {this.updateStatus}
           </div>
-          <div className="flex-item thread-title">
+          <div id="footer-thread-title">
             {this.currentThreadTitle}
           </div>
         </div>

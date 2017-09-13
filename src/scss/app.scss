@@ -239,14 +239,14 @@ footer{
     flex-wrap: nowrap;
     justify-content: space-between;
     /* 更新状態 */
-    .flex-item.update-status{
+    #footer-update-status{
       order: 1;
       padding-left: 5px;
       text-align: left;
       min-width: 50px;
     }
     /* スレッド名 */
-    .flex-item.thread-title{
+    #footer-thread-title{
       order: 2;
       padding-right: 5px;
       text-align: right;

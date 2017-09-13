@@ -27,7 +27,7 @@ state
     スレッドのオートスクロールのON/OFF状態
 ********************************************************/
 import React from 'react'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, shell } from 'electron'
 import _ from 'lodash'
 
 import Storage from 'js/storage'
@@ -101,6 +101,7 @@ export default class App extends React.Component {
       this.setUpdateStatus('WAIT')
       if (err) {
         console.log(err.status)
+        shell.beep()
       } else {
         this.writeFormTextarea.value = ""
         this.updateCurrentThread()
