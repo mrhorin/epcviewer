@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { Board, Thread, UrlParser } from '2ch-parser'
+import Store from 'electron-store'
 import request from 'superagent'
 import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
@@ -8,6 +9,7 @@ import MenuManager from 'main_process/menu_manager'
 
 import Storage from 'js/storage'
 
+let store = new Store()
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
 
@@ -181,24 +183,23 @@ app.on('ready', () => {
   }
 
   // 設定を読み込む
-  Storage.configPromise.then((config) => {
-    window.app = new BrowserWindow({
-      width: config.width,
-      height: config.height,
-      x: config.x,
-      y: config.y,
-      minHeight: 151
-    })
-    window.app.loadURL(`file://${__dirname}/html/app.html`)
-    if(isDarwin) window.app.setTouchBar(touchBar.touchBar)
-    // 閉じた時
-    window.app.on('close', () => {
-      Storage.setConfig(window.app.getBounds(), () => {
-        window.app = null
-      })
-    })
+  var bounds = store.get('appBounds', { width: 320, height: 640, x: 0, y: 0 })
+  window.app = new BrowserWindow({
+    width: bounds.width,
+    height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
+    minWidth: 100,
+    minHeight: 151
   })
 
+  window.app.loadURL(`file://${__dirname}/html/app.html`)
+  if(isDarwin()) window.app.setTouchBar(touchBar.touchBar)
+
+  // 閉じた時
+  window.app.on('close', ()=>{
+    store.set('appBounds', window.app.getBounds())
+  })
 })
 
 /*-----------------------------------------

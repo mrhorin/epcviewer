@@ -27,6 +27,7 @@ module.exports = {
     '2ch-parser',
     'electron',
     'electron-json-storage',
+    'electron-store',
     'ipc',
     'superagent',
     'encoding-japanese'

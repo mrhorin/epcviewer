@@ -12,6 +12,7 @@
   "dependencies": {
     "2ch-parser": "^0.2.2",
     "electron-json-storage": "^3.0.5",
+    "electron-store": "^1.2.0",
     "emoji-regex": "^6.4.2",
     "encoding-japanese": "^1.0.25",
     "lodash": "^4.17.4",
