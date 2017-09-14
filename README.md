@@ -6,7 +6,8 @@
 peercast実況用のBBSブラウザ
 
 ## ダウンロード
-[epcviewer v0.1.0 for macOS](https://github.com/mrhorin/epcviewer/releases/download/v0.1.0/epcviewer_v0.1.0_macos.zip)
+[epcviewer v0.2.1 for macOS](https://github.com/mrhorin/epcviewer/releases/download/v0.2.1/epcviewer_v0.2.1_macos.zip)  
+[epcviewer v0.2.1 for Linux](https://github.com/mrhorin/epcviewer/releases/download/v0.2.1/epcviewer_v0.2.1_linux.zip)
 
 ## 特徴
 - シンプルUI
