@@ -19,7 +19,7 @@ gulp.task('jade', function(){
     .pipe(gulp.dest('dist/html/'));
 });
 
-// OSX用にパッケージ化
+// macOS用にパッケージ化
 gulp.task('package:darwin', ['default'], function (done) {
   packager({
     dir: './',
@@ -30,6 +30,25 @@ gulp.task('package:darwin', ['default'], function (done) {
     "app-copyright": "Copyright (C) 2017 "+package["author"]+".",
     arch: 'x64',
     platform: 'darwin',
+    overwrite: true,
+    version: '1.6.7',
+    ignore: ['release']
+  }, function (err, path) {
+    done();
+  });
+});
+
+// Linux用にパッケージ化
+gulp.task('package:linux', ['default'], function (done) {
+  packager({
+    dir: './',
+    out: 'release/linux',
+    name: package["name"],
+    icon: "./src/img/darwin/icon_1024x1024.png.icns",
+    "app-version": package["version"],
+    "app-copyright": "Copyright (C) 2017 "+package["author"]+".",
+    arch: 'x64',
+    platform: 'linux',
     overwrite: true,
     version: '1.6.7',
     ignore: ['release']
