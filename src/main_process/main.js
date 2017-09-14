@@ -5,12 +5,10 @@ import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
 
 import MenuManager from 'main_process/menu_manager'
-import TouchBarManager from 'main_process/touch_bar_manager'
 
 import Storage from 'js/storage'
 
 let menu = new MenuManager()
-let touchBar = new TouchBarManager()
 let window = { app: null, preferences: null }
 
 /*-----------------------------------------
@@ -28,7 +26,7 @@ var shouldQuit = app.makeSingleInstance((argv, workingDirectory) => {
       // 板名
       board['name'] = argv[urlIndex+1] ? argv[urlIndex+1] : url
       window.app.webContents.send('add-board-reply', board)
-    })      
+    })
   }
 })
 if(shouldQuit) app.exit()
@@ -145,40 +143,44 @@ app.on('ready', () => {
   })
   menu.show()
 
-  touchBar.addItem({
-    icon: `${__dirname}/../src/img/darwin/touchbar/arrow.png`,
-    click: () => {
-      window.app.webContents.send('shortcut-update-current-list')
-    }
-  })  
-  touchBar.addSpacer('large')
-  touchBar.addItem({
-    icon: `${__dirname}/../src/img/darwin/touchbar/menu.png`,
-    click: () => {
-      window.app.webContents.send('shortcut-show-boards')
-    }
-  })  
-  touchBar.addItem({
-    icon: `${__dirname}/../src/img/darwin/touchbar/window.png`,
-    click: () => {
-      window.app.webContents.send('shortcut-show-threads')
-    }
-  })
-  touchBar.addSpacer('large')
-  touchBar.addItem({
-    icon: `${__dirname}/../src/img/darwin/touchbar/clock.png`,
-    click: () => {
-      window.app.webContents.send('shortcut-switch-auto-update')
-    }
-  })
-  touchBar.addItem({
-    icon: `${__dirname}/../src/img/darwin/touchbar/down.png`,
-    click: () => {
-      window.app.webContents.send('shortcut-switch-auto-scroll')
-    }
-  })
+  if(isDarwin()){
+    const TouchBarManager = require('main_process/touch_bar_manager')
+    let touchBar = new TouchBarManager()
+    touchBar.addItem({
+      icon: `${__dirname}/../src/img/darwin/touchbar/arrow.png`,
+      click: () => {
+        window.app.webContents.send('shortcut-update-current-list')
+      }
+    })
+    touchBar.addSpacer('large')
+    touchBar.addItem({
+      icon: `${__dirname}/../src/img/darwin/touchbar/menu.png`,
+      click: () => {
+        window.app.webContents.send('shortcut-show-boards')
+      }
+    })
+    touchBar.addItem({
+      icon: `${__dirname}/../src/img/darwin/touchbar/window.png`,
+      click: () => {
+        window.app.webContents.send('shortcut-show-threads')
+      }
+    })
+    touchBar.addSpacer('large')
+    touchBar.addItem({
+      icon: `${__dirname}/../src/img/darwin/touchbar/clock.png`,
+      click: () => {
+        window.app.webContents.send('shortcut-switch-auto-update')
+      }
+    })
+    touchBar.addItem({
+      icon: `${__dirname}/../src/img/darwin/touchbar/down.png`,
+      click: () => {
+        window.app.webContents.send('shortcut-switch-auto-scroll')
+      }
+    })
+  }
 
-  // 設定を読み込む  
+  // 設定を読み込む
   Storage.configPromise.then((config) => {
     window.app = new BrowserWindow({
       width: config.width,
@@ -192,7 +194,7 @@ app.on('ready', () => {
     // 閉じた時
     window.app.on('close', () => {
       Storage.setConfig(window.app.getBounds(), () => {
-        window.app = null      
+        window.app = null
       })
     })
   })
@@ -222,7 +224,7 @@ ipcMain.on('add-board', (event, url) => {
 
 // ------- 引数URLのBoardを返す -------
 ipcMain.on('add-arg-board', (event) => {
-  let urlIndex = findUrlIndex(global.process.argv)  
+  let urlIndex = findUrlIndex(global.process.argv)
   if (urlIndex >= 0) {
     const url = global.process.argv[urlIndex]
     var board = new Board(UrlParser.getBoardUrl(url))
@@ -376,7 +378,7 @@ function getChildBoundsFromApp(childWidth, childHeight) {
 function findUrlIndex(array) {
   return array.findIndex((element, index) => {
     return element.match(/https?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
-  })  
+  })
 }
 
 function escapeShitaraba(hash) {
@@ -402,7 +404,7 @@ function escape2ch(hash) {
     if (key == 'bbs' || key == 'key' || key == 'time') {
       return key + '=' + hash[key]
     } else {
-      return key + '=' + encode2ch(hash[key]) 
+      return key + '=' + encode2ch(hash[key])
     }
   }).join('&')
 }
