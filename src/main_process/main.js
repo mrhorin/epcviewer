@@ -145,7 +145,21 @@ app.on('ready', () => {
   })
   menu.show()
 
-  if(isDarwin()){
+  // 設定を読み込む
+  var bounds = store.get('appBounds', { width: 320, height: 640, x: 0, y: 0 })
+  window.app = new BrowserWindow({
+    width: bounds.width,
+    height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
+    minWidth: 100,
+    minHeight: 151
+  })
+
+  window.app.loadURL(`file://${__dirname}/html/app.html`)
+
+  // タッチバーの設定
+  if (isDarwin()) {
     const TouchBarManager = require('main_process/touch_bar_manager')
     let touchBar = new TouchBarManager()
     touchBar.addItem({
@@ -180,21 +194,8 @@ app.on('ready', () => {
         window.app.webContents.send('shortcut-switch-auto-scroll')
       }
     })
+    window.app.setTouchBar(touchBar.touchBar)
   }
-
-  // 設定を読み込む
-  var bounds = store.get('appBounds', { width: 320, height: 640, x: 0, y: 0 })
-  window.app = new BrowserWindow({
-    width: bounds.width,
-    height: bounds.height,
-    x: bounds.x,
-    y: bounds.y,
-    minWidth: 100,
-    minHeight: 151
-  })
-
-  window.app.loadURL(`file://${__dirname}/html/app.html`)
-  if(isDarwin()) window.app.setTouchBar(touchBar.touchBar)
 
   // 閉じた時
   window.app.on('close', ()=>{
@@ -360,7 +361,7 @@ function closePreferencesWindow() {
 
 // Mac環境か
 function isDarwin() {
-  return process.platform == 'darwin'
+  return global.process.platform == 'darwin'
 }
 
 // window.appの中心の相対座標を取得
