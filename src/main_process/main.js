@@ -6,7 +6,6 @@ import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
 
 import MenuManager from 'main_process/menu_manager'
-import TouchBarManager from 'main_process/touch_bar_manager'
 
 let store = new Store()
 let menu = new MenuManager()
@@ -161,44 +160,6 @@ app.on('ready', () => {
     }
   })
   window.app.loadURL(`file://${__dirname}/../html/app.html`)
-
-  // タッチバーの設定
-  if (isDarwin()) {
-    let touchBar = new TouchBarManager()
-    touchBar.addItem({
-      icon: `${__dirname}/../src/img/darwin/touchbar/arrow.png`,
-      click: () => {
-        window.app.webContents.send('shortcut-update-current-list')
-      }
-    })
-    touchBar.addSpacer('large')
-    touchBar.addItem({
-      icon: `${__dirname}/../src/img/darwin/touchbar/menu.png`,
-      click: () => {
-        window.app.webContents.send('shortcut-show-boards')
-      }
-    })
-    touchBar.addItem({
-      icon: `${__dirname}/../src/img/darwin/touchbar/window.png`,
-      click: () => {
-        window.app.webContents.send('shortcut-show-threads')
-      }
-    })
-    touchBar.addSpacer('large')
-    touchBar.addItem({
-      icon: `${__dirname}/../src/img/darwin/touchbar/clock.png`,
-      click: () => {
-        window.app.webContents.send('shortcut-switch-auto-update')
-      }
-    })
-    touchBar.addItem({
-      icon: `${__dirname}/../src/img/darwin/touchbar/down.png`,
-      click: () => {
-        window.app.webContents.send('shortcut-switch-auto-scroll')
-      }
-    })
-    window.app.setTouchBar(touchBar.touchBar)
-  }
 
   // 閉じた時
   window.app.on('close', ()=>{
