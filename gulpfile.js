@@ -10,17 +10,28 @@ gulp.task('watch', function(){
 });
 
 // jadeコンパイル
-gulp.task('jade', function(){
+gulp.task('jade', function(cb){
   gulp.src('src/jade/**/*.jade')
     .pipe(plumber())
     .pipe(jade({
       pretty: true
     }))
     .pipe(gulp.dest('dist/html/'));
+  cb();
 });
 
+// distを空に
+gulp.task('clean', function(cb) {
+  del(['dist', '**/*.log'], cb);
+  cb();
+});
+
+gulp.task('default', gulp.series('jade', function (cb) {
+  cb();
+}));
+
 // macOS用にパッケージ化
-gulp.task('package:darwin', ['default'], function (done) {
+gulp.task('package:darwin', gulp.series('default', function (cb) {
   packager({
     dir: './',
     out: 'release/darwin',
@@ -31,15 +42,16 @@ gulp.task('package:darwin', ['default'], function (done) {
     arch: 'x64',
     platform: 'darwin',
     overwrite: true,
-    version: '1.6.7',
+    version: package['version'],
     ignore: ['release']
   }, function (err, path) {
-    done();
+    cb();
   });
-});
+  cb();
+}));
 
-// Linux用にパッケージ化
-gulp.task('package:linux', ['default'], function (done) {
+// // Linux用にパッケージ化
+gulp.task('package:linux', gulp.series('default', function (cb) {
   packager({
     dir: './',
     out: 'release/linux',
@@ -50,16 +62,10 @@ gulp.task('package:linux', ['default'], function (done) {
     arch: 'x64',
     platform: 'linux',
     overwrite: true,
-    version: '1.6.7',
+    version: package['version'],
     ignore: ['release']
   }, function (err, path) {
-    done();
+    cb();
   });
-});
-
-// distを空に
-gulp.task('clean', function(cb) {
-  del(['dist', '**/*.log'], cb);
-});
-
-gulp.task('default', ['jade']);
+  cb();
+}));

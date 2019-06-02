@@ -2,13 +2,14 @@ var path = require('path');
 var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
+  mode: "production",
   entry: {
     "app": './src/jsx/component/app/index.jsx',
     "preferences": './src/jsx/component/preferences/index.jsx',
     "main": './src/main_process/main.js'
   },
   output: {
-    path: path.resolve('./dist'),
+    path: path.resolve('./dist/js'),
     filename: '[name].js',
     libraryTarget: 'commonjs2'
   },
@@ -17,11 +18,11 @@ module.exports = {
     __filename: false
   },
   resolve: {
+    extensions: ['.js', '.jsx', '.css', '.scss'],
     modules: [
       "node_modules",
       path.resolve('./src/')
-    ],
-    extensions: ['*', '.js', '.jsx', '.css', '.scss']
+    ]
   },
   externals: [
     '2ch-parser',
@@ -36,33 +37,35 @@ module.exports = {
     new WebpackNotifierPlugin()
   ],
   module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react']
-        }
-      },
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react'],
-          plugins: ["transform-react-jsx", "transform-class-properties"]
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['transform-react-jsx', 'transform-class-properties']
+          }
         }
       },
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        loaders: ["style-loader", "css-loader", "resolve-url-loader", "sass-loader"]
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'resolve-url-loader' },
+          { loader: 'sass-loader' }
+        ]
       },
       {
         test: /\.png$/,
-        loader: 'url-loader?mimetype=image/png'
+        use: {
+          loader: 'url-loader?mimetype=image/png'
+        }
       }
     ]
   },
+  performance: { hints: false }
 };

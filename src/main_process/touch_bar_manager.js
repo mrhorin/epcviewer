@@ -1,11 +1,11 @@
 import { TouchBar } from 'electron'
 
-const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar
+const { TouchBarButton, TouchBarSpacer } = TouchBar
 
 /*---------------------------------------
   タッチバーを操作するクラス
 ----------------------------------------*/
-module.exports = class TouchBarManager {
+export default class TouchBarManager {
 
   constructor() {
     this.items = []

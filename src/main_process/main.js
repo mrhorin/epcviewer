@@ -6,8 +6,7 @@ import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
 
 import MenuManager from 'main_process/menu_manager'
-
-import Storage from 'js/storage'
+import TouchBarManager from 'main_process/touch_bar_manager'
 
 let store = new Store()
 let menu = new MenuManager()
@@ -17,21 +16,24 @@ let window = { app: null, preferences: null }
   アプリの多重起動を禁止
   アプリ起動済みの場合は新しい板として登録する
 -----------------------------------------*/
-var shouldQuit = app.makeSingleInstance((argv, workingDirectory) => {
-  // 多重起動時の引数URL
-  const urlIndex = findUrlIndex(argv)
-  if (window.app && (urlIndex >= 0)) {
-    const url = argv[urlIndex]
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+  console.log('The instance will quit because the first instance exists already.')
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine) => {
+    console.log('The second instance was build but exited.')
+    const urlIndex = findUrlIndex(commandLine)
+    const url = commandLine[urlIndex]
     var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res) => {
       window.app.focus()
       // 板名
-      board['name'] = argv[urlIndex+1] ? argv[urlIndex+1] : url
+      board['name'] = commandLine[urlIndex+1] ? commandLine[urlIndex+1] : url
       window.app.webContents.send('add-board-reply', board)
     })
-  }
-})
-if(shouldQuit) app.exit()
+  })
+}
 
 /*-----------------------------------------
   アプリケーション起動準備完了時
@@ -153,14 +155,15 @@ app.on('ready', () => {
     x: bounds.x,
     y: bounds.y,
     minWidth: 100,
-    minHeight: 151
+    minHeight: 151,
+    webPreferences: {
+      nodeIntegration: true,
+    }
   })
-
-  window.app.loadURL(`file://${__dirname}/html/app.html`)
+  window.app.loadURL(`file://${__dirname}/../html/app.html`)
 
   // タッチバーの設定
   if (isDarwin()) {
-    const TouchBarManager = require('main_process/touch_bar_manager')
     let touchBar = new TouchBarManager()
     touchBar.addItem({
       icon: `${__dirname}/../src/img/darwin/touchbar/arrow.png`,
@@ -342,9 +345,12 @@ function openPreferencesWindow() {
     y: bounds.y,
     alwaysOnTop: true,
     resizable: false,
-    center: true
+    center: true,
+    webPreferences: {
+      nodeIntegration: true,
+    }
   })
-  window.preferences.loadURL(`file://${__dirname}/html/preferences.html`)
+  window.preferences.loadURL(`file://${__dirname}/../html/preferences.html`)
   window.app.setIgnoreMouseEvents(true)
   // 閉じた時
   window.preferences.on('close', () => {
