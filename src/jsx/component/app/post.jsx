@@ -79,7 +79,7 @@ export default class Post extends React.Component {
           convertUnicode: true,
           convertAscii: true,
           style: {
-            backgroundImage: 'url("../../src/img/common/emojione.sprites.png")',
+            backgroundImage: 'url("../../src/img/common/emojione-3.1.2-32x32.png")',
             width: 14, height: 14, margin: 0, top: -2
           }
     }
