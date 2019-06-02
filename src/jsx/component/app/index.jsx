@@ -6,5 +6,5 @@ import css from 'scss/app'
 
 ReactDOM.render(
   <App/>,
-  document.getElementById('container')
+  document.getElementById('app')
 )

@@ -453,7 +453,7 @@ export default class App extends React.Component {
     }
 
     return (
-      <div>
+      <div id="container">
         <Header
           listMode={this.state.listMode} currentUrl={this.state.currentUrl}
           isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll}
