@@ -143,7 +143,6 @@ export default class App extends React.Component {
         listMode: "BOARDS"
       })
     }
-    Storage.setState(this.state)
   }
 
   removeBoard = (boardUrl) => {
@@ -164,7 +163,6 @@ export default class App extends React.Component {
       boards: boards,
       currentBoardIndex: afterCurrentIndex
     })
-    Storage.setState(this.state)
   }
 
   selectBoard = (index) => {
@@ -190,7 +188,6 @@ export default class App extends React.Component {
         listMode: "THREADS"
       })
     }
-    Storage.setState(this.state)
   }
 
   removeThread = (threadUrl) => {
@@ -209,7 +206,6 @@ export default class App extends React.Component {
     if (afterCurrentIndex < 0) afterCurrentIndex = 0
     this.selectThread(afterCurrentIndex)
     this.setState({ threads: threads })
-    Storage.setState(this.state)
   }
 
   selectThread = (index) => {
