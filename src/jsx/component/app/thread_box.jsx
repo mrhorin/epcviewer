@@ -18,7 +18,7 @@ export default class ThreadBox extends React.Component {
 
   // 引数の番号のレスを取得  
   getPost = (no) => {
-    const index = _.findIndex(this.props.posts, { no: no })
+    const index = _.findIndex(this.props.posts, { no: Number(no) })
     return this.props.posts[index]
   }
 
@@ -89,7 +89,6 @@ export default class ThreadBox extends React.Component {
         )
       })
     }
-
     return (
       <div id="thread-box">
         {/*スレッドタブ*/}

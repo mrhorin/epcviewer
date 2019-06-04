@@ -1,7 +1,11 @@
+/*
+*/
 import React from 'react'
 import { emojify } from 'react-emojione'
-import { shell } from 'electron'
 import _ from 'lodash'
+
+import PostAnchor from 'jsx/component/app/post_anchor'
+import PostLink from 'jsx/component/app/post_link'
 
 export default class Post extends React.Component {
 
@@ -9,60 +13,77 @@ export default class Post extends React.Component {
     super(props)
   }
 
-  // IDがある場合は ID: を付加  
-  printId = (id) => {
-    return id ? `ID:${id}` : ''
+  get id() {
+    return this.props.post.id ? `ID:${this.props.post.id}` : ''
   }
 
-  parseBody = (text) => {
-    return this.replaceUrl(_.unescape(text))
-  }
-
-  // URLを置換  
-  replaceUrl = (text) => {
-    var elements = []
-    const ptn = /h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/ig
-    // URLをセパレータで区切る
-    text = text.replace(ptn, (url) => { return `<>${url}<>` })
-    text.split("<>").map((element, index) => {
-      if (element.match(ptn)) {
-        // URLをリンク化
-        elements.push(<a key={index} onClick={() => { this.openBrowser(element) }}>{element}</a>)
-      } else {
-        elements.push(this.replaceBr(element))
-      }
-    })
-    return elements
-  }
-
-  // 改行タグを置換  
-  replaceBr = (text) => {
-    return text.split("<br>").map((line, index) => {
+  get body() {
+    // 改行タグを置換
+    let body = this.props.post.body.replace(/<br>/gi, "\n")
+    // 文字実体参照と置換
+    body = _.unescape( body)
+    // 数値文字参照を置換
+    body = this.decodeNumRefToString(body)
+    // 絵文字をreact-emojioneの絵文字に置換
+    body = this.decodeEmoji(body)
+    // URLをPostLinkに置換
+    let urlPtn = /h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/ig
+    body = this.replaceStringWithComponent(body, urlPtn, (match, index) => {
       return (
-        <div className="post-body-line" key={index}>{this.replaceAnker(line)}</div>
+        <PostLink key={index} url={match} />
       )
     })
+    // アンカーをPostAnchorに置換
+    let anchorPtn = /<a.*?>>([0-9]+)<\/a>/gi
+    let tagPtn = /<("[^"]*"|'[^']*'|[^'">])*>|>>/gi
+    body = this.replaceStringWithComponent(body, anchorPtn, (match, index) => {
+      // アンカー先のレスを取得
+      let no = match.replace(tagPtn, "")
+      let anchored_post = this.props.getPost(no)
+      return (
+        <PostAnchor key={index} anchored_post={anchored_post} getPost={this.props.getPost} />
+      )     
+    })
+    return body
   }
 
-  // 安価を置換  
-  replaceAnker = (text) => {
-    var elements = []
-    const ptn = /(<a href=.+)(>>[0-9]+)(<\/a>)/i
-    text = text.replace(ptn, (match, astart, anker, aend) => { return `<>${anker}<>` })
-    text.split('<>').map((element, index) => {
-      if (element.match(/^(>>)([0-9]+)$/)) {
-        elements.push(
-          <a key={index} onMouseOver={this.onAnkerMouseOverrHandler} onMouseOut={this.onAnkerMouseOutHandler}>
-            {element}
-          </a>
-        )
-      } else {
-        element = this.decodeNumRefToString(element)
-        element = this.decodeEmoji(element)
-        elements.push(element)
-      }
-    })
-    return elements
+  // regexpにmatchした文字列をコンポーネントと置換
+  replaceStringWithComponent = (body, regexp, componentFunc) => {
+    const getComponent = (text) => {
+      let elements = []
+      // matchした箇所をセパレータで区切る
+      text = text.replace(regexp, (match) => {
+        return `<>${match}<>`
+      })
+      text.split("<>").map((currentValue, index) => {
+        if (currentValue.match(regexp)) {
+          // matchしたエレメント
+          elements.push(
+            componentFunc(currentValue, index)
+          )
+        } else {
+          elements.push(currentValue)
+        }
+      })
+      return elements
+    }
+    if (typeof body == "string") {
+      // 文字列をコンポーネントと置換
+      return getComponent(body)
+    } else if (Array.isArray(body)) {
+      // 配列の場合は文字列要素だけをコンポーネントと置換
+      let res = []
+      body.forEach((currentValue, index) => {
+        if (typeof currentValue == "string") {
+          res = res.concat(getComponent(currentValue))
+        } else {
+          res.push(currentValue)
+        }
+      })
+      return res
+    } else {
+      throw "body isn't a string or array."
+    }
   }
 
   // 数値文字参照を文字列に
@@ -86,31 +107,6 @@ export default class Post extends React.Component {
     return emojify(text, options)
   }
 
-  // 規定ブラウザで開く
-  openBrowser = (url) => {
-    // hなしの場合をhを付加
-    if(url[0] != 'h') url = 'h' + url
-    shell.openExternal(url)
-  }
-
-  // レス安価onMouseOverハンドラ
-  onAnkerMouseOverrHandler = (e) => {
-    const no = Number(_.unescape(e.target.innerHTML).replace(/^>>/, ''))
-    const post = this.props.getPost(no)
-    if (post) {
-      this.postElement.children[0].style.display = 'block'
-      this.postElement.children[0].style.top = `${e.clientY}px`
-      this.postElement.children[0].style.left = `${e.clientX+10}px`
-      this.postElement.children[0].innerHTML = `${no}:${post.name}[${post.mail}]${post.date} ${this.printId(post.id)}<br>${post.body}`      
-    }
-  }
-
-  // レス安価onMouseOutハンドラ
-  onAnkerMouseOutHandler = (e) => {
-    this.postElement.children[0].style.display = 'none'
-    this.postElement.children[0].innerHTML = ''
-  }
-
   componentDidMount() {
     this.postElement = window.document.getElementById(`post-${this.props.no}`)
   }
@@ -127,10 +123,10 @@ export default class Post extends React.Component {
           <span className="post-name">{this.props.post.name}</span>
           <span className="post-mail">[{this.props.post.mail}]</span>
           <span className="post-date">{this.props.post.date}</span>
-          <span className="post-id">{this.printId(this.props.post.id)}</span>
+          <span className="post-id">{this.id}</span>
         </div>
         <div className="post-body">
-          {this.parseBody(this.props.post.body)}
+          {this.body}
         </div>
       </div>
     )

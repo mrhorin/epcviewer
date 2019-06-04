@@ -1,12 +1,22 @@
+$font-color: #444444;
+
+$tooltip-bg-bolor: #ffffe0;
+
 input{
   border-radius: 3px;
   border: 1px solid #ccc;
   height: 22px;
 }
 
-a{ color: #0000ff; }
+a,
+.link{
+  color: #0000ff;
+  display: inline;
+  cursor: pointer;
+}
 a:visited{ color: #000080; }
-a:hover{
+a:hover,
+.link:hover{
   color: #ff0000;
   cursor: pointer;
 }
@@ -203,13 +213,48 @@ header{
       }
       .post-body{
         padding-left: 30px;
-        word-wrap: break-word;
+        word-break: break-all;
+        white-space: pre-line;
+        user-select: text;
         .post-body-line{
           display: block;
           line-height: 18px;
-          user-select: text;
           min-height: 18px;
           a{ user-select: text; }
+        }
+        .post-body-link{
+          @extend .link;
+        }
+        .post-body-anchor{
+          @extend .link;
+          position: relative;
+          .post-body-anchor-tooltip{
+            position: absolute;
+            bottom: 10px;
+            left: 0px;
+            min-width: 100%;
+            height: auto;
+            z-index: 1000;
+            font-size: 11px;
+            background-color: $tooltip-bg-bolor;
+            color: $font-color;
+            filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.8));
+            .post{
+              padding: 0px;
+              .post-header{
+                white-space: nowrap;
+                .post-no{
+                  margin-left: 5px;
+                }
+              }
+              .post-body{
+                padding-left: 10px;
+              }
+            }
+          }
+          .post-body-anchor-no{
+            display: inline;
+          }
         }
       }
     }
