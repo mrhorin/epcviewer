@@ -281,6 +281,11 @@ header{
     border-color: #ddd !important;
     box-shadow: none !important;
   }
+  textarea:disabled{
+    background-color: #eee;
+    color: #777;
+    cursor: not-allowed;
+  }
 }
 
 /* -------- フッター -------- */
