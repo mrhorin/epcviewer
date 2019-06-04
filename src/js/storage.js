@@ -17,6 +17,7 @@ export default class Storage {
       currentUrl: "",
       listMode: "BOARDS",
       updateStatus: "WAIT",
+      log: "",
       isAutoUpdate: true,
       isAutoScroll: true,
       isShowWriteForm: true
@@ -89,6 +90,7 @@ export default class Storage {
   // Appのstateを保存  
   static setState(state, callback = () => { }) {
     state.updateStatus = 'WAIT'
+    state.log = ''
     storage.set('state', state, (error) => {
       if (error) throw `Error: ${error}`
       callback()

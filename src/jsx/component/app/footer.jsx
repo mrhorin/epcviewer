@@ -95,6 +95,9 @@ export default class Footer extends React.Component {
           <div id="footer-update-status">
             {this.updateStatus}
           </div>
+          <div id="footer-log">
+            {this.props.log}
+          </div>
           <div id="footer-thread-title">
             {this.currentThreadTitle}
           </div>

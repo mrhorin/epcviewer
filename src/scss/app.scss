@@ -303,12 +303,21 @@ footer{
     #footer-update-status{
       order: 1;
       padding-left: 5px;
+      padding-right: 5px;
+      min-width: 70px;
       text-align: left;
       min-width: 50px;
     }
+    #footer-log{
+      order: 2;
+      flex-grow: 1;
+      text-align: left;
+      font-weight: bold;
+      color: #ff5757;
+    }
     /* スレッド名 */
     #footer-thread-title{
-      order: 2;
+      order: 3;
       padding-right: 5px;
       text-align: right;
       overflow: hidden;

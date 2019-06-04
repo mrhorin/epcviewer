@@ -396,6 +396,15 @@ export default class App extends React.Component {
     this.setState({ isShowWriteForm: !this.state.isShowWriteForm })
   }
 
+  outputLog = (log) => {
+    this.setState({ log: log })
+    setTimeout(this.clearLog, 3000)
+  }
+
+  clearLog = () => {
+    this.setState({ log: "" })
+  }
+
   // stateを初期化
   initialize = () => {
     Storage.clearState((error) => {
@@ -473,6 +482,7 @@ export default class App extends React.Component {
         </div>
         <Footer
           updateStatus={this.state.updateStatus}
+          log={this.state.log}
           isAutoUpdate={this.state.isAutoUpdate}
           currentThread={this.currentThread}
           updateCurrentThread={this.updateCurrentThread}
