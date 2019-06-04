@@ -101,6 +101,7 @@ export default class App extends React.Component {
       this.setUpdateStatus('WAIT')
       if (err) {
         console.log(err.status)
+        this.outputLog("書き込み失敗!")
         shell.beep()
       } else {
         this.writeFormTextarea.value = ""
@@ -394,7 +395,7 @@ export default class App extends React.Component {
 
   outputLog = (log) => {
     this.setState({ log: log })
-    setTimeout(this.clearLog, 3000)
+    setTimeout(this.clearLog, 3500)
   }
 
   clearLog = () => {
