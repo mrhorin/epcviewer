@@ -1,6 +1,12 @@
-$font-color: #444444;
+$font-color: #555;
+$name-color: #42a724;
+$admin-name-color: #ef6565;
 
 $tooltip-bg-bolor: #ffffe0;
+
+body{
+  color: $font-color;
+}
 
 input{
   border-radius: 3px;
@@ -194,10 +200,13 @@ header{
         }
         .post-name{
           display: inline;
-          color: #008800;
+          color: $name-color;
           font-weight: bold;
           margin-left: 3px;
           margin-right: 3px;
+        }
+        .post-name-admin{
+          color: $admin-name-color;
         }
         .post-mail{
           display: inline;

@@ -13,6 +13,10 @@ export default class Post extends React.Component {
     super(props)
   }
 
+  get name() {
+    return this.escapeHtmlTag(this.props.post.name)
+  }
+
   get id() {
     return this.props.post.id ? `ID:${this.props.post.id}` : ''
   }
@@ -38,13 +42,21 @@ export default class Post extends React.Component {
     let tagPtn = /<("[^"]*"|'[^']*'|[^'">])*>|>>/gi
     body = this.replaceStringWithComponent(body, anchorPtn, (match, index) => {
       // アンカー先のレスを取得
-      let no = match.replace(tagPtn, "")
+      let no = this.escapeHtmlTag(match)
       let anchored_post = this.props.getPost(no)
       return (
         <PostAnchor key={index} anchored_post={anchored_post} getPost={this.props.getPost} />
       )     
     })
     return body
+  }
+
+  get isAdmin() {
+    return Array.isArray(this.props.post.name.match(/★/gi))
+  }
+
+  getHtmlTagRegExp = (flags) => {
+    return new RegExp(/<("[^"]*"|'[^']*'|[^'">])*>|>>/, flags)
   }
 
   // regexpにmatchした文字列をコンポーネントと置換
@@ -86,6 +98,10 @@ export default class Post extends React.Component {
     }
   }
 
+  escapeHtmlTag = (text) => {
+    return text.replace(this.getHtmlTagRegExp("gi"), "")
+  }
+
   // 数値文字参照を文字列に
   decodeNumRefToString = (text) => {
     return text.replace(/&#(\d+);/ig, (match, $code, idx, all) => {
@@ -116,11 +132,12 @@ export default class Post extends React.Component {
   }
 
   render() {
+    let nameClass = (this.isAdmin) ? "post-name post-name-admin" : "post-name"
     return (
       <div id={`post-${this.props.no}`} className="post">
         <div className="post-header">
           <span className="post-no">{this.props.post.no}</span>:
-          <span className="post-name">{this.props.post.name}</span>
+          <span className={nameClass}>{this.name}</span>
           <span className="post-mail">[{this.props.post.mail}]</span>
           <span className="post-date">{this.props.post.date}</span>
           <span className="post-id">{this.id}</span>
