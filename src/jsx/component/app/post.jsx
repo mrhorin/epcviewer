@@ -34,7 +34,7 @@ export default class Post extends React.Component {
     let urlPtn = /h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/ig
     body = this.replaceStringWithComponent(body, urlPtn, (match, index) => {
       return (
-        <PostLink key={index} url={match} />
+        <PostLink key={index+'-'+this.randomKey} url={match} />
       )
     })
     // アンカーをPostAnchorに置換
@@ -45,7 +45,7 @@ export default class Post extends React.Component {
       let no = this.escapeHtmlTag(match)
       let anchored_post = this.props.getPost(no)
       return (
-        <PostAnchor key={index} anchored_post={anchored_post} getPost={this.props.getPost} />
+        <PostAnchor key={index+'-'+this.randomKey} anchored_post={anchored_post} getPost={this.props.getPost} />
       )     
     })
     return body
@@ -53,6 +53,15 @@ export default class Post extends React.Component {
 
   get isAdmin() {
     return Array.isArray(this.props.post.name.match(/★/gi))
+  }
+
+  get randomKey() {
+    let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&=~/*-+"
+    let res = ""
+    for (let i = 0; i < 10; i++){
+      res += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return res
   }
 
   getHtmlTagRegExp = (flags) => {
