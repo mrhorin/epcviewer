@@ -6,6 +6,7 @@ import _ from 'lodash'
 
 import PostAnchor from 'jsx/component/app/post_anchor'
 import PostLink from 'jsx/component/app/post_link'
+import PostId from 'jsx/component/app/post_id'
 
 export default class Post extends React.Component {
 
@@ -15,10 +16,6 @@ export default class Post extends React.Component {
 
   get name() {
     return this.escapeHtmlTag(this.props.post.name)
-  }
-
-  get id() {
-    return this.props.post.id ? `ID:${this.props.post.id}` : ''
   }
 
   get body() {
@@ -53,6 +50,10 @@ export default class Post extends React.Component {
 
   get isAdmin() {
     return Array.isArray(this.props.post.name.match(/★/gi))
+  }
+
+  get hasId() {
+    return (this.props.post.id && !(this.props.post.id.match(/\?\?\?/gi))) ? true : false
   }
 
   get randomKey() {
@@ -142,6 +143,9 @@ export default class Post extends React.Component {
 
   render() {
     let nameClass = (this.isAdmin) ? "post-name post-name-admin" : "post-name"
+    let postId = (this.hasId) ? (
+      <PostId getIdCounter={this.props.getIdCounter} id={this.props.post.id} no={this.props.post.no} />
+    ) : ( "" )
     return (
       <div id={`post-${this.props.no}`} className="post">
         <div className="post-header">
@@ -149,7 +153,7 @@ export default class Post extends React.Component {
           <span className={nameClass}>{this.name}</span>
           <span className="post-mail">[{this.props.post.mail}]</span>
           <span className="post-date">{this.props.post.date}</span>
-          <span className="post-id">{this.id}</span>
+          {postId}
         </div>
         <div className="post-body">
           {this.body}

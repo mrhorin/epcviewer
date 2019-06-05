@@ -216,8 +216,31 @@ header{
           display: inline;
           margin-right: 5px;
         }
-        .post-id{
+        div[class^="post-id"]{
           display: inline;
+        }
+        .post-id{
+          .post-id-extract{
+            @extend .link;
+            content: "ID";
+          }
+          .post-id-uid::before{
+            content: ":";
+          }
+          .post-id-counter{
+            .post-id-counter-count::before{
+              content: "(";
+            }
+            .post-id-counter-count{
+              margin-left: 3px;
+            }
+            .post-id-counter-total::before{
+              content: "/";
+            }
+            .post-id-counter-total::after{
+              content: ")";
+            }
+          }
         }
       }
       .post-body{

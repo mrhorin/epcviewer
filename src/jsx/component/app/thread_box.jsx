@@ -22,6 +22,26 @@ export default class ThreadBox extends React.Component {
     return this.props.posts[index]
   }
 
+  // 引数の番号のレスのIDカウンターを取得
+  getIdCounter = (no) => {
+    // 全IDごとの格納位置を集計
+    let idCounters = {}
+    this.props.posts.forEach((currentValue, index) => {
+      if ((idCounters[currentValue.id]) && !(currentValue.id.match(/\?\?\?/gi))) {
+        idCounters[currentValue.id].push(index+1)
+      } else if (currentValue.id && !(currentValue.id.match(/\?\?\?/gi))) {
+        idCounters[currentValue.id] = [index+1]
+      }
+    })
+    // no番のレスのIDが何回目の発言か
+    let noIndex = Number(no) - 1
+    let id = this.props.posts[noIndex].id
+    let count = idCounters[id].findIndex((value, index) => {
+      return value == no
+    })
+    return { count: Number(count) + 1, total: idCounters[id].length }
+  }
+
   // 書き込み一覧の一番下までスクロール
   scrollBottom = () => {
     this.postBox.scrollIntoView(false)
@@ -76,7 +96,7 @@ export default class ThreadBox extends React.Component {
     let posts = []
     if (this.props.hasBoard && this.hasPost) {
       posts = this.props.posts.map((post, index) => {
-        return <Post key={index} no={index + 2} post={post} getPost={this.getPost}/>
+        return <Post key={index} no={index + 2} post={post} getPost={this.getPost} getIdCounter={this.getIdCounter}/>
       })
     }
     let tabs = []
