@@ -36,14 +36,14 @@ export default class Post extends React.Component {
     })
     // アンカーをPostAnchorに置換
     let anchorPtn = /<a.*?>>([0-9]+)<\/a>/gi
-    let tagPtn = /<("[^"]*"|'[^']*'|[^'">])*>|>>/gi
     body = this.replaceStringWithComponent(body, anchorPtn, (match, index) => {
       // アンカー先のレスを取得
       let no = this.escapeHtmlTag(match)
-      let anchored_post = this.props.getPost(no)
+      let anchoredPost = this.props.getPost(no)
       return (
-        <PostAnchor key={index+'-'+this.randomKey} anchored_post={anchored_post} getPost={this.props.getPost} />
-      )     
+        <PostAnchor key={index + '-' + this.randomKey} no={no} anchoredPost={anchoredPost}
+                    getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
+      )
     })
     return body
   }
@@ -80,9 +80,8 @@ export default class Post extends React.Component {
       text.split("<>").map((currentValue, index) => {
         if (currentValue.match(regexp)) {
           // matchしたエレメント
-          elements.push(
-            componentFunc(currentValue, index)
-          )
+          let component = componentFunc(currentValue, index)
+          if(component) elements.push(component)
         } else {
           elements.push(currentValue)
         }
@@ -119,7 +118,7 @@ export default class Post extends React.Component {
     })
   }
 
-  // 絵文字  
+  // 実体参照をemojifyの絵文字に
   decodeEmoji = (text) => {
     const options = {
           convertShortnames: true,
@@ -147,7 +146,7 @@ export default class Post extends React.Component {
       <PostId getIdCounter={this.props.getIdCounter} id={this.props.post.id} no={this.props.post.no} />
     ) : ( "" )
     return (
-      <div id={`post-${this.props.no}`} className="post">
+      <div className="post">
         <div className="post-header">
           <span className="post-no">{this.props.post.no}</span>:
           <span className={nameClass}>{this.name}</span>

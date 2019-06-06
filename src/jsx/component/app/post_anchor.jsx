@@ -1,6 +1,4 @@
 import React from 'react'
-import { emojify } from 'react-emojione'
-import _ from 'lodash'
 
 import Post from 'jsx/component/app/post'
 
@@ -20,17 +18,21 @@ export default class PostAnchor extends React.Component {
   }
 
   hideAnchoredPost = () => {
-    this.setState({tooltipStyle: { visibility: "hidden" }})
+    this.setState({ tooltipStyle: { visibility: "hidden" } })
   }
 
   render() {
+    let anchoredPostComponent = (this.props.anchoredPost) ? (
+      <Post no={this.props.anchoredPost.no} post={this.props.anchoredPost}
+      getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
+    ) : ("")
     return (
       <div className="post-body-anchor" onMouseOver={this.showAnchoredPost} onMouseOut={this.hideAnchoredPost}>
-        <div className="post-body-anchor-tooltip" style={this.state.tooltipStyle}>
-          <Post no={this.props.anchored_post.no} post={this.props.anchored_post} getPost={this.props.getPost}/>
+        <div className="post-body-anchor-tooltip tooltip" style={this.state.tooltipStyle}>
+          {anchoredPostComponent}
         </div>
         <div className="post-body-anchor-no">
-          {">>"+this.props.anchored_post.no}
+          {">>"+this.props.no}
         </div>        
       </div>      
     )
