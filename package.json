@@ -35,6 +35,7 @@
     "del": "^4.1.1",
     "electron": "^5.0.2",
     "electron-packager": "^13.1.1",
+    "electron-react-devtools": "^0.5.3",
     "gulp": "^4.0.2",
     "gulp-jade": "^1.1.0",
     "gulp-plumber": "^1.2.1",

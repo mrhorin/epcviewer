@@ -29,6 +29,7 @@ module.exports = {
     'electron',
     'electron-json-storage',
     'electron-store',
+    'electron-react-devtools',
     'ipc',
     'superagent',
     'encoding-japanese'
