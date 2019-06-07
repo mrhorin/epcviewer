@@ -193,7 +193,7 @@ header{
   #post-box{
     order: 2;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100vh;
     .post{
       padding: 5px 10px;
@@ -305,6 +305,7 @@ header{
     padding: 0px;
     border-radius: 0px;
     border: 1px solid #ccc;
+    resize: vertical;
   }
   textarea:focus{
     border-color: #ddd !important;
