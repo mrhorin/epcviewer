@@ -143,7 +143,8 @@ export default class Post extends React.Component {
   render() {
     let nameClass = (this.isAdmin) ? "post-name post-name-admin" : "post-name"
     let postId = (this.hasId) ? (
-      <PostId getIdCounter={this.props.getIdCounter} id={this.props.post.id} no={this.props.post.no} />
+      <PostId id={this.props.post.id} no={this.props.post.no} post={this.props.post}
+              getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
     ) : ( "" )
     return (
       <div className="post">

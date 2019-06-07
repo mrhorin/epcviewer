@@ -36,10 +36,7 @@ export default class ThreadBox extends React.Component {
     // no番のレスのIDが何回目の発言か
     let noIndex = Number(no) - 1
     let id = this.props.posts[noIndex].id
-    let count = idCounters[id].findIndex((value, index) => {
-      return value == no
-    })
-    return { count: Number(count) + 1, total: idCounters[id].length }
+    return idCounters[id]
   }
 
   // 書き込み一覧の一番下までスクロール
@@ -87,9 +84,13 @@ export default class ThreadBox extends React.Component {
     this.scrollBottom()
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return (this.props.posts !== nextProps.posts) || (this.props.threads !== nextProps.threads)
+  }
+
   componentDidUpdate() {
     // オートスクロール
-    if(this.props.isAutoScroll) this.scrollBottom()
+    if (this.props.isAutoScroll) this.scrollBottom()
   }
 
   render() {

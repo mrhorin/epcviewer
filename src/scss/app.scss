@@ -1,6 +1,6 @@
 $font-color: #555;
-$name-color: #42a724;
-$admin-name-color: #ef6565;
+$name-color: #009900;
+$admin-name-color: #f95a5a;
 
 $tooltip-bg-bolor: #ffffe0;
 
@@ -155,6 +155,27 @@ header{
 }
 
 /* ------- スレッド一覧 ------- */
+.tooltip{
+  position: absolute;
+  min-width: 100%;
+  height: auto;
+  z-index: 1000;
+  font-size: 11px;
+  background-color: $tooltip-bg-bolor;
+  color: $font-color;
+  filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.8));
+  .post{
+    .post-header{
+      white-space: nowrap;
+      .post-no{
+        margin-left: 5px;
+      }
+    }
+    .post-body{
+      padding-left: 10px;
+    }
+  }
+}
 #thread-box{
   order: 2;
   background: #efefef;
@@ -222,6 +243,14 @@ header{
         .post-id{
           .post-id-extract{
             @extend .link;
+            position: relative;
+            .post-tooltip{
+              @extend .tooltip;
+              bottom: 0px;
+              right: 0px;
+            }
+          }
+          .post-id-extract::before{
             content: "ID";
           }
           .post-id-uid::before{
