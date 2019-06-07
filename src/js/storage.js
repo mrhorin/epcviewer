@@ -1,4 +1,7 @@
 import storage from 'electron-json-storage'
+import Store from 'electron-store'
+
+let store = new Store()
 
 export default class Storage {
 
@@ -20,7 +23,8 @@ export default class Storage {
       log: "",
       isAutoUpdate: true,
       isAutoScroll: true,
-      isShowWriteForm: true
+      isShowWriteForm: true,
+      theme: store.get('theme', "light")
     }
   }
 
@@ -28,7 +32,8 @@ export default class Storage {
   static get defaultPreferences() {
     return {
       isReturnBoards: false,
-      isReturnThreads: false
+      isReturnThreads: false,
+      theme: "light"
     }
   }
 
@@ -64,6 +69,7 @@ export default class Storage {
     })
   }
 
+  // 環境設定を取得
   static get preferencesPromise() {
     return new Promise((resolve, reject) => {
       storage.get('preferences', (error, preferences) => {
@@ -97,7 +103,9 @@ export default class Storage {
     })
   }
 
+  // 環境設定の保存
   static setPreferences(preferences, callback = () => { }) {
+    store.set('theme', preferences.theme)
     storage.set('preferences', preferences, (error) => {
       if (error) throw `Error: ${error}`
       callback()

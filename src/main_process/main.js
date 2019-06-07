@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { systemPreferences, app, BrowserWindow, ipcMain, shell } from 'electron'
 import { Board, Thread, UrlParser } from '2ch-parser'
 import Store from 'electron-store'
 import request from 'superagent'
@@ -10,6 +10,8 @@ import MenuManager from 'main_process/menu_manager'
 let store = new Store()
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
+
+systemPreferences.setAppLevelAppearance(store.get('theme', "light"))
 
 /*-----------------------------------------
   アプリの多重起動を禁止
@@ -323,7 +325,10 @@ function openPreferencesWindow() {
 function closePreferencesWindow() {
   window.preferences.close()
   window.preferences = null
+  let theme = store.get('theme', "light")
+  systemPreferences.setAppLevelAppearance(theme)
   window.app.setIgnoreMouseEvents(false)
+  window.app.webContents.send('close-preferences-window-reply', theme)
 }
 
 // Mac環境か

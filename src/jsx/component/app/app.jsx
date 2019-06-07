@@ -60,6 +60,11 @@ export default class App extends React.Component {
           values[0].threads = []
           values[0].currentThreadIndex = 0
         }
+        if (!values[1].theme) {
+          values[0].theme = "light"
+        } else {
+          values[0].theme = values[1].theme
+        }
         this.setState(values[0])
         if(board) this.addBoard(board)
       })
@@ -109,6 +114,9 @@ export default class App extends React.Component {
       }
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
+    })
+    ipcRenderer.on('close-preferences-window-reply', (event, theme) => {
+      this.setState({ theme: theme })
     })
     ipcRenderer.on('shortcut-tab-left', (event) => { this.moveLeftTab() })
     ipcRenderer.on('shortcut-tab-right', (event) => { this.moveRightTab() })
@@ -459,7 +467,7 @@ export default class App extends React.Component {
     }
 
     return (
-      <div id="container">
+      <div id="container" className={this.state.theme}>
         <Header
           listMode={this.state.listMode} currentUrl={this.state.currentUrl}
           isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll}

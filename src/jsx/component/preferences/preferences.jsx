@@ -21,7 +21,11 @@ export default class Preferences extends React.Component {
   }
 
   _onChangeReturnThreads = (event) => {
-    this.setState({ isReturnThreads: event.target.checked })    
+    this.setState({ isReturnThreads: event.target.checked })
+  }
+
+  _onChangeTheme = (event) => {
+    this.setState({ theme: this.refs.theme.value })
   }
 
   _onClickOk = (event) => {
@@ -43,14 +47,25 @@ export default class Preferences extends React.Component {
   render() {
     return (
       <div id="preferences-flex-container">
-        <div className="preferences-title">起動時</div>
-        <div className="preferences-item" id="preferences-save-boards">
-          <input type="checkbox" onChange={this._onChangeReturnBoards} checked={this.state.isReturnBoards} />
-          <span className="checkbox-label">板一覧を復帰</span>
+        <div id="preferences-startup">
+          <div className="preferences-title">起動時</div>
+          <div id="preferences-startup-boards" className="preferences-item">
+            <input type="checkbox" onChange={this._onChangeReturnBoards} checked={this.state.isReturnBoards} />
+            <span className="checkbox-label">板一覧を復帰</span>
+          </div>
+          <div id="preferences-startup-threads" className="preferences-item">
+            <input type="checkbox" onChange={this._onChangeReturnThreads} checked={this.state.isReturnThreads} />
+            <span className="checkbox-label">スレッド一覧を復帰</span>          
+          </div>
         </div>
-        <div className="preferences-item" id="preferences-save-threads">
-          <input type="checkbox" onChange={this._onChangeReturnThreads} checked={this.state.isReturnThreads} />
-          <span className="checkbox-label">スレッド一覧を復帰</span>          
+        <div id="preferences-theme" className="preferences-item">
+          <div className="preferences-title">テーマ</div>
+          <div className=" form-group">
+            <select ref="theme" onChange={this._onChangeTheme} value={this.state.theme}>
+              <option value="light">ライト</option>
+              <option value="dark">ダーク</option>
+            </select>
+          </div>
         </div>
         <div id="preferences-btns">
           <button className="btn btn-primary btn-mini" onClick={this._onClickOk}>OK</button>

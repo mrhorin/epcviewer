@@ -44,21 +44,35 @@ a:active{ color: #ff8000; }
 /* -------- 環境設定 -------- */
 #preferences-flex-container{
   display: flex;
-  position: relative;
   flex-direction: column;
   padding: 15px;
   background: #efefef;
   color: #333;
   height: 100vh;
+  #preferences-startup{
+    order: 1;
+    display: flex;
+    flex-direction: column;  
+    #preferences-startup-boards{
+    }
+    #preferences-startup-threads{
+    }  
+  }
+  #preferences-theme{
+    order: 2;
+  }
+  #preferences-btns{
+    order: 3;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    button{
+      margin: 0px 3px;
+    }
+  }
   .preferences-title{
     font-size: 11px;
     font-weight: bold;
-  }
-  #preferences-save-boards{
-    order: 1;
-  }
-  #preferences-save-threads{
-    order: 2;
   }
   .preferences-item{
     padding-left: 2px;
@@ -73,14 +87,7 @@ a:active{ color: #ff8000; }
       font-size: 11px;
     }
   }
-  #preferences-btns{
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    button{
-      margin: 0px 3px;
-    }
-  }
+
 }
 
 /* -------- ヘッダー -------- */
@@ -135,7 +142,7 @@ header{
   #subject-box{
     order: 2;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100vh;
   }
 }
@@ -164,6 +171,7 @@ header{
   font-size: 11px;
   background-color: $tooltip-bg-bolor;
   color: $font-color;
+  border-radius: 3px;
   filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.8));
   .post{
     padding: 5px;
@@ -308,8 +316,8 @@ header{
     resize: vertical;
   }
   textarea:focus{
-    border-color: #ddd !important;
-    box-shadow: none !important;
+    border-color: #ddd;
+    box-shadow: none;
   }
   textarea:disabled{
     background-color: #eee;
@@ -391,15 +399,15 @@ footer{
     content: 'オートスクロール';
   }
   button.btn.active:first-child{
-    border-right: 1px solid #c2c0c2 !important;
+    border-right: 1px solid #c2c0c2;
   }
   button.btn.active:last-child{
-    border-left: 1px solid #c2c0c2 !important;
+    border-left: 1px solid #c2c0c2;
   }
 }
 
 .tab-group{
-  background: #ccc;
+  background-color: #ccc;
   border-bottom: 1px solid #999;
   min-height: 20px;
 }
@@ -425,7 +433,7 @@ footer{
 }
 
 .tab-item-active{
-  background: #ccc !important;
+  background: #ccc;
 }
 
 .tab-item:hover{
@@ -440,4 +448,148 @@ footer{
 
 .toolbar-header{
   border-bottom: none;
+}
+
+/* dark theme */
+$darktheme-base-color: #444444;
+$darktheme-tooltip-bg-color: rgba(0, 0, 0, 0.7);
+$darktheme-btn-default-color: darken($darktheme-base-color, 3%);
+$darktheme-font-color: #ffffff;
+$darktheme-link-font-color: #00ccff;
+$darktheme-btn-primary-color: #308cff;
+
+#container.dark{
+  input[type="text"]{
+    background-color: #222;
+    border-color: #4c4c4c;
+    color: #ffffff;
+  }
+  textarea{
+    background-color: #313131;
+    border-color: #464646;
+    color: #ffffff;
+  }
+  textarea:focus{
+    border-color: #616161;
+    box-shadow: none;
+  }
+  .toolbar{
+    background-color: $darktheme-base-color;
+    background-image: linear-gradient(to bottom, $darktheme-base-color 0%, $darktheme-base-color*0.82 100%);
+    box-shadow: none;
+    color: #ffffff;
+  }
+  .toolbar-footer{
+    border-top-color: lighten($darktheme-btn-default-color, 20%);
+  }
+  .toolbar-header{
+    border-bottom-color: lighten($darktheme-btn-default-color, 20%);
+  }
+
+  .btn-default{
+    background-color: $darktheme-btn-default-color;
+    border-color: lighten($darktheme-btn-default-color, 10%);
+    border-bottom-color: lighten($darktheme-btn-default-color, 3%);
+    background-image: linear-gradient(to bottom, darken($darktheme-btn-default-color, 5%) 0%, darken($darktheme-btn-default-color, 10%) 100%);
+    color: #fdfdfd;
+    .icon{
+      color: #fdfdfd;
+    }
+  }
+  .btn-default:hover{
+    background-color: darken($darktheme-btn-default-color, 10%);
+    background-image: linear-gradient(to bottom, darken($darktheme-btn-default-color, 15%) 0%, darken($darktheme-btn-default-color, 20%) 100%);
+  }
+  .btn-default:active,
+  .btn-default.active{
+    background-color: #fcfcfc;
+    background-image: linear-gradient(to bottom, #fcfcfc 0%, #dadada 100%);
+    .icon{
+      color: $darktheme-base-color;
+    }
+  }
+  .btn-group .btn + .btn {
+    border-left-color: lighten($darktheme-btn-default-color, 10%);
+  }
+
+  .tab-group{
+    $base: darken($darktheme-base-color, 5%);
+    background-color: $base;
+    border-bottom-color: lighten($base, 10%);
+    .tab-item{
+      background-color: $base;
+      background-image: linear-gradient(to bottom, $base 0%, darken($base, 7%) 100%);
+      color: #ffffff;
+      border-left: 1px solid lighten($base, 10%);
+    }
+    .tab-item.tab-item-active{
+      background-color: $darktheme-base-color;
+      background-image: linear-gradient(to bottom, $darktheme-base-color*0.82 0%, $darktheme-base-color*0.82 100%);
+    }
+    .tab-item:hover,
+    .tab-item-active:hover{
+      background-color: darken($darktheme-base-color, 8%);
+      background-image: linear-gradient(to bottom, darken($darktheme-base-color, 10%) 0%, darken($darktheme-base-color, 10%) 100%);
+    }
+    .tab-item:first-child{
+      border-left: none;
+    }
+  }
+
+  #board-box>#subject-box::-webkit-scrollbar,
+  #thread-box>#post-box::-webkit-scrollbar{
+    background: darken($darktheme-base-color, 7%);
+    border-left: 1px solid lighten($darktheme-base-color, 3%);
+  }
+  #board-box>#subject-box::-webkit-scrollbar-thumb,
+  #thread-box>#post-box::-webkit-scrollbar-thumb{
+    background: darken($darktheme-base-color, 14%);
+    border-left: 1px solid lighten($darktheme-base-color, 3%);
+  }
+
+
+  #board-box{
+    background: darken($darktheme-base-color, 12%);
+    .subject{
+      color: $darktheme-font-color;
+    }
+    .subject:nth-child(even) {
+      background: darken($darktheme-base-color, 8%);
+    }
+  }
+
+  #thread-box{
+    background-color: darken($darktheme-base-color, 12%);;
+    color: $darktheme-font-color;
+    #post-box{
+      a,
+      .post-body-anchor-no,
+      .post-id-extract{
+        color: $darktheme-link-font-color;
+      }
+      .post-header{
+        color: $darktheme-font-color;
+        .post-name{
+          color: $darktheme-font-color;
+          font-weight: normal;
+        }
+        .post-name-admin{
+          color: #ff5252;
+          font-weight: bold;
+        }
+      }
+    }
+    .tooltip{
+      background-color: $darktheme-tooltip-bg-color;
+      color: $font-color;
+      filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.85));
+      .post{
+        .post-header{
+        }
+        .post-body{
+          color: $darktheme-font-color;
+        }
+      }
+    }
+  }
 }
