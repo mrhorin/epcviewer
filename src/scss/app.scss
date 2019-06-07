@@ -245,7 +245,7 @@ header{
             .post-tooltip{
               @extend .tooltip;
               bottom: 0px;
-              right: 0px;
+              left: 0px;
             }
           }
           .post-id-extract::before{
@@ -286,11 +286,11 @@ header{
         }
         .post-body-anchor{
           @extend .link;
-          position: relative;
           .post-body-anchor-tooltip{
-            @extend .tooltip;
-            bottom: 0px;
-            left: 0px;
+            position: relative;
+            .post-tooltip{
+              @extend .tooltip;
+            }
           }
           .post-body-anchor-no{
             display: inline;
