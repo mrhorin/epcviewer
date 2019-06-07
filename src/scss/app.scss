@@ -165,11 +165,9 @@ header{
   color: $font-color;
   filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.8));
   .post{
+    padding: 5px;
     .post-header{
       white-space: nowrap;
-      .post-no{
-        margin-left: 5px;
-      }
     }
     .post-body{
       padding-left: 10px;
@@ -290,28 +288,9 @@ header{
           @extend .link;
           position: relative;
           .post-body-anchor-tooltip{
-            position: absolute;
-            bottom: 10px;
+            @extend .tooltip;
+            bottom: 0px;
             left: 0px;
-            min-width: 100%;
-            height: auto;
-            z-index: 1000;
-            font-size: 11px;
-            background-color: $tooltip-bg-bolor;
-            color: $font-color;
-            filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.8));
-            .post{
-              padding: 0px;
-              .post-header{
-                white-space: nowrap;
-                .post-no{
-                  margin-left: 5px;
-                }
-              }
-              .post-body{
-                padding-left: 10px;
-              }
-            }
           }
           .post-body-anchor-no{
             display: inline;

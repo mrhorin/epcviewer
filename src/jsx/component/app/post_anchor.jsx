@@ -1,35 +1,44 @@
 import React from 'react'
 
 import Post from 'jsx/component/app/post'
+import PostTooltip from 'jsx/component/app/post_tooltip'
 
 export default class PostAnchor extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      tooltipStyle: {
-        visibility: "hidden"
-      }
+    this.state = { showTooltip: false, tooltipComponent: "" }
+  }
+
+  showTooltip = () => {
+    if (!this.state.showTooltip) {
+      let post = this.props.getPost(this.props.no)
+      this.setState({
+        showTooltip: true,
+        tooltipComponent: <Post no={post.no} post={post} getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />          
+      })      
     }
   }
 
-  showAnchoredPost = () => {
-    this.setState({tooltipStyle: { visibility: "visible" }})
+  hideTooltip = () => {
+    if (this.state.showTooltip) {
+      this.setState({ showTooltip: false, tooltipComponent: '' })      
+    }
   }
 
-  hideAnchoredPost = () => {
-    this.setState({ tooltipStyle: { visibility: "hidden" } })
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.showTooltip !== nextState.showTooltip
   }
 
   render() {
-    let anchoredPostComponent = (this.props.anchoredPost) ? (
-      <Post no={this.props.anchoredPost.no} post={this.props.anchoredPost}
-      getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
-    ) : ("")
+    let tooltip = ""
+    if (this.state.showTooltip) {
+      tooltip = <PostTooltip component={this.state.tooltipComponent} hideTooltip={this.hideTooltip} />
+    }
     return (
-      <div className="post-body-anchor" onMouseOver={this.showAnchoredPost} onMouseOut={this.hideAnchoredPost}>
-        <div className="post-body-anchor-tooltip tooltip" style={this.state.tooltipStyle}>
-          {anchoredPostComponent}
+      <div className="post-body-anchor" onMouseOver={this.showTooltip}>
+        <div className="post-body-anchor-tooltip">
+          {tooltip}
         </div>
         <div className="post-body-anchor-no">
           {">>"+this.props.no}

@@ -6,10 +6,6 @@ export default class PostTooltip extends React.Component {
     super(props)
   }
 
-  componentWillUnmount = () => {
-    console.log('did mount post_tooltip')
-  }
-
   render() {
     return (
       <div className="post-tooltip" onMouseLeave={this.props.hideTooltip}>
