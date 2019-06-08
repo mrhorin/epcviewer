@@ -1,13 +1,15 @@
 {
   "name": "epcviewer",
   "version": "1.6.7",
-  "main": "./dist/main.js",
+  "main": "./dist/js/main.js",
   "scripts": {
     "build": "gulp clean && gulp jade && webpack --mode=production",
     "clean": "gulp clean",
     "watch": "webpack -w --mode=development",
     "start": "electron ./dist/js/main.js",
-    "list": "npm list --depth=0"
+    "list": "npm list --depth=0",
+    "release:darwin": "npm run build && gulp package:darwin",
+    "release:linux": "npm run build && gulp package:linux"
   },
   "license": "MIT",
   "dependencies": {
@@ -22,7 +24,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-emojione": "^5.0.1",
-    "superagent": "^5.0.5"
+    "superagent": "^5.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -33,7 +35,7 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "css-loader": "^2.1.1",
     "del": "^4.1.1",
-    "electron": "^5.0.2",
+    "electron": "^5.0.3",
     "electron-packager": "^13.1.1",
     "electron-react-devtools": "^0.5.3",
     "gulp": "^4.0.2",
@@ -43,9 +45,9 @@
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "url-loader": "^1.1.2",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2",
+    "url-loader": "^2.0.0",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.3",
     "webpack-notifier": "^1.7.0"
   }
 }

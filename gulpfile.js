@@ -38,7 +38,7 @@ gulp.task('package:darwin', gulp.series('default', function (cb) {
     name: package["name"],
     icon: "./src/img/darwin/icon_1024x1024.png.icns",
     "app-version": package["version"],
-    "app-copyright": "Copyright (C) 2017 "+package["author"]+".",
+    "app-copyright": "Copyright (C) 2019 "+package["author"]+".",
     arch: 'x64',
     platform: 'darwin',
     overwrite: true,
