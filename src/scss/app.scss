@@ -473,6 +473,11 @@ $darktheme-btn-primary-color: #308cff;
     border-color: #616161;
     box-shadow: none;
   }
+  textarea:disabled{
+    background-color: #424242;
+    border-color: #656565;
+    color: #bbbbbb;
+  }
   .toolbar{
     background-color: $darktheme-base-color;
     background-image: linear-gradient(to bottom, $darktheme-base-color 0%, $darktheme-base-color*0.82 100%);
