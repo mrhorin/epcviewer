@@ -455,8 +455,9 @@ $darktheme-base-color: #444444;
 $darktheme-tooltip-bg-color: rgba(0, 0, 0, 0.7);
 $darktheme-btn-default-color: darken($darktheme-base-color, 3%);
 $darktheme-font-color: #ffffff;
+$darktheme-post-name-font-color: #6eca1b;
 $darktheme-link-font-color: #00ccff;
-$darktheme-btn-primary-color: #308cff;
+$darktheme-btn-primary-color: #3c83ec;
 
 #container.dark{
   input[type="text"]{
@@ -503,12 +504,12 @@ $darktheme-btn-primary-color: #308cff;
   }
   .btn-default:hover{
     background-color: darken($darktheme-btn-default-color, 10%);
-    background-image: linear-gradient(to bottom, darken($darktheme-btn-default-color, 15%) 0%, darken($darktheme-btn-default-color, 20%) 100%);
+    background-image: linear-gradient(to top, darken($darktheme-btn-default-color, 15%) 0%, darken($darktheme-btn-default-color, 20%) 100%);
   }
   .btn-default:active,
   .btn-default.active{
     background-color: #fcfcfc;
-    background-image: linear-gradient(to bottom, #fcfcfc 0%, #dadada 100%);
+    background-image: linear-gradient(to top, #fcfcfc 0%, #dadada 100%);
     .icon{
       color: $darktheme-base-color;
     }
@@ -576,7 +577,7 @@ $darktheme-btn-primary-color: #308cff;
       .post-header{
         color: $darktheme-font-color;
         .post-name{
-          color: $darktheme-font-color;
+          color: $darktheme-post-name-font-color;
           font-weight: normal;
         }
         .post-name-admin{
