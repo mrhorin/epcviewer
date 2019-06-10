@@ -221,8 +221,13 @@ ipcMain.on('update-thread', (event, thread) => {
   newThread.posts = thread.posts
   newThread.headers = thread.headers
   // ペカステBBS対策（Last-Modified ヘッダの存在確認）
-  if (thread.headers.lastMofied) {
+  if (newThread.headers.lastModified) {
     newThread.newPostsPromise.then((res) => {
+      // 更新があるか
+      if (res.statusCode != 304 && res.body.length > 0) {
+        newThread.headers.lastModified = res.res.headers['date']
+        newThread.headers.contentLength = Number(res.res.headers['content-length'])
+      }
       newThread.posts = res.body
       event.sender.send('update-thread-reply', newThread)
     }).catch((res) => {

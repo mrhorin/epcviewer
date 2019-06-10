@@ -84,7 +84,8 @@ export default class App extends React.Component {
     ipcRenderer.on('update-thread-reply', (event, thread) => {
       // threadがthreadsの何番目に存在するか
       let index = _.findIndex(this.state.threads, { url: thread.url })
-      if (index >= 0) {
+      // 更新があるか
+      if ((index >= 0) && (thread.posts.length > 0)) {
         let threads = this.state.threads
         if (thread.url.match(/jbbs/)) {
           // 新着レスを末尾に追加
@@ -93,6 +94,8 @@ export default class App extends React.Component {
           // レス全件を置換
           threads[index].posts = thread.posts
         }
+        threads[index].headers.contentLength += thread.headers.contentLength
+        threads[index].headers.lastModified = thread.headers.lastModified
         this.setState({ threads: threads, updateStatus: "WAIT" })
       } else {
         this.setUpdateStatus('WAIT')
