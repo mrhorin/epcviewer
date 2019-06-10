@@ -13,10 +13,15 @@ export default class PostAnchor extends React.Component {
   showTooltip = () => {
     if (!this.state.showTooltip) {
       let post = this.props.getPost(this.props.no)
-      this.setState({
-        showTooltip: true,
-        tooltipComponent: <Post no={post.no} post={post} getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />          
-      })      
+      // アンカー先が存在するレス番号か
+      if (post) {
+        this.setState({
+          showTooltip: true,
+          tooltipComponent: <Post no={this.props.no} post={post} getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />          
+        })        
+      } else {
+        this.hideTooltip()
+      }
     }
   }
 
