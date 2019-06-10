@@ -217,15 +217,24 @@ ipcMain.on('add-thread', (event, threadUrl) => {
 // ------- thread更新して返す -------
 ipcMain.on('update-thread', (event, thread) => {
   var newThread = new Thread(thread.url)
-  newThread.headers = thread.headers
   newThread.title = thread.title
   newThread.posts = thread.posts
-  newThread.newPostsPromise.then((res) => {
-    newThread.posts = res.body
-    event.sender.send('update-thread-reply', newThread)
-  }).catch((res) => {
-    event.sender.send('update-thread-reply', thread)
-  })
+  newThread.headers = thread.headers
+  // ペカステBBS対策（Last-Modified ヘッダの存在確認）
+  if (thread.headers.lastMofied) {
+    newThread.newPostsPromise.then((res) => {
+      newThread.posts = res.body
+      event.sender.send('update-thread-reply', newThread)
+    }).catch((res) => {
+      event.sender.send('update-thread-reply', thread)
+    })    
+  } else {
+    console.warn('WARNING: Last-Modifiedヘッダがみつかりません。更新時に毎回レスを全件取得します。')
+    newThread.fetchAllPosts((res) => {
+      newThread.posts = res.body
+      event.sender.send('update-thread-reply', newThread)      
+    })
+  }
 })
 
 // ------- board更新して返す -------

@@ -86,8 +86,13 @@ export default class App extends React.Component {
       let index = _.findIndex(this.state.threads, { url: thread.url })
       if (index >= 0) {
         let threads = this.state.threads
-        // 新着レスを追加
-        threads[index].posts = threads[index].posts.concat(thread.posts)
+        if (thread.url.match(/jbbs/)) {
+          // 新着レスを末尾に追加
+          threads[index].posts = threads[index].posts.concat(thread.posts)          
+        } else {
+          // レス全件を置換
+          threads[index].posts = thread.posts
+        }
         this.setState({ threads: threads, updateStatus: "WAIT" })
       } else {
         this.setUpdateStatus('WAIT')

@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "2ch-parser": "^0.2.2",
+    "2ch-parser": "^0.3.0",
     "electron-json-storage": "^4.1.6",
     "electron-store": "^3.2.0",
     "emoji-regex": "^8.0.0",
