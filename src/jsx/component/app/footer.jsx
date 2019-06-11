@@ -13,6 +13,12 @@ export default class Footer extends React.Component {
     this.state = { autoUpdateCount: 10 }
   }
 
+  bindEvent = () => {
+    ipcRenderer.on('update-thread-reply', () => {
+      this.setState({ autoUpdateCount: 10 })
+    })
+  }
+
   // 更新状態
   get updateStatus() {
     switch (this.props.updateStatus) {
@@ -81,6 +87,7 @@ export default class Footer extends React.Component {
   }
 
   componentDidMount() {
+    this.bindEvent()
     this.startUpdateTimer()
   }
 
