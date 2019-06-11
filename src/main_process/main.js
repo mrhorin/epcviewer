@@ -29,8 +29,8 @@ if (!gotTheLock) {
     var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res) => {
       window.app.focus()
-      // 板名
-      board['name'] = commandLine[urlIndex+1] ? commandLine[urlIndex+1] : url
+      // 板名がない時はURLを板名に
+      board['title'] = commandLine[urlIndex + 1] ? commandLine[urlIndex + 1] : url.replace(/^https?:\/\//i, '')
       window.app.webContents.send('add-board-reply', board)
     })
   })
@@ -182,8 +182,10 @@ app.on('window-all-closed', ()=>{
 // ------- URLのBoardを返す -------
 ipcMain.on('add-board', (event, url) => {
   var board = new Board(UrlParser.getBoardUrl(url))
-  board.fetchThreads((res)=>{
+  board.fetchThreads((res) => {
+    if (!(board['title']))  board['title'] = board['url'].replace(/^https?:\/\//, '')
     event.sender.send('add-board-reply', {
+      title: board.title,
       url: board.url,
       threads: res.body
     })
@@ -198,7 +200,7 @@ ipcMain.on('add-arg-board', (event) => {
     var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res) => {
       // 板名
-      board['name'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url
+      board['title'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url.replace(/^https?:\/\//i, '')
       event.sender.send('add-arg-board-reply', board)
     })
   } else {

@@ -63,7 +63,7 @@ export default class BoardBox extends React.Component {
       tabs = this.props.boards.map((board, index) => {
         const active = this.props.currentBoardIndex==index
         return (
-          <Tab key={index} index={index} name={board.name} url={board.url} active={active}
+          <Tab key={index} index={index} name={board.title} url={board.url} active={active}
             removeTab={this._removeBoard} selectTab={this._selectBoard} />
         )
       })
