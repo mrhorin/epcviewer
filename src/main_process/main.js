@@ -121,6 +121,12 @@ app.on('ready', () => {
       ]
     },
     {
+      label: '掲示板',
+      submenu: [
+        { label: '更新', accelerator: 'CmdOrCtrl+r',click: ()=>{ window.app.webContents.send('shortcut-update-current-list') } }
+      ]
+    },
+    {
       label: '設定',
       submenu: [
         { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
