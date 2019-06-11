@@ -540,6 +540,16 @@ $darktheme-btn-primary-color: #3c83ec;
     .tab-item:first-child{
       border-left: none;
     }
+    .tab-item:hover{
+      .icon-close-tab{
+        background-color: darken($darktheme-base-color, 10%);
+        color: #fff;
+      }
+      .icon-close-tab:hover{
+        background: #d65858;
+        color: #fff;
+      }
+    }
   }
 
   #board-box>#subject-box::-webkit-scrollbar,
