@@ -1,7 +1,4 @@
-/*
-*/
 import React from 'react'
-import { emojify } from 'react-emojione'
 import _ from 'lodash'
 
 import PostAnchor from 'jsx/component/app/post_anchor'
@@ -25,10 +22,8 @@ export default class Post extends React.Component {
     body = _.unescape( body)
     // 数値文字参照を置換
     body = this.decodeNumRefToString(body)
-    // 絵文字をreact-emojioneの絵文字に置換
-    body = this.decodeEmoji(body)
     // URLをPostLinkに置換
-    let urlPtn = /h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/ig
+    let urlPtn = new RegExp(/h?ttps?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/, "ig")
     body = this.replaceStringWithComponent(body, urlPtn, (match, index) => {
       return (
         <PostLink key={index+'-'+this.randomKey} url={match} />
@@ -116,20 +111,6 @@ export default class Post extends React.Component {
     return text.replace(/&#(\d+);/ig, (match, $code, idx, all) => {
       return String.fromCodePoint($code)
     })
-  }
-
-  // 実体参照をemojifyの絵文字に
-  decodeEmoji = (text) => {
-    const options = {
-          convertShortnames: true,
-          convertUnicode: true,
-          convertAscii: true,
-          style: {
-            backgroundImage: 'url("../../src/img/common/emojione-3.1.2-32x32.png")',
-            width: 14, height: 14, margin: 0, top: -2
-          }
-    }
-    return emojify(text, options)
   }
 
   componentDidMount() {
