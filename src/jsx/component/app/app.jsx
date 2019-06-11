@@ -445,13 +445,14 @@ export default class App extends React.Component {
 
   componentDidUpdate() {
     if (this.state.isShowWriteForm) {
-      this.writeFormTextarea.style.display = 'block'
+      this.writeForm.style.display = 'block'
     } else {
-      this.writeFormTextarea.style.display = 'none'
+      this.writeForm.style.display = 'none'
     }
   }
 
   componentDidMount() {
+    this.writeForm = document.getElementById('write-form')
     this.writeFormTextarea = document.getElementById('write-form-textarea')
     this.bindEvents()
     ipcRenderer.send('add-arg-board')

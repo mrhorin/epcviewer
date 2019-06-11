@@ -308,7 +308,8 @@ header{
   order: 3;
   width: 100%;
   margin: 0px;
-  margin-bottom: -1px;
+  padding: 0px;
+  margin-bottom: -6px;
   textarea{
     width: 100%;
     padding: 0px;
@@ -469,15 +470,17 @@ $darktheme-btn-primary-color: #3c83ec;
   textarea{
     background-color: #313131;
     border-color: #464646;
+    border-left: none;
+    border-right: none;
     color: #ffffff;
   }
   textarea:focus{
-    border-color: #616161;
+    border: 1px solid #616161;
     box-shadow: none;
   }
   textarea:disabled{
     background-color: #424242;
-    border-color: #656565;
+    border: 1px solid #656565;
     color: #bbbbbb;
   }
   .toolbar{
