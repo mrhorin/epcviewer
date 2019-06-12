@@ -34,18 +34,18 @@ export default class Header extends React.Component {
 
   // 掲示板一覧に表示切り替え
   switchBoardsList = () => {
-    this.props.setListMode("BOARDS")
-    this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS"))
-    if (this.isListShown && this.props.listMode != "BOARDS") return
-    this.switchList()
+    if (this.props.listMode != "BOARDS") {
+      this.props.setListMode("BOARDS")
+      this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS")) 
+    }
   }
 
   // スレッド一覧に表示切り替え
   switchThreadsList = () => {
-    this.props.setListMode("THREADS")
-    this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))
-    if (this.isListShown && this.props.listMode != "THREADS") return
-    this.switchList()
+    if (this.props.listMode != "THREADS") {
+      this.props.setListMode("THREADS")
+      this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))      
+    }
   }
 
   // 一覧の表示/非表示を切り替え
