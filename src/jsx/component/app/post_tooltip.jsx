@@ -25,7 +25,7 @@ export default class PostTooltip extends React.Component {
 
   componentDidMount() {
     // tooltipの位置を調整
-    let style = { visibility: 'visible', bottom: '-20px', left: '0px' }
+    let style = { visibility: 'visible' }
     let rect = this.refs.tooltip.getBoundingClientRect()
     let windowSize = this.windowSize
     // 右がはみ出ているか

@@ -183,6 +183,8 @@ header{
 /* ツールチップ */
 .tooltip{
   position: absolute;
+  bottom: -15px;
+  left: 0px;
   min-width: 100%;
   height: auto;
   z-index: 1000;
@@ -613,14 +615,21 @@ $darktheme-btn-primary-color: #3c83ec;
       }
     }
     .tooltip{
-      background-color: $darktheme-tooltip-bg-color;
       color: $font-color;
       filter: drop-shadow(3px 3px 3px rgba(0,0,0,0.85));
       .post{
         .post-header{
+          color: $font-color;
+          .post-name{
+            color: $name-color;
+            font-weight: bold;
+          }
+          .post-id-extract{
+            @extend .link;
+          }
         }
         .post-body{
-          color: $darktheme-font-color;
+          color: $font-color;
         }
       }
     }
