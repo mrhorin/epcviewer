@@ -16,6 +16,27 @@ export default class ThreadBox extends React.Component {
     return this.props.posts.length > 0
   }
 
+  // 一番下までスクロールしているか
+  get isMostBottom() {
+    // ウィンドウ縦サイズを取得
+    const getWindowHeight = () => {
+      let height = window.innerHeight
+      if (!height) {
+          let mode = document.compatMode
+          if (mode) {
+              let domObject = mode == "CSS1Compat" ? document.documentElement : document.body
+              height = domObject.clientHeight
+          }
+      }
+      return height
+    }
+    var offsetY = this.postBox.getBoundingClientRect().top
+    var viewportHeight = getWindowHeight()
+    var style = this.postBox.currentStyle || document.defaultView.getComputedStyle(this.postBox, '')
+    var height = parseInt(style.height)
+    return (0 < offsetY && offsetY + height < viewportHeight)
+  }
+
   // 引数の番号のレスを取得  
   getPost = (no) => {
     const index = _.findIndex(this.props.posts, { no: Number(no) })
@@ -84,13 +105,20 @@ export default class ThreadBox extends React.Component {
     this.scrollBottom()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (this.props.posts !== nextProps.posts) || (this.props.threads !== nextProps.threads)
+  shouldComponentUpdate(nextProps) {
+    return (this.props.posts !== nextProps.posts) ||
+      (this.props.threads !== nextProps.threads) ||
+      (this.props.isAutoScroll !== nextProps.isAutoScroll) ||
+      (this.props.isShowWriteForm !== nextProps.isShowWriteForm)
   }
 
-  componentDidUpdate() {
-    // オートスクロール
-    if (this.props.isAutoScroll) this.scrollBottom()
+  componentDidUpdate(prevProps) {
+    // 書き込み欄が表示されたら && 一番下なら || 新着レスがあったら強制スクロール
+    if (
+      (this.props.isShowWriteForm && (this.props.isShowWriteForm !== prevProps.isShowWriteForm) && this.isMostBottom) ||
+      (this.props.posts.length !== prevProps.posts.length)) {
+      this.scrollBottom()
+    }
   }
 
   render() {

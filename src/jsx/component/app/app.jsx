@@ -443,22 +443,14 @@ export default class App extends React.Component {
     this.isPressShift = false
   }
 
-  componentDidUpdate() {
-    if (this.state.isShowWriteForm) {
-      this.writeForm.style.display = 'block'
-    } else {
-      this.writeForm.style.display = 'none'
-    }
-  }
-
   componentDidMount() {
-    this.writeForm = document.getElementById('write-form')
     this.writeFormTextarea = document.getElementById('write-form-textarea')
     this.bindEvents()
     ipcRenderer.send('add-arg-board')
   }
 
   render() {
+    let writeFormTextareaStyle = (this.state.isShowWriteForm) ? { display: 'block' } : { display: 'none' }
     let listBox
     switch (this.state.listMode) {
       case 'BOARDS':
@@ -469,7 +461,8 @@ export default class App extends React.Component {
       case 'THREADS':
         listBox = <ThreadBox
           boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
-          isAutoScroll={this.state.isAutoScroll} hasBoard={this.hasBoard} hasThread={this.hasThread}
+          isAutoScroll={this.state.isAutoScroll} isShowWriteForm={this.state.isShowWriteForm}
+          hasBoard={this.hasBoard} hasThread={this.hasThread}
           currentThreadIndex={this.state.currentThreadIndex}
           removeThread={this.removeThread} selectThread={this.selectThread} />
         break
@@ -490,7 +483,8 @@ export default class App extends React.Component {
         {listBox}
         {/*書き込み欄*/}
         <div id="write-form" className="form-group">
-          <textarea id="write-form-textarea" className="form-control" rows="3"
+          <textarea id="write-form-textarea" className="form-control"
+            rows="3" style={writeFormTextareaStyle}
             onKeyDown={this._pressWriteFormHandler}
             onKeyUp={this._releaseWriteFormHandler} />
         </div>
