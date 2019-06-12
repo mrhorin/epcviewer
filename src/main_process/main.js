@@ -102,8 +102,12 @@ app.on('ready', () => {
           click: () => {
             window.app.webContents.send('shortcut-tab-close')
           }
-        },
-        { type: 'separator' },
+        }
+      ]
+    },
+    {
+      label: '表示',
+      submenu: [
         {
           label: '板一覧',
           accelerator: 'CmdOrCtrl+b',
@@ -117,13 +121,21 @@ app.on('ready', () => {
           click: () => {
             window.app.webContents.send('shortcut-show-threads')
           }
-        }
+        },
+        { type: 'separator' },
+        {
+          label: '書き込み欄',
+          accelerator: 'CmdOrCtrl+Shift+w',
+          click: () => {
+            window.app.webContents.send('shortcut-switch-write-form')
+          }
+        },
       ]
     },
     {
       label: '掲示板',
       submenu: [
-        { label: '更新', accelerator: 'CmdOrCtrl+r',click: ()=>{ window.app.webContents.send('shortcut-update-current-list') } }
+        { label: '一覧の更新', accelerator: 'CmdOrCtrl+r',click: ()=>{ window.app.webContents.send('shortcut-update-current-list') } }
       ]
     },
     {
