@@ -305,11 +305,12 @@ header{
         }
         .post-body-anchor{
           @extend .link;
-          .post-body-anchor-tooltip{
-            position: relative;
-            .post-tooltip{
-              @extend .tooltip;
-            }
+          text-decoration: none;
+          position: relative;
+          .post-tooltip{
+            @extend .tooltip;
+            bottom: 0px;
+            left: 0px;
           }
           .post-body-anchor-no{
             display: inline;
