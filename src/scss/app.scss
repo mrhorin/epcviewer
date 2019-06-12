@@ -1,4 +1,5 @@
 $font-color: #444;
+$link-font-color: #0000ff;
 $name-color: #009900;
 $admin-name-color: #f95a5a;
 
@@ -16,7 +17,7 @@ input{
 
 a,
 .link{
-  color: #0000ff;
+  color: $link-font-color;
   display: inline;
   cursor: pointer;
   text-decoration: underline;
@@ -638,6 +639,12 @@ $darktheme-btn-primary-color: #3c83ec;
         }
         .post-body{
           color: $font-color;
+          .post-body-link{
+            color: $link-font-color;
+          }
+          .post-body-anchor-no{
+            color: $link-font-color;
+          }
         }
       }
     }
