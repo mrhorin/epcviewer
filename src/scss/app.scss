@@ -487,6 +487,8 @@ $darktheme-btn-primary-color: #3c83ec;
   }
   textarea:focus{
     border: 1px solid #616161;
+    border-left: none;
+    border-right: none;
     box-shadow: none;
   }
   textarea:disabled{
