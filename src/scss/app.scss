@@ -102,18 +102,36 @@ header{
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 2px;
+      #btn-update{
+        border-radius: 5px;
+      }
+      #btn-update:hover::after{
+        content: '更新';
+      }
     }
     .flex-header-list-btns{
       order: 2;
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 2px;
+      #btn-boards:hover::after{
+        content: '板一覧';
+      }
+      #btn-threads:hover::after{
+        content: 'スレッド一覧';
+      }
     }
     .flex-header-thread-btns{
       order: 3;
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 3px;
+      #btn-auto-update:hover::after{
+        content: '自動更新';
+      }
+      #btn-auto-scroll:hover::after{
+        content: 'オートスクロール';
+      }
     }
     .flex-header-url{
       order: 4;
@@ -385,21 +403,6 @@ footer{
     border: 1px solid #666;
     color: #000;
   }
-  #btn-update:hover::after{
-    content: '更新';
-  }
-  #btn-boards:hover::after{
-    content: '板一覧';
-  }
-  #btn-threads:hover::after{
-    content: 'スレッド一覧';
-  }
-  #btn-auto-update:hover::after{
-    content: '自動更新';
-  }
-  #btn-auto-scroll:hover::after{
-    content: 'オートスクロール';
-  }
   button.btn.active:first-child{
     border-right: 1px solid #c2c0c2;
   }
@@ -498,28 +501,37 @@ $darktheme-btn-primary-color: #3c83ec;
 
   .btn-default{
     background-color: $darktheme-btn-default-color;
-    border-color: lighten($darktheme-btn-default-color, 10%);
-    border-bottom-color: lighten($darktheme-btn-default-color, 3%);
     background-image: linear-gradient(to bottom, darken($darktheme-btn-default-color, 5%) 0%, darken($darktheme-btn-default-color, 10%) 100%);
+    border-color: lighten($darktheme-btn-default-color, 10%);
     color: #fdfdfd;
     .icon{
       color: #fdfdfd;
     }
   }
-  .btn-default:hover{
+  .btn-default:hover,
+  .btn-default:active{
     background-color: darken($darktheme-btn-default-color, 10%);
     background-image: linear-gradient(to top, darken($darktheme-btn-default-color, 15%) 0%, darken($darktheme-btn-default-color, 20%) 100%);
+    border-color: lighten($darktheme-btn-default-color, 10%);
   }
-  .btn-default:active,
   .btn-default.active{
     background-color: #fcfcfc;
     background-image: linear-gradient(to top, #fcfcfc 0%, #dadada 100%);
+    border-color: lighten($darktheme-btn-default-color, 10%);
     .icon{
       color: $darktheme-base-color;
     }
   }
-  .btn-group .btn + .btn {
-    border-left-color: lighten($darktheme-btn-default-color, 10%);
+  .btn-default.active:hover,
+  .btn-default.active:active{
+    background-color: #dadada;
+    background-image: linear-gradient(to top, #dadada 0%, #bdbdbd 100%);
+  }
+  .btn-group{
+    button.btn:first-child{
+    }
+    button.btn:last-child{
+    }
   }
 
   .tab-group{

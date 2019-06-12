@@ -71,9 +71,11 @@ export default class Header extends React.Component {
         <div className="flex-container">
           {/*更新ボタン*/}
           <div className="flex-header-update-btns">
-            <button id="btn-update" className="btn btn-default btn-mini" onClick={this.props.updateCurrentList}>
-              <span className="icon icon-arrows-ccw"></span>
-            </button>
+            <div className="btn-group">
+              <button id="btn-update" className="btn btn-default btn-mini" onClick={this.props.updateCurrentList}>
+                <span className="icon icon-arrows-ccw"></span>
+              </button>
+            </div>
           </div>
           {/*リストボタン*/}
           <div className="flex-header-list-btns">
