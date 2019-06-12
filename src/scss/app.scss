@@ -19,6 +19,7 @@ a,
   color: #0000ff;
   display: inline;
   cursor: pointer;
+  text-decoration: underline;
 }
 a:visited{ color: #000080; }
 a:hover,
@@ -265,6 +266,9 @@ header{
               bottom: 0px;
               left: 0px;
             }
+          }
+          .post-id-extract.post-id-extract-hisshi{
+            color: #fd3f3f;
           }
           .post-id-extract::before{
             content: "ID";
@@ -602,6 +606,9 @@ $darktheme-btn-primary-color: #3c83ec;
       .post-body-link,
       .post-id-extract{
         color: $darktheme-link-font-color;
+      }
+      .post-id-extract.post-id-extract-hisshi{
+        color: #ff5d5d;
       }
       .post-header{
         color: $darktheme-font-color;

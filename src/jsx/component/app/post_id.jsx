@@ -45,13 +45,14 @@ export default class PostId extends React.Component {
 
   render() {
     let idCounter = this.idCounter
+    let extractClass = (idCounter.total<5) ? 'post-id-extract' : 'post-id-extract post-id-extract-hisshi'
     let tooltip = ""
     if (this.state.showTooltip) {
       tooltip = <PostTooltip component={this.state.tooltipComponent} hideTooltip={this.hideTooltip} />
     }
     return (
       <div className="post-id">
-        <div className="post-id-extract" onMouseOver={this.showTooltip}>
+        <div className={extractClass} onMouseOver={this.showTooltip}>
           {tooltip}
         </div>
         <div className="post-id-uid">{this.props.id}</div>
