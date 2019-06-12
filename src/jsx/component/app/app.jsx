@@ -131,7 +131,10 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-tab-close', (event) => { this.closeCurrentTab() })
     ipcRenderer.on('shortcut-show-boards', (event) => { this.setListMode('BOARDS') })
     ipcRenderer.on('shortcut-show-threads', (event) => { this.setListMode('THREADS') })
-    ipcRenderer.on('shortcut-switch-write-form', (event) => { this.switchShowWriteForm() })
+    ipcRenderer.on('shortcut-switch-write-form', (event) => {
+      this.switchShowWriteForm()
+      this.writeFormTextarea.focus()
+    })
     ipcRenderer.on('shortcut-switch-auto-update', (event) => { this.switchAutoUpdate() })
     ipcRenderer.on('shortcut-switch-auto-scroll', (event) => { this.switchAutoScroll() })
     ipcRenderer.on('shortcut-update-current-list', (event) => { this.updateCurrentList() })
