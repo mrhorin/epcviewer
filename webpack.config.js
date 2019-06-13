@@ -1,7 +1,7 @@
 var path = require('path');
 var WebpackNotifierPlugin = require('webpack-notifier');
 
-module.exports = {
+const electron = {
   mode: "production",
   entry: {
     "app": './src/jsx/component/app/index.jsx',
@@ -31,6 +31,8 @@ module.exports = {
     'electron-store',
     'electron-react-devtools',
     'ipc',
+    'fs',
+    'http',
     'superagent',
     'encoding-japanese'
   ],
@@ -70,3 +72,51 @@ module.exports = {
   },
   performance: { hints: false }
 };
+
+const jimaku = {
+  mode: "production",
+  entry: {
+    "jimaku": './src/js/jimaku.js',
+  },
+  output: {
+    path: path.resolve('./dist/js'),
+    filename: '[name].js',
+    libraryTarget: 'umd'
+  },
+  node: {
+    __dirname: false,
+    __filename: false
+  },
+  resolve: {
+    extensions: ['.js'],
+    modules: [
+      "node_modules",
+      path.resolve('./src/')
+    ]
+  },
+  externals: [
+    'http',
+    'fs',
+  ],
+  plugins: [
+    new WebpackNotifierPlugin()
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['transform-class-properties']
+          }
+        }
+      }
+    ]
+  },
+  performance: { hints: false }
+};
+
+module.exports = [electron, jimaku]
