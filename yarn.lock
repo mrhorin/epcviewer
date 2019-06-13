@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"2ch-parser@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.5.0.tgz#c1e5510ee706b4a9ed70a0b1a0c37f39f47d17b1"
-  integrity sha512-ie7rodqAFqr/Nqx8yweiuXC5fYG2W9KIGtperaqU1wWl3wD7Ip/73lzGf202JMQ0aixHY4I6s4lDW/yzTAFwIQ==
+"2ch-parser@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/2ch-parser/-/2ch-parser-0.6.0.tgz#5a7743b4e224f2aa725c72f6306ebc33d308791d"
+  integrity sha512-hhcti4mAFOIpbLA3CnjuYVhUZMxrbb7Ur5fn/EzHS0bJxImhclrW85j5NDWx0aeatT7ip8yQlm5sphSPxoHMFw==
   dependencies:
     superagent "^5.0.6"
     superagent-charset "^1.2.0"

@@ -143,6 +143,7 @@ export default class App extends React.Component {
         this.setState(Storage.defaultState)
       })
     })
+    ipcRenderer.on('outputlog', (event, message) => { this.outputLog(message) })
   }
 
   addBoard = (board) => {

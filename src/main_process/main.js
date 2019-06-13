@@ -202,13 +202,17 @@ app.on('window-all-closed', ()=>{
 // ------- URLのBoardを返す -------
 ipcMain.on('add-board', (event, url) => {
   var board = new Board(UrlParser.getBoardUrl(url))
-  board.fetchThreads((res) => {
-    if (!(board['title']))  board['title'] = board['url'].replace(/^https?:\/\//, '')
-    event.sender.send('add-board-reply', {
-      title: board.title,
-      url: board.url,
-      threads: res.body
-    })
+  board.fetchThreads((res, err) => {
+    if (err) {
+      event.sender.send('outputlog', `取得失敗(${err})`)
+    } else{
+      if (!(board['title']))  board['title'] = board['url'].replace(/^https?:\/\//, '')
+      event.sender.send('add-board-reply', {
+        title: board.title,
+        url: board.url,
+        threads: res.body
+      }) 
+    }
   })
 })
 
