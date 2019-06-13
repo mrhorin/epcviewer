@@ -97,6 +97,7 @@ export default class App extends React.Component {
         threads[index].headers.contentLength += thread.headers.contentLength
         threads[index].headers.lastModified = thread.headers.lastModified
         this.setState({ threads: threads, updateStatus: "WAIT" })
+        Storage.setState(this.state)
       } else {
         this.setUpdateStatus('WAIT')
       }
@@ -381,7 +382,6 @@ export default class App extends React.Component {
       this.setUpdateStatus('UPDATING')
       ipcRenderer.send('update-thread', this.currentThread)
     }
-    Storage.setState(this.state)
   }
 
   // 書き込みの投稿
