@@ -321,7 +321,7 @@ ipcMain.on('post-write', (event, thread, message) => {
       .set('User-Agent', 'Monazilla/5.0')
       .end((err, res) => {
         if (err) console.log(err)
-        event.sender.send('post-write-reply', res)
+        event.sender.send('post-write-reply', res, err)
       })
   }
 })
