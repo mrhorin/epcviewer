@@ -113,8 +113,7 @@ export default class App extends React.Component {
     ipcRenderer.on('post-write-reply', (event, res, err) => {
       this.setUpdateStatus('WAIT')
       if (err) {
-        console.log(err.status)
-        this.outputLog("書き込み失敗!")
+        this.outputLog(`書き込み失敗(${err.status})`)
         shell.beep()
       } else {
         this.writeFormTextarea.value = ""
@@ -387,14 +386,15 @@ export default class App extends React.Component {
   // 書き込みの投稿
   postWriteForm = () => {
     let message = this.writeFormTextarea.value
-    if ((this.currentThread.posts.length > 0 && message.length > 0) && this.isWait) {
+    let hasMesssage = (message.replace(/\s/g,'').length >0)
+    if ((this.currentThread.posts.length > 0 && hasMesssage) && this.isWait) {
       // 書き込み処理
       this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
       ipcRenderer.send('post-write', this.currentThread, message)      
-    } else if ((this.currentThread.posts.length > 0 && message.length > 0) && !this.isWait) {
-      // 2秒後に再帰的に呼び出し
-      setTimeout(() => { this.postWriteForm() }, 2000)
+    } else if ((this.currentThread.posts.length > 0 && hasMesssage) && !this.isWait) {
+      // 1.5秒後に再帰的に呼び出し
+      setTimeout(() => { this.postWriteForm() }, 1500)
     }
   }
 
@@ -435,9 +435,9 @@ export default class App extends React.Component {
       // Shift押下状態を保持
       this.isPressShift = true
     } else if (event.nativeEvent.key == 'Enter' && this.isPressShift) {
+      this.isPressShift = false
       // Shift+Enterで投稿
       this.postWriteForm()
-      this.isPressShift = false
     }
   }
 
