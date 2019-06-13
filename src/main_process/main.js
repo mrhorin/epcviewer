@@ -135,7 +135,9 @@ app.on('ready', () => {
     {
       label: '掲示板',
       submenu: [
-        { label: '一覧の更新', accelerator: 'CmdOrCtrl+r',click: ()=>{ window.app.webContents.send('shortcut-update-current-list') } }
+        { label: '一覧の更新', accelerator: 'CmdOrCtrl+r', click: () => { window.app.webContents.send('shortcut-update-current-list') } },
+        { type: 'separator' },
+        { label: '投稿', accelerator: 'Shift+Enter',click: ()=>{ window.app.webContents.send('shortcut-post-write-form') } }
       ]
     },
     {

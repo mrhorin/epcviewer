@@ -138,6 +138,7 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-switch-auto-update', (event) => { this.switchAutoUpdate() })
     ipcRenderer.on('shortcut-switch-auto-scroll', (event) => { this.switchAutoScroll() })
     ipcRenderer.on('shortcut-update-current-list', (event) => { this.updateCurrentList() })
+    ipcRenderer.on('shortcut-post-write-form', (event) => { this.postWriteForm() })
     ipcRenderer.on('shortcut-clear-storage', (event) => {
       Storage.clearStorage(() => {
         this.setState(Storage.defaultState)
@@ -384,17 +385,16 @@ export default class App extends React.Component {
   }
 
   // 書き込みの投稿
-  postWriteForm = (message) => {
-    if (this.currentThread.posts.length > 0 && this.isWait) {
+  postWriteForm = () => {
+    let message = this.writeFormTextarea.value
+    if ((this.currentThread.posts.length > 0 && message.length > 0) && this.isWait) {
       // 書き込み処理
       this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
       ipcRenderer.send('post-write', this.currentThread, message)      
-    } else if (this.currentThread.posts.length > 0 && !this.isWait) {
+    } else if ((this.currentThread.posts.length > 0 && message.length > 0) && !this.isWait) {
       // 2秒後に再帰的に呼び出し
-      setTimeout(() => { this.postWriteForm(message) }, 2000)
-    } else {
-      throw "The curentThread is empty. Please select thread from board."
+      setTimeout(() => { this.postWriteForm() }, 2000)
     }
   }
 
@@ -436,7 +436,7 @@ export default class App extends React.Component {
       this.isPressShift = true
     } else if (event.nativeEvent.key == 'Enter' && this.isPressShift) {
       // Shift+Enterで投稿
-      this.postWriteForm(event.target.value)
+      this.postWriteForm()
       this.isPressShift = false
     }
   }
