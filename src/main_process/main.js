@@ -249,10 +249,12 @@ ipcMain.on('update-thread', (event, thread) => {
   // ペカステBBS対策（Last-Modified ヘッダの存在確認）
   if (newThread.headers.lastModified) {
     newThread.newPostsPromise.then((res) => {
-      // 更新があるか
+      // 新着レスがあるか
       if (res.statusCode != 304 && res.body.length > 0) {
         newThread.headers.lastModified = res.res.headers['date']
         newThread.headers.contentLength = Number(res.res.headers['content-length'])
+        // 新着レスの差分だけを取得
+        if (!UrlParser.isShitaraba(newThread.url)) res.body = getPostsDiff(thread.posts, res.body)
       }
       newThread.posts = res.body
       event.sender.send('update-thread-reply', newThread)
@@ -261,8 +263,8 @@ ipcMain.on('update-thread', (event, thread) => {
     })    
   } else {
     console.warn('WARNING: Last-Modifiedヘッダがみつかりません。更新時に毎回レスを全件取得します。')
-    newThread.fetchAllPosts((res) => {
-      newThread.posts = res.body
+    newThread.fetchAllPosts((res, err) => {
+      newThread.posts = getPostsDiff(thread.posts, res.body)
       event.sender.send('update-thread-reply', newThread)      
     })
   }
@@ -386,6 +388,11 @@ function getChildBoundsFromApp(childWidth, childHeight) {
     parrent.y + (parrent.height/2) - (childHeight/2)
   )
   return { x: x, y: y, width: childWidth, height: childHeight }
+}
+
+// 更新前のpostsと更新後のpostsの差分を返す
+function getPostsDiff(postsBefore, postsAfter) {
+  return postsAfter.slice(postsBefore.length)
 }
 
 // arrayから最初に出現するURLのindexを取得する
