@@ -6,11 +6,13 @@ import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
 
 import MenuManager from 'main_process/menu_manager'
+import JimakuServer from 'main_process/jimaku_server'
 
 let store = new Store()
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
 
+const jimaku = new JimakuServer()
 systemPreferences.setAppLevelAppearance(store.get('theme', "light"))
 
 /*-----------------------------------------
@@ -255,16 +257,27 @@ ipcMain.on('update-thread', (event, thread) => {
         newThread.headers.contentLength = Number(res.res.headers['content-length'])
         // 新着レスの差分だけを取得
         if (!UrlParser.isShitaraba(newThread.url)) res.body = getPostsDiff(thread.posts, res.body)
+        // 字幕サーバに追加
+        jimaku.pushPosts(res.body)
       }
       newThread.posts = res.body
       event.sender.send('update-thread-reply', newThread)
-    }).catch((res) => {
-      event.sender.send('update-thread-reply', thread)
+    }).catch((err) => {
+      console.log(err)
+      newThread.posts = []
+      event.sender.send('update-thread-reply', newThread)
     })    
   } else {
     console.warn('WARNING: Last-Modifiedヘッダがみつかりません。更新時に毎回レスを全件取得します。')
     newThread.fetchAllPosts((res, err) => {
-      newThread.posts = getPostsDiff(thread.posts, res.body)
+      if (err) {
+        console.log(err)
+        newThread.posts = []
+      } else {
+        newThread.posts = getPostsDiff(thread.posts, res.body)
+        // 新着レスがある時は字幕サーバに追加
+        if(newThread.posts.length > 0) jimaku.pushPosts(newThread.posts)        
+      }
       event.sender.send('update-thread-reply', newThread)      
     })
   }
