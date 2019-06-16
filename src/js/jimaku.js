@@ -1,19 +1,32 @@
 import request from 'superagent'
 
-class Jimaku{
+/*----------------------------------------------
+  ブラウザからJimakuServerからレスを取得して表示する
+----------------------------------------------*/
+export default class Jimaku{
   
-  constructor(port = 3000) {
+  constructor(elementID, port = 3000) {
     this.port = port
     this.posts = []
+    this.element = document.getElementById(elementID)
+    this.style = { 'font-size': '16px' }
+    this.speech = new SpeechSynthesisUtterance()
+    this.speech.lang = 'ja-JP'
     this.initializeJimakuServerPromise.finally(() => {
       this.showJimakuTimerID
       this.pullPostsTimerID
     })
   }
 
-  startShowJimaku = (interval = 500) => {
+  startShowJimaku = (interval = 300) => {
     this.showJimakuTimerID = setTimeout(() => {
-      this.showJimaku()
+      if (!this.isSaying && this.hasPosts) {
+        this.showJimaku()
+        this.say()
+        this.dequeuePost()
+      } else if (!this.isSaying) {
+        this.hideJimaku()
+      }
       this.startShowJimaku()
     }, interval)
   }
@@ -28,9 +41,35 @@ class Jimaku{
 
   showJimaku = () => {
     if (this.posts.length > 0) {
-      console.log(this.posts[0])
-      this.posts.shift()
+      this.element.innerHTML = this.post
     }
+  }
+
+  hideJimaku = () => {
+    this.element.innerHTML = ""
+  }
+
+  say = () => {
+    this.speech.text = this.post
+    speechSynthesis.speak(this.speech)
+  }
+
+  dequeuePost = () => {
+    this.posts.shift()    
+  }
+
+  // 先頭の投稿を取得
+  get post() {
+    let ptn = new RegExp(/<("[^"]*"|'[^']*'|[^'">])*>/, "gi")
+    return String(this.posts[0].body.replace(ptn, ""))
+  }
+
+  get isSaying() {
+    return speechSynthesis.speaking
+  }
+
+  get hasPosts() {
+    return (this.posts.length > 0)
   }
 
   get initializeJimakuServerPromise() {
@@ -64,6 +103,6 @@ class Jimaku{
 
 }
 
-let jimaku = new Jimaku()
+let jimaku = new Jimaku('jimaku')
 jimaku.startPullPosts()
 jimaku.startShowJimaku()
