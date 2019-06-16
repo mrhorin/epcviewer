@@ -31,9 +31,11 @@ export default class Storage {
   // 環境設定の初期値  
   static get defaultPreferences() {
     return {
+      currentTabIndex: 0,
       isReturnBoards: false,
       isReturnThreads: false,
-      theme: "light"
+      theme: "light",
+      jimakuFontSize: 16
     }
   }
 

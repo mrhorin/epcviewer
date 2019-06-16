@@ -3,6 +3,9 @@ import { ipcRenderer } from 'electron'
 
 import Storage from 'js/storage'
 
+import PreferencesGeneral from 'jsx/component/preferences/preferences_general'
+import PreferencesJimaku from 'jsx/component/preferences/preferences_jimaku'
+
 /* 環境設定のメインウィンドウ */
 export default class Preferences extends React.Component {
 
@@ -16,19 +19,16 @@ export default class Preferences extends React.Component {
     ipcRenderer.send('close-preferences-window')
   }
 
-  _onChangeReturnBoards = (event) => {
-    this.setState({ isReturnBoards: event.target.checked })
+  onChange = (key, value) => {
+    this.setState({ [key]: value })
   }
 
-  _onChangeReturnThreads = (event) => {
-    this.setState({ isReturnThreads: event.target.checked })
-  }
-
-  _onChangeTheme = (event) => {
-    this.setState({ theme: this.refs.theme.value })
+  _onClickTab = (tabIndex) => {
+    this.setState({ currentTabIndex: tabIndex })
   }
 
   _onClickOk = (event) => {
+    this.state.currentTabIndex = 0
     Storage.setPreferences(this.state, () => {
       this.close()
     })
@@ -45,33 +45,34 @@ export default class Preferences extends React.Component {
   }
 
   render() {
+    let components = [{
+        name: '一般',
+        component:
+          <PreferencesGeneral key={0} onChange={this.onChange} theme={this.state.theme}
+            isReturnBoards={this.state.isReturnBoards} isReturnThreads={this.state.isReturnThreads} />
+      }, {
+        name: '字幕',
+        component:
+          <PreferencesJimaku key={1} onChange={this.onChange} fontSize={this.state.jimakuFontSize}/>
+      }
+    ]
+    let tabs = components.map((value, index) => {
+      let tabClassName = (index == this.state.currentTabIndex) ? ('tab-item tab-item-active') : ('tab-item')
+      return <div key={index} className={tabClassName} onClick={e => this._onClickTab(index)}>{value.name}</div>
+    })
     return (
-      <div id="preferences-flex-container">
-        <div id="preferences-startup">
-          <div className="preferences-title">起動時</div>
-          <div id="preferences-startup-boards" className="preferences-item">
-            <input type="checkbox" onChange={this._onChangeReturnBoards} checked={this.state.isReturnBoards} />
-            <span className="checkbox-label">板一覧を復帰</span>
-          </div>
-          <div id="preferences-startup-threads" className="preferences-item">
-            <input type="checkbox" onChange={this._onChangeReturnThreads} checked={this.state.isReturnThreads} />
-            <span className="checkbox-label">スレッド一覧を復帰</span>          
-          </div>
+      <div id="preferences" className={this.state.theme}>
+        {/* タブ */}
+        <div id="preferences-tab-box">
+          <div className="tab-group">{tabs}</div>
         </div>
-        <div id="preferences-theme" className="preferences-item">
-          <div className="preferences-title">テーマ</div>
-          <div className=" form-group">
-            <select ref="theme" onChange={this._onChangeTheme} value={this.state.theme}>
-              <option value="light">ライト</option>
-              <option value="dark">ダーク</option>
-            </select>
-          </div>
-        </div>
+        {components[this.state.currentTabIndex].component}
+        {/* ボタン */}
         <div id="preferences-btns">
           <button className="btn btn-primary btn-mini" onClick={this._onClickOk}>OK</button>
           <button className="btn btn-default btn-mini" onClick={this._onClickCancel}>キャンセル</button>
         </div>
-      </div>  
+      </div>
     )    
   }
 
