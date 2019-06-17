@@ -3,6 +3,10 @@ import Store from 'electron-store'
 
 let store = new Store()
 
+/*----------------------------------------------
+  mainプロセスはelectron-store
+  rendererプロセスはelectron-json-storage
+----------------------------------------------*/
 export default class Storage {
 
   // 設定初期値  
@@ -34,8 +38,12 @@ export default class Storage {
       currentTabIndex: 0,
       isReturnBoards: false,
       isReturnThreads: false,
-      theme: "light",
-      jimakuFontSize: 16
+      jimakuFontSize: 16,
+      jimakuFontOutlineSize: 2,
+      jimakuFontColor: "#ffffff",
+      jimakuFontOutlineColor: "#0000ff",
+      jimakuPort: store.get('jimakuPort', 3000),
+      theme: store.get('theme', "light")
     }
   }
 
@@ -108,6 +116,7 @@ export default class Storage {
   // 環境設定の保存
   static setPreferences(preferences, callback = () => { }) {
     store.set('theme', preferences.theme)
+    store.set('jimakuPort', preferences.jimakuPort)
     storage.set('preferences', preferences, (error) => {
       if (error) throw `Error: ${error}`
       callback()

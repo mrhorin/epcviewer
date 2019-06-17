@@ -50,6 +50,13 @@ a:active{ color: #ff8000; }
   height: 100vh;
   background: #efefef;
   color: #333;
+  .btn-color{
+    color: #333;
+    width: 149px;
+    height: 22px;
+    border: 1px solid #333;
+    border-radius: 3px;
+  }
   #preferences-tab-box{
     order: 1;
   }
@@ -71,6 +78,15 @@ a:active{ color: #ff8000; }
     }
     #preferences-theme{
       order: 2;
+    }
+    #preferences-jimaku-fontcolor,
+    #preferences-jimaku-fontoutlinecolor{
+      .chrome-picker {
+        position: fixed;
+        top: 20px;
+        right: 0px;
+        z-index: 1;
+      }
     }
     .preferences-item{
       padding: 5px 15px;

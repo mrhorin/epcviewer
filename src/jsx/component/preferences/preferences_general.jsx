@@ -12,7 +12,6 @@ export default class PreferencesGeneral extends React.Component {
   }
 
   _onChangeSelect = (e, key) => {
-    console.log(e.target.value)
     this.props.onChange(key, e.target.value)
   }
 

@@ -355,7 +355,7 @@ ipcMain.on('close-preferences-window', (event) => {
   functions
 -----------------------------------------*/
 function openPreferencesWindow() {
-  let bounds = getChildBoundsFromApp(320, 240)
+  let bounds = getChildBoundsFromApp(350, 340)
   window.preferences = new BrowserWindow({
     width: bounds.width,
     height: bounds.height,

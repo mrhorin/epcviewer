@@ -53,7 +53,9 @@ export default class Preferences extends React.Component {
       }, {
         name: '字幕',
         component:
-          <PreferencesJimaku key={1} onChange={this.onChange} fontSize={this.state.jimakuFontSize}/>
+          <PreferencesJimaku key={1} onChange={this.onChange} port={this.state.jimakuPort}
+            fontSize={this.state.jimakuFontSize} fontOutlineSize={this.state.jimakuFontOutlineSize}
+            fontColor={this.state.jimakuFontColor} fontOutlineColor={this.state.jimakuFontOutlineColor} />
       }
     ]
     let tabs = components.map((value, index) => {
