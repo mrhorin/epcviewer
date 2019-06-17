@@ -28,7 +28,6 @@ const electron = {
     '2ch-parser',
     'electron',
     'electron-json-storage',
-    'electron-store',
     'electron-react-devtools',
     'ipc',
     'fs',

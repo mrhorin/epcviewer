@@ -1,17 +1,10 @@
 import storage from 'electron-json-storage'
-import Store from 'electron-store'
 
-let store = new Store()
-
-/*----------------------------------------------
-  mainプロセスはelectron-store
-  rendererプロセスはelectron-json-storage
-----------------------------------------------*/
 export default class Storage {
 
-  // 設定初期値  
-  static get defaultConfig() {
-    return { width: 320, height: 133 }
+  // appウィンドウの初期値（mainプロセス）
+  static get defaultAppBounds() {
+    return { width: 450, height: 700, x: 0, y: 0 }
   }
 
   // Appコンポーネントのstate初期値
@@ -28,7 +21,7 @@ export default class Storage {
       isAutoUpdate: true,
       isAutoScroll: true,
       isShowWriteForm: true,
-      theme: store.get('theme', "light")
+      theme: "light"
     }
   }
 
@@ -42,22 +35,22 @@ export default class Storage {
       jimakuFontOutlineSize: 2,
       jimakuFontColor: "#ffffff",
       jimakuFontOutlineColor: "#0000ff",
-      jimakuPort: store.get('jimakuPort', 3000),
-      theme: store.get('theme', "light")
+      jimakuPort: 3000,
+      theme: "light"
     }
   }
 
-  // mainプロセスの設定を取得  
-  static get configPromise() {
+  // appBoundsの値を取得
+  static get appBoundsPromise() {
     return new Promise((resolve, reject) => {
-      storage.get('config', (error, config) => {
+      storage.get('appBounds', (error, appBounds) => {
         if (error) {
           reject(error)
         } else {
-          if (Object.keys(config).length == 0) {
-            config = this.defaultConfig
+          if (Object.keys(appBounds).length == 0) {
+            appBounds = this.defaultAppBounds
           }
-          resolve(config)
+          resolve(appBounds)
         }
       })      
     })
@@ -95,9 +88,9 @@ export default class Storage {
     })
   }
 
-  // mainプロセス設定を保存  
-  static setConfig(bounds, callback = ()=>{}) {
-    storage.set('config', bounds, (error) => {
+  // appBoundsの値を保存  
+  static setAppBounds(appBounds, callback = ()=>{}) {
+    storage.set('appBounds', appBounds, (error) => {
       if (error) throw `Error: ${error}`
       callback()
     })
@@ -115,8 +108,6 @@ export default class Storage {
 
   // 環境設定の保存
   static setPreferences(preferences, callback = () => { }) {
-    store.set('theme', preferences.theme)
-    store.set('jimakuPort', preferences.jimakuPort)
     storage.set('preferences', preferences, (error) => {
       if (error) throw `Error: ${error}`
       callback()

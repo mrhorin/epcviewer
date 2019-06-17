@@ -1,19 +1,25 @@
 import { systemPreferences, app, BrowserWindow, ipcMain, shell } from 'electron'
-import { Board, Thread, UrlParser } from '2ch-parser'
-import Store from 'electron-store'
-import request from 'superagent'
 import Encoding from 'encoding-japanese'
 import emojiRegex from 'emoji-regex/text.js'
+import { Board, Thread, UrlParser } from '2ch-parser'
+import request from 'superagent'
 
+import storage from 'js/storage'
 import MenuManager from 'main_process/menu_manager'
 import JimakuServer from 'main_process/jimaku_server'
 
-let store = new Store()
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
 
+let appBounds
+let preferences
+
 const jimaku = new JimakuServer()
-systemPreferences.setAppLevelAppearance(store.get('theme', "light"))
+
+storage.preferencesPromise.then((res) => {
+  preferences = res
+  systemPreferences.setAppLevelAppearance(res.theme, "light")
+})
 
 /*-----------------------------------------
   アプリの多重起動を禁止
@@ -171,23 +177,25 @@ app.on('ready', () => {
   menu.show()
 
   // 設定を読み込む
-  var bounds = store.get('appBounds', { width: 320, height: 640, x: 0, y: 0 })
-  window.app = new BrowserWindow({
-    width: bounds.width,
-    height: bounds.height,
-    x: bounds.x,
-    y: bounds.y,
-    minWidth: 100,
-    minHeight: 151,
-    webPreferences: {
-      nodeIntegration: true,
-    }
-  })
-  window.app.loadURL(`file://${__dirname}/../html/app.html`)
+  storage.appBoundsPromise.then((res) => {
+    appBounds = res
+    window.app = new BrowserWindow({
+      width: appBounds.width,
+      height: appBounds.height,
+      x: appBounds.x,
+      y: appBounds.y,
+      minWidth: 100,
+      minHeight: 151,
+      webPreferences: {
+        nodeIntegration: true,
+      }
+    })
+    window.app.loadURL(`file://${__dirname}/../html/app.html`)
 
-  // 閉じた時
-  window.app.on('close', ()=>{
-    store.set('appBounds', window.app.getBounds())
+    // 閉じた時
+    window.app.on('close', ()=>{
+      storage.setAppBounds(window.app.getBounds())
+    })
   })
 })
 
@@ -380,10 +388,12 @@ function openPreferencesWindow() {
 function closePreferencesWindow() {
   window.preferences.close()
   window.preferences = null
-  let theme = store.get('theme', "light")
-  systemPreferences.setAppLevelAppearance(theme)
-  window.app.setIgnoreMouseEvents(false)
-  window.app.webContents.send('close-preferences-window-reply', theme)
+  storage.preferencesPromise.then((res) => {
+    preferences = res
+    systemPreferences.setAppLevelAppearance(preferences.theme)
+    window.app.setIgnoreMouseEvents(false)
+    window.app.webContents.send('close-preferences-window-reply', preferences.theme)
+  })
 }
 
 // Mac環境か
