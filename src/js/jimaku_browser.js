@@ -3,7 +3,7 @@ import request from 'superagent'
 /*----------------------------------------------
   ブラウザからJimakuServerからレスを取得して表示する
 ----------------------------------------------*/
-export default class Jimaku{
+export default class JimakuBrowser{
   
   constructor(elementID, port = 3000) {
     this.port = port
@@ -103,6 +103,6 @@ export default class Jimaku{
 
 }
 
-let jimaku = new Jimaku('jimaku')
+let jimaku = new JimakuBrowser('jimaku')
 jimaku.startPullPosts()
 jimaku.startShowJimaku()

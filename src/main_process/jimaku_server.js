@@ -1,6 +1,6 @@
 const http = require('http')
 const html = require('fs').readFileSync('dist/html/jimaku.html')
-const js = require('fs').readFileSync('dist/js/jimaku.js')
+const js = require('fs').readFileSync('dist/js/jimaku_browser.js')
 
 /*---------------------------------------
   字幕表示用のレスをJSONで返すサーバ
@@ -16,7 +16,7 @@ export default class JimakuServer{
             res.writeHead(200, { 'Content-Type': 'text/html' })
             res.end(html)
           },
-          '/jimaku.js': () => {
+          '/jimaku_browser.js': () => {
             res.writeHead(200, { 'Content-Type': 'application/javascript' })
             res.end(js)
           },

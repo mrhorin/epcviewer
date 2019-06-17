@@ -76,7 +76,7 @@ const electron = {
 const jimaku = {
   mode: "production",
   entry: {
-    "jimaku": './src/js/jimaku.js',
+    "jimaku_browser": './src/js/jimaku_browser.js',
   },
   output: {
     path: path.resolve('./dist/js'),
