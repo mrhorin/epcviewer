@@ -25,15 +25,15 @@ const electron = {
     ]
   },
   externals: [
-    '2ch-parser',
     'electron',
-    'electron-json-storage',
     'electron-react-devtools',
     'ipc',
     'fs',
+    'worker_threads',
     'http',
+    '2ch-parser',
     'superagent',
-    'encoding-japanese'
+    'encoding-japanese',
   ],
   plugins: [
     new WebpackNotifierPlugin()
@@ -94,8 +94,6 @@ const jimaku = {
     ]
   },
   externals: [
-    'http',
-    'fs',
   ],
   plugins: [
     new WebpackNotifierPlugin()

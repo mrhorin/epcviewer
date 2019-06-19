@@ -8,11 +8,15 @@ export default class JimakuBrowser{
   constructor(elementID, port = 3000) {
     this.port = port
     this.posts = []
+    this.preferences = {}
     this.element = document.getElementById(elementID)
     this.style = { 'font-size': '16px' }
     this.speech = new SpeechSynthesisUtterance()
     this.speech.lang = 'ja-JP'
-    this.initializeJimakuServerPromise.finally(() => {
+    Promise.all([
+      this.initializeJimakuServerPromise,
+      this.fetchPreferencesPromise
+    ]).finally(() => {
       this.showJimakuTimerID
       this.pullPostsTimerID
     })
@@ -41,6 +45,9 @@ export default class JimakuBrowser{
 
   showJimaku = () => {
     if (this.posts.length > 0) {
+      this.element.style.fontSize = this.preferences.jimakuFontSize + 'px'
+      this.element.style.color = this.preferences.jimakuFontColor
+      this.element.style.webkitTextStroke = `${this.preferences.jimakuFontOutlineSize}px ${this.preferences.jimakuFontOutlineColor}`
       this.element.innerHTML = this.post
     }
   }
@@ -55,7 +62,7 @@ export default class JimakuBrowser{
   }
 
   dequeuePost = () => {
-    this.posts.shift()    
+    this.posts.shift()
   }
 
   // 先頭の投稿を取得
@@ -72,6 +79,7 @@ export default class JimakuBrowser{
     return (this.posts.length > 0)
   }
 
+  // JimakuServerを初期化
   get initializeJimakuServerPromise() {
     return new Promise((resolve, reject) => {
       request
@@ -80,6 +88,21 @@ export default class JimakuBrowser{
         if (err) {
           reject(err)
         } else {
+          resolve(res)
+        }
+      })
+    })
+  }
+
+  get fetchPreferencesPromise() {
+    return new Promise((resolve, reject) => {
+      request
+      .get(`http://localhost:${this.port}/preferences.json`)
+      .end((err, res) => {
+        if (err) {
+          reject(err)
+        } else {
+          this.preferences = res.body
           resolve(res)
         }
       })
@@ -95,7 +118,7 @@ export default class JimakuBrowser{
             reject(err)
           } else {
             this.posts = this.posts.concat(res.body)
-            resolve(res)        
+            resolve(res)
           }
         })
     })

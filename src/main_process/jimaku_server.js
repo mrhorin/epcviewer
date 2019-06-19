@@ -1,3 +1,5 @@
+import storage from 'js/storage'
+
 const http = require('http')
 const html = require('fs').readFileSync('dist/html/jimaku.html')
 const js = require('fs').readFileSync('dist/js/jimaku_browser.js')
@@ -24,6 +26,12 @@ export default class JimakuServer{
             res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(this.pullPostsJson())
           },
+          '/preferences.json': () => {
+            storage.preferencesPromise.then((preference) => {
+              res.writeHead(200, { 'Content-Type': 'application/json' })
+              res.end(JSON.stringify(preference))
+            })
+          },
           '/initialize_posts': () => {
             this.initializePosts()
             let success = (this.posts.length < 1)
@@ -38,7 +46,7 @@ export default class JimakuServer{
   }
 
   pushPosts = (posts) => {
-    this.posts = this.posts.concat(posts)      
+    this.posts = this.posts.concat(posts)
   }
 
   pullPostsJson = () => {

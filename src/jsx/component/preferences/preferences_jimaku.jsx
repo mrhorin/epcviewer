@@ -33,7 +33,6 @@ export default class PreferencesJimaku extends React.Component {
     this.setState({ showFontPicker: false, showFontOutlinePicker: false })
   }
 
-
   render() {
     let styles = {
       fontColorPicker: { display: 'none' },
@@ -87,7 +86,7 @@ export default class PreferencesJimaku extends React.Component {
               color={this.props.fontOutlineColor} />
           </div>
         </div>
-      </div>       
+      </div>
     )
   }
 
