@@ -18,13 +18,14 @@ export default class JimakuBrowser{
       this.initializeJimakuServerPromise,
       this.fetchPreferencesPromise
     ]).finally(() => {
-      this.showJimakuTimerID
-      this.pullPostsTimerID
+      this.startPullPosts()
+      this.startShowJimaku()
     })
   }
 
   startShowJimaku = (interval = 300) => {
     this.showJimakuTimerID = setTimeout(() => {
+      this.startShowJimaku(this.interval)
       if (!this.isSaying && this.hasPosts) {
         if(this.preferences.isJimakuSe) this.playSe()
         this.say()
@@ -33,7 +34,6 @@ export default class JimakuBrowser{
       } else if (!this.isSaying) {
         this.hideJimaku()
       }
-      this.startShowJimaku()
     }, interval)
   }
 
@@ -75,6 +75,16 @@ export default class JimakuBrowser{
   get post() {
     let ptn = new RegExp(/<("[^"]*"|'[^']*'|[^'">])*>/, "gi")
     return String(this.posts[0].body.replace(ptn, ""))
+  }
+
+  get interval() {
+    if (this.posts.length <= 0) return 300
+    else if (this.posts.length == 1) return 9000
+    else if (2 <= this.posts.length <= 3) return 6000
+    else if (4 <= this.posts.length <= 5) return 5000
+    else if (6 <= this.posts.length <= 10) return 3500
+    else if (11 <= this.posts.length <= 15) return 2000
+    else return 1000
   }
 
   get isSaying() {
@@ -133,5 +143,3 @@ export default class JimakuBrowser{
 }
 
 let jimaku = new JimakuBrowser('jimaku')
-jimaku.startPullPosts()
-jimaku.startShowJimaku()
