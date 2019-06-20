@@ -2,6 +2,7 @@ import request from 'superagent'
 
 /*----------------------------------------------
   ブラウザ側からJimakuServerへレスを要求して表示する
+  OBSのBrowserSourceはChromiumの為SpeechAPIの回数制限あり
 ----------------------------------------------*/
 export default class JimakuBrowser{
 
@@ -28,7 +29,6 @@ export default class JimakuBrowser{
       this.startShowJimaku(this.interval)
       if (!this.isSaying && this.hasPosts) {
         if(this.preferences.isJimakuSe) this.playSe()
-        this.say()
         this.showJimaku()
         this.dequeuePost()
       } else if (!this.isSaying) {
