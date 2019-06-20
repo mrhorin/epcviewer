@@ -407,6 +407,9 @@ header{
     border: 1px solid #ccc;
     resize: vertical;
   }
+  textarea::-webkit-scrollbar{
+    display: none;
+  }
   textarea:focus{
     border-color: #ddd;
     box-shadow: none;
@@ -671,17 +674,20 @@ $darktheme-btn-primary-color: #3c83ec;
   }
 
   #board-box>#subject-box::-webkit-scrollbar,
-  #thread-box>#post-box::-webkit-scrollbar{
+  #thread-box>#post-box::-webkit-scrollbar,
+  #thread-box>#post-box::-webkit-scrollbar,
+  #write-form>textarea::-webkit-scrollbar{
     background: darken($darktheme-base-color, 7%);
     border-left: 1px solid lighten($darktheme-base-color, 3%);
   }
   #board-box>#subject-box::-webkit-scrollbar-thumb,
-  #thread-box>#post-box::-webkit-scrollbar-thumb{
+  #write-form>textarea::-webkit-scrollbar-thumb{
     background: darken($darktheme-base-color, 14%);
     border-left: 1px solid lighten($darktheme-base-color, 3%);
   }
-
-
+  #write-form>textarea::-webkit-scrollbar-corner{
+    background: darken($darktheme-base-color, 7%);
+  }
   #board-box{
     background: darken($darktheme-base-color, 12%);
     .subject{
