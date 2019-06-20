@@ -47,30 +47,14 @@ export default class App extends React.Component {
     this.state = Storage.defaultState
     // Shiftの押下状態
     this.isPressShift = false
+    this.bindEvents()
+    ipcRenderer.send('add-arg-board')
   }
 
   bindEvents = () => {
     // 初回起動時に引数URL取得したboardを受け取る
     ipcRenderer.on('add-arg-board-reply', (event, board) => {
-      Promise.all([Storage.statePromise, Storage.preferencesPromise]).then((values) => {
-        // 環境設定の適用
-        if (!values[1].isReturnBoards) {
-          values[0].boards = []
-          values[0].currentBoardIndex = 0
-        }
-        if (!values[1].isReturnThreads) {
-          values[0].threads = []
-          values[0].currentThreadIndex = 0
-        }
-        if (!values[1].theme) {
-          values[0].theme = "light"
-        } else {
-          values[0].theme = values[1].theme
-        }
-        this.setState(values[0])
-        if (board) this.addBoard(board)
-        if (values[0].isJimakuServer) ipcRenderer.send('switch-jimaku-server', values[0].isJimakuServer)
-      })
+      if (board) this.addBoard(board)
     })
     ipcRenderer.on('add-board-reply', (event, board) => { this.addBoard(board) })
     ipcRenderer.on('add-thread-reply', (event, thread) => { this.addThread(thread) })
@@ -452,10 +436,36 @@ export default class App extends React.Component {
     this.isPressShift = false
   }
 
+  componentWillMount() {
+    Promise.all([
+      Storage.statePromise,
+      Storage.preferencesPromise
+    ]).then((values) => {
+      let state = Storage.defaultState
+      if (this.state.boards) state.boards = this.state.boards
+      if (this.state.currentUrl) state.currentUrl = this.state.currentUrl
+      // stateの状態復帰
+      state.isAutoUpdate = values[0].isAutoUpdate
+      state.isAutoScroll = values[0].isAutoScroll
+      state.isJimakuServer = values[0].isJimakuServer
+      state.isShowWriteForm = values[0].isShowWriteForm
+      if (values[1].isReturnBoards) {
+        state.boards = state.boards.concat(values[0].boards)
+        state.currentBoardIndex = values[0].currentBoardIndex
+      }
+      if (!values[1].isReturnThreads) {
+        state.threads = values[0].threads
+        state.currentThreadIndex = values[0].currentThreadIndex
+      }
+      // 環境設定の適用
+      if (values[1].theme) state.theme = values[1].theme
+      this.setState(state)
+      if (values[0].isJimakuServer) ipcRenderer.send('switch-jimaku-server', values[0].isJimakuServer)
+    })
+  }
+
   componentDidMount() {
     this.writeFormTextarea = document.getElementById('write-form-textarea')
-    this.bindEvents()
-    ipcRenderer.send('add-arg-board')
   }
 
   render() {
