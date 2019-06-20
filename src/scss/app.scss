@@ -173,6 +173,7 @@ header{
       }
       #btn-update:hover::after{
         content: '更新';
+        z-index: 100;
       }
     }
     .flex-header-list-btns{
@@ -182,9 +183,11 @@ header{
       margin-right: 2px;
       #btn-boards:hover::after{
         content: '板一覧';
+        z-index: 100;
       }
       #btn-threads:hover::after{
         content: 'スレッド一覧';
+        z-index: 100;
       }
     }
     .flex-header-thread-btns{
@@ -192,11 +195,20 @@ header{
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 3px;
+      .btn-group .btn.active {
+        z-index: 10;
+      }
       #btn-auto-update:hover::after{
         content: '自動更新';
+        z-index: 100;
       }
       #btn-auto-scroll:hover::after{
         content: 'オートスクロール';
+        z-index: 100;
+      }
+      #btn-jimaku-server:hover::after{
+        content: '字幕サーバー';
+        z-index: 100;
       }
     }
     .flex-header-url{
@@ -463,9 +475,6 @@ footer{
 /* photonKit override */
 .btn-group{
   display: -webkit-inline-box !important;
-  button.btn:hover{
-    z-index: 10 !important;
-  }
   button.btn:hover::after,
   button.btn.active::after{
     position: absolute;
@@ -478,10 +487,10 @@ footer{
     border: 1px solid #666;
     color: #000;
   }
-  button.btn.active:first-child{
-    border-right: 1px solid #c2c0c2;
+  button.btn + button.btn.active:first-child{
+    border-left: none;
   }
-  button.btn.active:last-child{
+  button.btn + button.btn.active{
     border-left: 1px solid #c2c0c2;
   }
 }

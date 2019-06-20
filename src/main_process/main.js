@@ -10,7 +10,6 @@ import JimakuServer from 'main_process/jimaku_server'
 
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
-
 let appBounds
 let preferences
 
@@ -35,7 +34,7 @@ if (!gotTheLock) {
     const urlIndex = findUrlIndex(commandLine)
     const url = commandLine[urlIndex]
     var board = new Board(UrlParser.getBoardUrl(url))
-    board.fetchThreads((res) => {
+    board.fetchThreads(() => {
       window.app.focus()
       // 板名がない時はURLを板名に
       board['title'] = commandLine[urlIndex + 1] ? commandLine[urlIndex + 1] : url.replace(/^https?:\/\//i, '')
@@ -221,7 +220,7 @@ ipcMain.on('add-board', (event, url) => {
         title: board.title,
         url: board.url,
         threads: res.body
-      }) 
+      })
     }
   })
 })
@@ -232,7 +231,7 @@ ipcMain.on('add-arg-board', (event) => {
   if (urlIndex >= 0) {
     const url = global.process.argv[urlIndex]
     var board = new Board(UrlParser.getBoardUrl(url))
-    board.fetchThreads((res) => {
+    board.fetchThreads(() => {
       // 板名
       board['title'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url.replace(/^https?:\/\//i, '')
       event.sender.send('add-arg-board-reply', board)
@@ -245,7 +244,7 @@ ipcMain.on('add-arg-board', (event) => {
 // ------- URLのThreadを返す -------
 ipcMain.on('add-thread', (event, threadUrl) => {
   var thread = new Thread(threadUrl)
-  thread.fetchAllPosts((res) => {
+  thread.fetchAllPosts(() => {
     event.sender.send('add-thread-reply', thread)
   })
 })
@@ -266,7 +265,7 @@ ipcMain.on('update-thread', (event, thread) => {
         // 新着レスの差分だけを取得
         if (!UrlParser.isShitaraba(newThread.url)) res.body = getPostsDiff(thread.posts, res.body)
         // 字幕サーバに追加
-        jimaku.pushPosts(res.body)
+        if(jimaku.listening) jimaku.pushPosts(res.body)
       }
       newThread.posts = res.body
       event.sender.send('update-thread-reply', newThread)
@@ -274,7 +273,7 @@ ipcMain.on('update-thread', (event, thread) => {
       console.log(err)
       newThread.posts = []
       event.sender.send('update-thread-reply', newThread)
-    })    
+    })
   } else {
     console.warn('WARNING: Last-Modifiedヘッダがみつかりません。更新時に毎回レスを全件取得します。')
     newThread.fetchAllPosts((res, err) => {
@@ -284,9 +283,9 @@ ipcMain.on('update-thread', (event, thread) => {
       } else {
         newThread.posts = getPostsDiff(thread.posts, res.body)
         // 新着レスがある時は字幕サーバに追加
-        if(newThread.posts.length > 0) jimaku.pushPosts(newThread.posts)        
+        if(newThread.posts.length > 0 && jimaku.listening) jimaku.pushPosts(newThread.posts)
       }
-      event.sender.send('update-thread-reply', newThread)      
+      event.sender.send('update-thread-reply', newThread)
     })
   }
 })
@@ -294,7 +293,7 @@ ipcMain.on('update-thread', (event, thread) => {
 // ------- board更新して返す -------
 ipcMain.on('update-board', (event, board) => {
   var newBoard = new Board(board.url)
-  newBoard.threadsPromise.then((res) => [
+  newBoard.threadsPromise.then(() => [
     event.sender.send('update-board-reply', newBoard)
   ])
 })
@@ -354,8 +353,13 @@ ipcMain.on('show-thread', (event, threadUrl) => {
   event.sender.send('show-thread-reply', threadUrl)
 })
 
+// --- 字幕サーバーの起動状態のON/OFF切り替え ---
+ipcMain.on('switch-jimaku-server', (event, isJimakuServer) => {
+  isJimakuServer ? jimaku.start() : jimaku.stop()
+})
+
 // ------- 環境設定ウィンドウを閉じる -------
-ipcMain.on('close-preferences-window', (event) => {
+ipcMain.on('close-preferences-window', () => {
   closePreferencesWindow()
 })
 
@@ -420,7 +424,7 @@ function getPostsDiff(postsBefore, postsAfter) {
 
 // arrayから最初に出現するURLのindexを取得する
 function findUrlIndex(array) {
-  return array.findIndex((element, index) => {
+  return array.findIndex((element) => {
     return element.match(/https?:\/\/[-_\.!~*'()a-zA-Z0-9;\/?:@&=+$,%#¥]+/i) ? true : false
   })
 }

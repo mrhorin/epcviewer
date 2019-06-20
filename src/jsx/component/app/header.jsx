@@ -14,13 +14,14 @@ export default class Header extends React.Component {
 
   // ボタン用のCSSクラス
   get btnCssClassName() {
-    let css = { boardsList: '', threadsList: '', autoUpdate: '', autoScroll: '' }
+    let css = { boardsList: '', threadsList: '', autoUpdate: '', autoScroll: '', jimakuServer: '' }
     for (var key in css) {
       css[key] = 'btn btn-default btn-mini'
     }
     // アクティブ状態を付加
     if (this.props.isAutoUpdate) css.autoUpdate += ' active'
     if (this.props.isAutoScroll) css.autoScroll += ' active'
+    if (this.props.isJimakuServer) css.jimakuServer += ' active'
     switch (this.props.listMode) {
       case 'BOARDS':
         css.boardsList += ' active'
@@ -36,7 +37,7 @@ export default class Header extends React.Component {
   switchBoardsList = () => {
     if (this.props.listMode != "BOARDS") {
       this.props.setListMode("BOARDS")
-      this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS")) 
+      this.props.setCurrentUrl(this.props.getCurrentUrl("BOARDS"))
     }
   }
 
@@ -44,7 +45,7 @@ export default class Header extends React.Component {
   switchThreadsList = () => {
     if (this.props.listMode != "THREADS") {
       this.props.setListMode("THREADS")
-      this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))      
+      this.props.setCurrentUrl(this.props.getCurrentUrl("THREADS"))
     }
   }
 
@@ -102,7 +103,11 @@ export default class Header extends React.Component {
               <button id="btn-auto-scroll" className={css.autoScroll} onClick={this.props.switchAutoScroll}>
                 <span className="icon icon-down-bold"></span>
               </button>
-            </div>  
+              {/* 字幕サーバー */}
+              <button id="btn-jimaku-server" className={css.jimakuServer} onClick={this.props.switchJimakuServer}>
+                <span className="icon icon-network"></span>
+              </button>
+            </div>
           </div>
           {/*URL欄*/}
           <div className="flex-header-url">

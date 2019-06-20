@@ -10,6 +10,7 @@ const js = require('fs').readFileSync('dist/js/jimaku_browser.js')
 export default class JimakuServer{
 
   constructor(port = 3000) {
+    this.port = port
     this.posts = []
     this.server = http.createServer((req, res) => {
       const routes = (url) => {
@@ -49,7 +50,19 @@ export default class JimakuServer{
         if(paths[url]) paths[url]()
       }
       routes(req.url)
-    }).listen(port)
+    })
+  }
+
+  get listening() {
+    return this.server.listening
+  }
+
+  start = () => {
+    if(!this.listening) this.server.listen(this.port)
+  }
+
+  stop = () => {
+    if(this.listening) this.server.close()
   }
 
   pushPosts = (posts) => {

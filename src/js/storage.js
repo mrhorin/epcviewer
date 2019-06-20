@@ -20,6 +20,7 @@ export default class Storage {
       log: "",
       isAutoUpdate: true,
       isAutoScroll: true,
+      isJimakuServer: false,
       isShowWriteForm: true,
       theme: "light"
     }

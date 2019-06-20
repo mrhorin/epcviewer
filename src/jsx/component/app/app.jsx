@@ -25,6 +25,8 @@ state
     スレッドの自動更新のON/OFF状態
   isAutoScroll: bool
     スレッドのオートスクロールのON/OFF状態
+  isJimakuServer: bool
+    字幕サーバーの起動状態のON/OFF状態
 ********************************************************/
 import React from 'react'
 import { ipcRenderer, shell } from 'electron'
@@ -66,7 +68,8 @@ export default class App extends React.Component {
           values[0].theme = values[1].theme
         }
         this.setState(values[0])
-        if(board) this.addBoard(board)
+        if (board) this.addBoard(board)
+        if (values[0].isJimakuServer) ipcRenderer.send('switch-jimaku-server', values[0].isJimakuServer)
       })
     })
     ipcRenderer.on('add-board-reply', (event, board) => { this.addBoard(board) })
@@ -229,7 +232,7 @@ export default class App extends React.Component {
     this.setState({ currentThreadIndex: index })
   }
 
-  // タブを左に移動  
+  // タブを左に移動
   moveLeftTab = () => {
     switch (this.state.listMode) {
       case 'BOARDS':
@@ -238,18 +241,18 @@ export default class App extends React.Component {
         } else {
           this.setState({ currentBoardIndex: this.state.currentBoardIndex-1 })
         }
-        break  
+        break
       case 'THREADS':
         if (this.state.currentThreadIndex <= 0) {
           this.setState({ currentThreadIndex: this.state.threads.length-1 })
         } else {
           this.setState({ currentThreadIndex: this.state.currentThreadIndex-1 })
         }
-        break  
+        break
     }
   }
 
-  // タブを右に移動  
+  // タブを右に移動
   moveRightTab = () => {
     switch (this.state.listMode) {
       case 'BOARDS':
@@ -258,45 +261,45 @@ export default class App extends React.Component {
         } else {
           this.setState({ currentBoardIndex: this.state.currentBoardIndex+1 })
         }
-        break  
+        break
       case 'THREADS':
         if (this.state.currentThreadIndex >= this.state.threads.length-1) {
           this.setState({ currentThreadIndex: 0 })
         } else {
           this.setState({ currentThreadIndex: this.state.currentThreadIndex+1 })
         }
-        break  
-    }  
-  }
-
-  // 現在のタブを閉じる  
-  closeCurrentTab = () => {
-    switch (this.state.listMode) {
-      case 'BOARDS':
-        if(this.currentBoard.url) this.removeBoard(this.currentBoard.url)  
         break
-      case 'THREADS':
-        if(this.currentThread.url) this.removeThread(this.currentThread.url)
-        break  
     }
   }
 
-  // 更新状態がWAITか  
+  // 現在のタブを閉じる
+  closeCurrentTab = () => {
+    switch (this.state.listMode) {
+      case 'BOARDS':
+        if(this.currentBoard.url) this.removeBoard(this.currentBoard.url)
+        break
+      case 'THREADS':
+        if(this.currentThread.url) this.removeThread(this.currentThread.url)
+        break
+    }
+  }
+
+  // 更新状態がWAITか
   get isWait() {
     return this.state.updateStatus == 'WAIT'
   }
 
-  // 板が存在するか  
+  // 板が存在するか
   get hasBoard() {
     return this.state.boards.length > 0
   }
 
-  // スレッドが存在するか  
+  // スレッドが存在するか
   get hasThread() {
     return this.state.threads.length > 0
   }
-  
-  // 現在の板を取得  
+
+  // 現在の板を取得
   get currentBoard() {
     if (this.hasBoard) {
       return this.state.boards[this.state.currentBoardIndex]
@@ -314,7 +317,7 @@ export default class App extends React.Component {
     }
   }
 
-  // 指定したリストモードの現在のURLを取得  
+  // 指定したリストモードの現在のURLを取得
   getCurrentUrl = (listMode) => {
     let url = ""
     if (listMode == "BOARDS" && this.hasBoard) {
@@ -336,7 +339,7 @@ export default class App extends React.Component {
         break
       case 'THREADS':
         this.setState({ listMode: 'THREADS' })
-        break        
+        break
     }
   }
 
@@ -365,7 +368,7 @@ export default class App extends React.Component {
     }
   }
 
-  // 現在の板を更新  
+  // 現在の板を更新
   updateCurrentBoard = () => {
     if (this.hasBoard) ipcRenderer.send('update-board', this.currentBoard)
   }
@@ -386,24 +389,30 @@ export default class App extends React.Component {
       // 書き込み処理
       this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
-      ipcRenderer.send('post-write', this.currentThread, message)      
+      ipcRenderer.send('post-write', this.currentThread, message)
     } else if ((this.currentThread.posts.length > 0 && hasMesssage) && !this.isWait) {
       // 1.5秒後に再帰的に呼び出し
       setTimeout(() => { this.postWriteForm() }, 1500)
     }
   }
 
-  // スレッドの自動更新のON/OFF切り替え  
+  // スレッドの自動更新のON/OFF切り替え
   switchAutoUpdate = () => {
     this.setState({ isAutoUpdate: !this.state.isAutoUpdate })
   }
 
-  // スレッドのオートスクロールのON/OFF切り替え  
+  // スレッドのオートスクロールのON/OFF切り替え
   switchAutoScroll = () => {
     this.setState({ isAutoScroll: !this.state.isAutoScroll })
   }
 
-  // 書き込み欄の表示/非表示切り替え  
+  // 字幕サーバーの起動状態のON/OFF切り替え
+  switchJimakuServer = () => {
+    ipcRenderer.send('switch-jimaku-server', !this.state.isJimakuServer)
+    this.setState({ isJimakuServer: !this.state.isJimakuServer })
+  }
+
+  // 書き込み欄の表示/非表示切り替え
   switchShowWriteForm = () => {
     this.setState({ isShowWriteForm: !this.state.isShowWriteForm })
   }
@@ -437,7 +446,7 @@ export default class App extends React.Component {
     }
   }
 
-  // 書き込み欄でkeyUpハンドラ  
+  // 書き込み欄でkeyUpハンドラ
   _releaseWriteFormHandler = (event) => {
     // Shift押下状態を解放
     this.isPressShift = false
@@ -471,14 +480,10 @@ export default class App extends React.Component {
     return (
       <div id="container" className={this.state.theme}>
         <Header
-          listMode={this.state.listMode} currentUrl={this.state.currentUrl}
-          isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll}
-          setListMode={this.setListMode}
-          setCurrentUrl={this.setCurrentUrl}
-          getCurrentUrl={this.getCurrentUrl}
-          updateCurrentList={this.updateCurrentList}
-          switchAutoUpdate={this.switchAutoUpdate}
-          switchAutoScroll={this.switchAutoScroll} />
+          listMode={this.state.listMode} currentUrl={this.state.currentUrl} updateCurrentList={this.updateCurrentList}
+          isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll} isJimakuServer={this.state.isJimakuServer}
+          setListMode={this.setListMode} setCurrentUrl={this.setCurrentUrl} getCurrentUrl={this.getCurrentUrl}
+          switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchJimakuServer={this.switchJimakuServer} />
         {/*リスト欄*/}
         {listBox}
         {/*書き込み欄*/}
