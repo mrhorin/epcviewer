@@ -50,13 +50,6 @@ a:active{ color: #ff8000; }
   height: 100vh;
   background: #efefef;
   color: #333;
-  .btn-color{
-    color: #333;
-    width: 149px;
-    height: 22px;
-    border: 1px solid #333;
-    border-radius: 3px;
-  }
   #preferences-tab-box{
     order: 1;
   }
@@ -65,35 +58,30 @@ a:active{ color: #ff8000; }
     display: flex;
     flex-direction: column;
     height: 100vh;
-    #preferences-startup{
-      order: 1;
-      display: flex;
-      flex-direction: column;  
-      #preferences-startup-boards{
-        order: 1;
-      }
-      #preferences-startup-threads{
-        order: 2;
-      }  
+    .preferences-item-column{
+      flex-direction: column;
     }
-    #preferences-theme{
-      order: 2;
+    .preferences-item-row{
+      flex-direction: row;
+      justify-content: space-between;
     }
-    #preferences-jimaku-fontcolor,
-    #preferences-jimaku-fontoutlinecolor{
-      .chrome-picker {
-        position: fixed;
-        top: 20px;
-        right: 0px;
-        z-index: 1;
-      }
-    }
-    .preferences-item{
+    .preferences-item-column,
+    .preferences-item-row{
       padding: 5px 15px;
+      display: flex;
       .preferences-title{
         font-size: 11px;
         font-weight: bold;
-      }  
+      }
+      input[type="text"],
+      input[type="number"]{
+        width: 130px;
+        border-radius: 3px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        height: 22px;
+        text-align: right;
+      }
       input[type="checkbox"]{
         margin: 0;
         margin-right: 3px;
@@ -104,6 +92,57 @@ a:active{ color: #ff8000; }
         line-height: 11px;
         font-size: 11px;
       }
+      .btn-color{
+        color: #333;
+        width: 130px;
+        height: 22px;
+        border-radius: 3px;
+        text-shadow: 1px 1px 0 #FFF, -1px -1px 0 #FFF,
+                    -1px 1px 0 #FFF, 1px -1px 0 #FFF,
+                     0px 1px 0 #FFF,  0-1px 0 #FFF,
+                    -1px 0 0 #FFF, 1px 0 0 #FFF;
+      }
+      .form-dialog{
+        display: flex;
+        flex-direction: row;
+        input{
+          flex-grow: 1;
+          text-align: left;
+          border-right: none;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px;
+        }
+        button{
+          border-top-left-radius: 0px;
+          border-bottom-left-radius: 0px;
+          border-bottom-color: #ccc;
+        }
+      }
+      #preferences-jimaku-se-file-path{
+        width: 100vh;
+      }
+    }
+    #preferences-startup{
+      display: flex;
+      flex-direction: column;
+      #preferences-startup-boards{
+        order: 1;
+      }
+      #preferences-startup-threads{
+        order: 2;
+      }
+    }
+    #preferences-jimaku-fontcolor,
+    #preferences-jimaku-fontoutlinecolor{
+      .chrome-picker {
+        position: fixed;
+        top: 20px;
+        right: 0px;
+        z-index: 1;
+      }
+    }
+    #preferences-jimaku-fontoutlinecolor{
+      margin-right: 19px;
     }
   }
   #preferences-btns{
@@ -500,10 +539,30 @@ $darktheme-btn-primary-color: #3c83ec;
 #container.dark,
 #preferences.dark{
   background-color: $darktheme-base-color;
-  .preferences-item{
+  #preferences-box>.preferences-item-column,
+  #preferences-box>.preferences-item-row{
     color: $darktheme-font-color;
-    input, select, option{
+    input[type="text"], input[type="number"], select, option{
       color: $font-color;
+      border-color: #4c4c4c;
+    }
+    .btn-color{
+      border-color: #4c4c4c;
+    }
+    .form-dialog{
+      display: flex;
+      flex-direction: row;
+      input{
+        flex-grow: 1;
+        border-right: none;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      button{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-bottom-color: #4c4c4c;
+      }
     }
   }
   input[type="text"]{

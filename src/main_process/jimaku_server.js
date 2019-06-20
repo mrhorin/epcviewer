@@ -32,6 +32,13 @@ export default class JimakuServer{
               res.end(JSON.stringify(preference))
             })
           },
+          '/se.mp3': () => {
+            storage.preferencesPromise.then((preference) => {
+              const se = require('fs').readFileSync(preference.jimakuSeFilePath)
+              res.writeHead(200, { 'Content-Type': 'audio/mpeg' })
+              res.end(se)
+            })
+          },
           '/initialize_posts': () => {
             this.initializePosts()
             let success = (this.posts.length < 1)

@@ -25,12 +25,14 @@ export default class Storage {
     }
   }
 
-  // 環境設定の初期値  
+  // 環境設定の初期値
   static get defaultPreferences() {
     return {
       currentTabIndex: 0,
       isReturnBoards: false,
       isReturnThreads: false,
+      isJimakuSe: false,
+      jimakuSeFilePath: "",
       jimakuFontSize: 16,
       jimakuFontOutlineSize: 2,
       jimakuFontColor: "#ffffff",
@@ -52,11 +54,11 @@ export default class Storage {
           }
           resolve(appBounds)
         }
-      })      
+      })
     })
   }
 
-  // stateを取得  
+  // stateを取得
   static get statePromise() {
     return new Promise((resolve, reject) => {
       storage.get('state', (error, state) => {
@@ -88,7 +90,7 @@ export default class Storage {
     })
   }
 
-  // appBoundsの値を保存  
+  // appBoundsの値を保存
   static setAppBounds(appBounds, callback = ()=>{}) {
     storage.set('appBounds', appBounds, (error) => {
       if (error) throw `Error: ${error}`
@@ -96,7 +98,7 @@ export default class Storage {
     })
   }
 
-  // Appのstateを保存  
+  // Appのstateを保存
   static setState(state, callback = () => { }) {
     state.updateStatus = 'WAIT'
     state.log = ''

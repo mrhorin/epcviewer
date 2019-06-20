@@ -1,15 +1,16 @@
 import request from 'superagent'
 
 /*----------------------------------------------
-  ブラウザからJimakuServerからレスを取得して表示する
+  ブラウザ側からJimakuServerへレスを要求して表示する
 ----------------------------------------------*/
 export default class JimakuBrowser{
-  
+
   constructor(elementID, port = 3000) {
     this.port = port
     this.posts = []
     this.preferences = {}
     this.element = document.getElementById(elementID)
+    this.seElement = document.getElementById('se')
     this.style = { 'font-size': '16px' }
     this.speech = new SpeechSynthesisUtterance()
     this.speech.lang = 'ja-JP'
@@ -25,8 +26,9 @@ export default class JimakuBrowser{
   startShowJimaku = (interval = 300) => {
     this.showJimakuTimerID = setTimeout(() => {
       if (!this.isSaying && this.hasPosts) {
-        this.showJimaku()
+        if(this.preferences.isJimakuSe) this.playSe()
         this.say()
+        this.showJimaku()
         this.dequeuePost()
       } else if (!this.isSaying) {
         this.hideJimaku()
@@ -59,6 +61,10 @@ export default class JimakuBrowser{
   say = () => {
     this.speech.text = this.post
     speechSynthesis.speak(this.speech)
+  }
+
+  playSe = () => {
+    this.seElement.play()
   }
 
   dequeuePost = () => {
