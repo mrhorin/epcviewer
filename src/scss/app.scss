@@ -688,6 +688,10 @@ $darktheme-btn-primary-color: #3c83ec;
   #write-form>textarea::-webkit-scrollbar-corner{
     background: darken($darktheme-base-color, 7%);
   }
+  #write-form>textarea::-webkit-scrollbar-button{
+    background: darken($darktheme-base-color, 7%);
+    border: 1px solid lighten($darktheme-base-color, 3%);
+  }
   #board-box{
     background: darken($darktheme-base-color, 12%);
     .subject{
