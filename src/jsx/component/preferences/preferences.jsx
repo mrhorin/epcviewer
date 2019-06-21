@@ -44,7 +44,7 @@ export default class Preferences extends React.Component {
 
   render() {
     let components = [{
-        name: '一般',
+        name: '全般',
         component:
           <PreferencesGeneral key={0} onChange={this.onChange} theme={this.state.theme}
             isReturnBoards={this.state.isReturnBoards} isReturnThreads={this.state.isReturnThreads} />
