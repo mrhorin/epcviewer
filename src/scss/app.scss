@@ -164,7 +164,8 @@ header{
   min-height: 28px !important;
   .flex-container{
     .btn-group .btn.active,
-    .btn-group .btn:active {
+    .btn-group .btn:active,
+    .btn-group .btn:focus {
       // afterのcontextの文字を前面に出すため
       z-index: 10;
     }
