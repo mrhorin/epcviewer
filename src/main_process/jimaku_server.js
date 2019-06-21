@@ -1,8 +1,8 @@
 import storage from 'js/storage'
 
 const http = require('http')
-const html = require('fs').readFileSync('dist/html/jimaku.html')
-const js = require('fs').readFileSync('dist/js/jimaku_browser.js')
+const html = require('fs').readFileSync(__dirname + '/../html/jimaku.html')
+const js = require('fs').readFileSync(__dirname + '/jimaku_browser.js')
 
 /*---------------------------------------
   字幕表示用のレスをJSONで返すサーバ
