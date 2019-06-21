@@ -393,9 +393,6 @@ export default class App extends React.Component {
       this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
       ipcRenderer.send('post-write', this.currentThread, message)
-    } else if ((this.currentThread.posts.length > 0 && hasMesssage) && !this.isWait) {
-      // 1.5秒後に再帰的に呼び出し
-      setTimeout(() => { this.postWriteForm() }, 1500)
     }
   }
 
