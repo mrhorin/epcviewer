@@ -4,19 +4,17 @@ import emojiRegex from 'emoji-regex/text.js'
 import { Board, Thread, UrlParser } from '2ch-parser'
 import request from 'superagent'
 
-import Store from 'js/store'
 import MenuManager from 'main_process/menu_manager'
 import JimakuServer from 'main_process/jimaku_server'
+import Store from 'js/store'
 
-const jimaku = new JimakuServer()
 const store = new Store()
+const jimaku = new JimakuServer()
 
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
-let appBounds
-let preferences = store.preferences
 
-systemPreferences.setAppLevelAppearance(preferences.theme, "light")
+systemPreferences.setAppLevelAppearance(store.preferences.theme, "light")
 
 /*-----------------------------------------
   アプリの多重起動を禁止
@@ -352,7 +350,7 @@ ipcMain.on('show-thread', (event, threadUrl) => {
 
 // --- 字幕サーバーの起動状態のON/OFF切り替え ---
 ipcMain.on('switch-jimaku-server', (event, isJimakuServer) => {
-  isJimakuServer ? jimaku.start() : jimaku.stop()
+  isJimakuServer ? jimaku.start(store.preferences.jimakuPort) : jimaku.stop()
 })
 
 ipcMain.on('open-preferences-window', (event) => {

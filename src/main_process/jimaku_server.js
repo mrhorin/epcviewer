@@ -9,8 +9,7 @@ const js = require('fs').readFileSync(__dirname + '/jimaku_browser.js')
 ----------------------------------------*/
 export default class JimakuServer{
 
-  constructor(port = 3000) {
-    this.port = port
+  constructor() {
     this.posts = []
     this.store = new Store()
     this.server = http.createServer((req, res) => {
@@ -54,8 +53,8 @@ export default class JimakuServer{
     return this.server.listening
   }
 
-  start = () => {
-    if(!this.listening) this.server.listen(this.port)
+  start = (port) => {
+    if(!this.listening) this.server.listen(port)
   }
 
   stop = () => {

@@ -6,8 +6,8 @@ import request from 'superagent'
 ----------------------------------------------*/
 export default class JimakuBrowser{
 
-  constructor(elementID, port = 3000) {
-    this.port = port
+  constructor(elementID) {
+    this.port = location.port
     this.posts = []
     this.preferences = {}
     this.element = document.getElementById(elementID)
