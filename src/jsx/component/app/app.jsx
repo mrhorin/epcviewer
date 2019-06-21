@@ -71,15 +71,16 @@ export default class App extends React.Component {
     ipcRenderer.on('update-thread-reply', (event, thread) => {
       // threadがthreadsの何番目に存在するか
       let index = _.findIndex(this.state.threads, { url: thread.url })
-      // 更新があるか
+      // 新着レスがあるか
       if ((index >= 0) && (thread.posts.length > 0)) {
-        let threads = this.state.threads
-        // 新着レスを末尾に追加
-        threads[index].posts = threads[index].posts.concat(thread.posts)
-        threads[index].headers.contentLength += thread.headers.contentLength
-        threads[index].headers.lastModified = thread.headers.lastModified
-        this.setState({ threads: threads, updateStatus: "WAIT" })
-        Storage.setState(this.state)
+        let currentState = this.state
+        // 新着レスをstateにセット
+        currentState.threads[index].posts = currentState.threads[index].posts.concat(thread.posts)
+        currentState.threads[index].headers.contentLength += thread.headers.contentLength
+        currentState.threads[index].headers.lastModified = thread.headers.lastModified
+        this.setState({ threads: currentState.threads, updateStatus: "WAIT" })
+        // stateの状態を保存
+        Storage.setState(currentState)
       } else {
         this.setUpdateStatus('WAIT')
       }
@@ -104,8 +105,9 @@ export default class App extends React.Component {
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
     })
-    ipcRenderer.on('close-preferences-window-reply', (event, theme) => {
-      this.setState({ theme: theme })
+    ipcRenderer.on('close-preferences-window-reply', (event, preferences) => {
+      this.preferences = preferences
+      this.setState({ theme: preferences.theme })
     })
     ipcRenderer.on('shortcut-tab-left', (event) => { this.moveLeftTab() })
     ipcRenderer.on('shortcut-tab-right', (event) => { this.moveRightTab() })
@@ -457,26 +459,29 @@ export default class App extends React.Component {
       Storage.statePromise,
       Storage.preferencesPromise
     ]).then((values) => {
+      // 環境設定の読み込み
+      this.preferences = values[1]
+      // stateの状態復帰
+      let prevState = values[0]
       let state = Storage.defaultState
+      if (this.preferences.theme) state.theme = this.preferences.theme
       if (this.state.boards) state.boards = this.state.boards
       if (this.state.currentUrl) state.currentUrl = this.state.currentUrl
-      // stateの状態復帰
-      state.isAutoUpdate = values[0].isAutoUpdate
-      state.isAutoScroll = values[0].isAutoScroll
-      state.isJimakuServer = values[0].isJimakuServer
-      state.isShowWriteForm = values[0].isShowWriteForm
-      if (values[1].isReturnBoards) {
-        state.boards = state.boards.concat(values[0].boards)
-        state.currentBoardIndex = values[0].currentBoardIndex
+      state.isAutoUpdate = prevState.isAutoUpdate
+      state.isAutoScroll = prevState.isAutoScroll
+      state.isJimakuServer = prevState.isJimakuServer
+      state.isShowWriteForm = prevState.isShowWriteForm
+      if (this.preferences.isReturnBoards) {
+        state.boards = state.boards.concat(prevState.boards)
+        state.currentBoardIndex = prevState.currentBoardIndex
       }
-      if (!values[1].isReturnThreads) {
-        state.threads = values[0].threads
-        state.currentThreadIndex = values[0].currentThreadIndex
+      if (this.preferences.isReturnThreads) {
+        state.threads = prevState.threads
+        state.currentThreadIndex = prevState.currentThreadIndex
       }
-      // 環境設定の適用
-      if (values[1].theme) state.theme = values[1].theme
       this.setState(state)
-      if (values[0].isJimakuServer) ipcRenderer.send('switch-jimaku-server', values[0].isJimakuServer)
+      // 字幕サーバーを起動
+      if (prevState.isJimakuServer) ipcRenderer.send('switch-jimaku-server', prevState.isJimakuServer)
     })
   }
 

@@ -359,8 +359,12 @@ ipcMain.on('switch-jimaku-server', (event, isJimakuServer) => {
 })
 
 // ------- 環境設定ウィンドウを閉じる -------
-ipcMain.on('close-preferences-window', () => {
-  closePreferencesWindow()
+ipcMain.on('close-preferences-window', (event, preferences) => {
+  window.preferences.close()
+  window.preferences = null
+  systemPreferences.setAppLevelAppearance(preferences.theme)
+  window.app.setIgnoreMouseEvents(false)
+  window.app.webContents.send('close-preferences-window-reply', preferences)
 })
 
 /*-----------------------------------------
@@ -386,17 +390,6 @@ function openPreferencesWindow() {
   window.preferences.on('close', () => {
     window.preferences = null
     window.app.setIgnoreMouseEvents(false)
-  })
-}
-
-function closePreferencesWindow() {
-  window.preferences.close()
-  window.preferences = null
-  storage.preferencesPromise.then((res) => {
-    preferences = res
-    systemPreferences.setAppLevelAppearance(preferences.theme)
-    window.app.setIgnoreMouseEvents(false)
-    window.app.webContents.send('close-preferences-window-reply', preferences.theme)
   })
 }
 

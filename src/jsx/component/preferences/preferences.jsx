@@ -16,7 +16,7 @@ export default class Preferences extends React.Component {
 
   // ウィンドウを閉じる
   close = () => {
-    ipcRenderer.send('close-preferences-window')
+    ipcRenderer.send('close-preferences-window', this.state)
   }
 
   onChange = (key, value) => {

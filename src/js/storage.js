@@ -101,11 +101,17 @@ export default class Storage {
 
   // Appのstateを保存
   static setState(state, callback = () => { }) {
-    state.updateStatus = 'WAIT'
-    state.log = ''
-    storage.set('state', state, (error) => {
-      if (error) throw `Error: ${error}`
-      callback()
+    this.preferencesPromise.then((preferences) => {
+      if (!preferences.isReturnBoards) state.boards = this.defaultState.boards
+      if (!preferences.isReturnThreads) state.threads = this.defaultState.threads
+      state.currentBoardIndex = 0
+      state.currentBoardIndex = 0
+      state.updateStatus = 'WAIT'
+      state.log = ''
+      storage.set('state', state, (error) => {
+        if (error) throw `Error: ${error}`
+        callback()
+      })
     })
   }
 
