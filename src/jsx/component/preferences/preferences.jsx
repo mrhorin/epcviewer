@@ -1,7 +1,7 @@
 import React from 'react'
 import { ipcRenderer } from 'electron'
 
-import Storage from 'js/storage'
+import Store from 'js/store'
 
 import PreferencesGeneral from 'jsx/component/preferences/preferences_general'
 import PreferencesJimaku from 'jsx/component/preferences/preferences_jimaku'
@@ -11,7 +11,8 @@ export default class Preferences extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = Storage.defaultPreferences
+    this.store = new Store()
+    this.state = this.store.defaultPreferences
   }
 
   // ウィンドウを閉じる
@@ -29,9 +30,8 @@ export default class Preferences extends React.Component {
 
   _onClickOk = (event) => {
     this.state.currentTabIndex = 0
-    Storage.setPreferences(this.state, () => {
-      this.close()
-    })
+    this.store.setPreferences(this.state)
+    this.close()
   }
 
   _onClickCancel = (event) => {
@@ -39,9 +39,7 @@ export default class Preferences extends React.Component {
   }
 
   componentDidMount() {
-    Storage.preferencesPromise.then((preferences) => {
-      this.setState(preferences)
-    })
+    this.setState(this.store.preferences)
   }
 
   render() {

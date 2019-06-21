@@ -64,7 +64,7 @@ export default class JimakuBrowser{
   }
 
   playSe = () => {
-    this.seElement.play()
+    if (this.preferences.jimakuSeFilePath) this.seElement.play()
   }
 
   dequeuePost = () => {
@@ -110,6 +110,7 @@ export default class JimakuBrowser{
     })
   }
 
+  // 字幕サーバーから環境設定を取得
   get fetchPreferencesPromise() {
     return new Promise((resolve, reject) => {
       request
@@ -125,6 +126,7 @@ export default class JimakuBrowser{
     })
   }
 
+  // 字幕サーバーから新着レスを取得
   get pullPostsPromise() {
     return new Promise((resolve, reject) => {
       request

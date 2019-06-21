@@ -32,19 +32,21 @@ import React from 'react'
 import { ipcRenderer, shell } from 'electron'
 import _ from 'lodash'
 
-import Storage from 'js/storage'
-
 import Header from 'jsx/component/app/header'
 import BoardBox from 'jsx/component/app/board_box'
 import ThreadBox from 'jsx/component/app/thread_box'
 import Footer from 'jsx/component/app/footer'
+
+import Store from 'js/store'
 
 /* アプリケーションのメインウィンドウ */
 export default class App extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = Storage.defaultState
+    this.store = new Store()
+    this.state = this.store.defaultAppState
+    this.preferences = this.store.preferences
     // Shiftの押下状態
     this.isPressShift = false
     this.bindEvents()
@@ -80,7 +82,7 @@ export default class App extends React.Component {
         currentState.threads[index].headers.lastModified = thread.headers.lastModified
         this.setState({ threads: currentState.threads, updateStatus: "WAIT" })
         // stateの状態を保存
-        Storage.setState(currentState)
+        this.store.setAppState(currentState)
       } else {
         this.setUpdateStatus('WAIT')
       }
@@ -123,9 +125,8 @@ export default class App extends React.Component {
     ipcRenderer.on('shortcut-update-current-list', (event) => { this.updateCurrentList() })
     ipcRenderer.on('shortcut-post-write-form', (event) => { this.postWriteForm() })
     ipcRenderer.on('shortcut-clear-storage', (event) => {
-      Storage.clearStorage(() => {
-        this.setState(Storage.defaultState)
-      })
+      this.store.clear()
+      this.setState(this.store.defaultAppState)
     })
     ipcRenderer.on('outputlog', (event, message) => { this.outputLog(message) })
   }
@@ -429,13 +430,6 @@ export default class App extends React.Component {
     this.setState({ log: "" })
   }
 
-  // stateを初期化
-  initialize = () => {
-    Storage.clearState((error) => {
-      if(!error) this.setState(Storage.defaultState)
-    })
-  }
-
   // 書き込み欄でkeyDownハンドラ
   _pressWriteFormHandler = (event) => {
     if (event.nativeEvent.key == 'Shift') {
@@ -455,34 +449,27 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    Promise.all([
-      Storage.statePromise,
-      Storage.preferencesPromise
-    ]).then((values) => {
-      // 環境設定の読み込み
-      this.preferences = values[1]
-      // stateの状態復帰
-      let prevState = values[0]
-      let state = Storage.defaultState
-      if (this.preferences.theme) state.theme = this.preferences.theme
-      if (this.state.boards) state.boards = this.state.boards
-      if (this.state.currentUrl) state.currentUrl = this.state.currentUrl
-      state.isAutoUpdate = prevState.isAutoUpdate
-      state.isAutoScroll = prevState.isAutoScroll
-      state.isJimakuServer = prevState.isJimakuServer
-      state.isShowWriteForm = prevState.isShowWriteForm
-      if (this.preferences.isReturnBoards) {
-        state.boards = state.boards.concat(prevState.boards)
-        state.currentBoardIndex = prevState.currentBoardIndex
-      }
-      if (this.preferences.isReturnThreads) {
-        state.threads = prevState.threads
-        state.currentThreadIndex = prevState.currentThreadIndex
-      }
-      this.setState(state)
-      // 字幕サーバーを起動
-      if (prevState.isJimakuServer) ipcRenderer.send('switch-jimaku-server', prevState.isJimakuServer)
-    })
+    // stateの状態復帰
+    let prevState = this.store.appState
+    let state = this.store.defaultAppState
+    if (this.state.boards) state.boards = this.state.boards
+    if (this.state.currentUrl) state.currentUrl = this.state.currentUrl
+    state.theme = this.preferences.theme
+    state.isAutoUpdate = prevState.isAutoUpdate
+    state.isAutoScroll = prevState.isAutoScroll
+    state.isJimakuServer = prevState.isJimakuServer
+    state.isShowWriteForm = prevState.isShowWriteForm
+    if (this.preferences.isReturnBoards) {
+      state.boards = state.boards.concat(prevState.boards)
+      state.currentBoardIndex = prevState.currentBoardIndex
+    }
+    if (this.preferences.isReturnThreads) {
+      state.threads = prevState.threads
+      state.currentThreadIndex = prevState.currentThreadIndex
+    }
+    this.setState(state)
+    // 字幕サーバーを起動
+    if (state.isJimakuServer) ipcRenderer.send('switch-jimaku-server', state.isJimakuServer)
   }
 
   componentDidMount() {

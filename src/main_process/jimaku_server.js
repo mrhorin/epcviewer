@@ -1,4 +1,4 @@
-import storage from 'js/storage'
+import Store from 'js/store'
 
 const http = require('http')
 const html = require('fs').readFileSync(__dirname + '/../html/jimaku.html')
@@ -12,6 +12,7 @@ export default class JimakuServer{
   constructor(port = 3000) {
     this.port = port
     this.posts = []
+    this.store = new Store()
     this.server = http.createServer((req, res) => {
       const routes = (url) => {
         let paths = {
@@ -28,17 +29,13 @@ export default class JimakuServer{
             res.end(this.pullPostsJson())
           },
           '/preferences.json': () => {
-            storage.preferencesPromise.then((preference) => {
-              res.writeHead(200, { 'Content-Type': 'application/json' })
-              res.end(JSON.stringify(preference))
-            })
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify(this.store.preferences))
           },
           '/se.mp3': () => {
-            storage.preferencesPromise.then((preference) => {
-              const se = require('fs').readFileSync(preference.jimakuSeFilePath)
-              res.writeHead(200, { 'Content-Type': 'audio/mpeg' })
-              res.end(se)
-            })
+            const se = require('fs').readFileSync(this.store.preferences.jimakuSeFilePath)
+            res.writeHead(200, { 'Content-Type': 'audio/mpeg' })
+            res.end(se)
           },
           '/initialize_posts': () => {
             this.initializePosts()

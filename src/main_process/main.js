@@ -4,21 +4,19 @@ import emojiRegex from 'emoji-regex/text.js'
 import { Board, Thread, UrlParser } from '2ch-parser'
 import request from 'superagent'
 
-import storage from 'js/storage'
+import Store from 'js/store'
 import MenuManager from 'main_process/menu_manager'
 import JimakuServer from 'main_process/jimaku_server'
+
+const jimaku = new JimakuServer()
+const store = new Store()
 
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
 let appBounds
-let preferences
+let preferences = store.preferences
 
-const jimaku = new JimakuServer()
-
-storage.preferencesPromise.then((res) => {
-  preferences = res
-  systemPreferences.setAppLevelAppearance(res.theme, "light")
-})
+systemPreferences.setAppLevelAppearance(preferences.theme, "light")
 
 /*-----------------------------------------
   アプリの多重起動を禁止
@@ -176,26 +174,25 @@ app.on('ready', () => {
   menu.show()
 
   // 設定を読み込む
-  storage.appBoundsPromise.then((res) => {
-    appBounds = res
-    window.app = new BrowserWindow({
-      width: appBounds.width,
-      height: appBounds.height,
-      x: appBounds.x,
-      y: appBounds.y,
-      minWidth: 100,
-      minHeight: 151,
-      webPreferences: {
-        nodeIntegration: true,
-      }
-    })
-    window.app.loadURL(`file://${__dirname}/../html/app.html`)
-
-    // 閉じた時
-    window.app.on('close', ()=>{
-      storage.setAppBounds(window.app.getBounds())
-    })
+  const appBounds = store.appBounds
+  window.app = new BrowserWindow({
+    width: appBounds.width,
+    height: appBounds.height,
+    x: appBounds.x,
+    y: appBounds.y,
+    minWidth: 100,
+    minHeight: 151,
+    webPreferences: {
+      nodeIntegration: true,
+    }
   })
+  window.app.loadURL(`file://${__dirname}/../html/app.html`)
+
+  // 閉じた時
+  window.app.on('close', ()=>{
+    store.setAppBounds(window.app.getBounds())
+  })
+
 })
 
 /*-----------------------------------------
