@@ -36,8 +36,8 @@ export default class Storage {
       jimakuSeFilePath: "",
       jimakuFontSize: 16,
       jimakuFontOutlineSize: 2,
-      jimakuFontColor: "#ffffff",
-      jimakuFontOutlineColor: "#0000ff",
+      jimakuFontColor: "#0000ff",
+      jimakuFontOutlineColor: "#ffffff",
       jimakuPort: 3000,
       theme: "light"
     }
