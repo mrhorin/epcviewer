@@ -163,6 +163,11 @@ header{
   padding: 3px;
   min-height: 28px !important;
   .flex-container{
+    .btn-group .btn.active,
+    .btn-group .btn:active {
+      // afterのcontextの文字を前面に出すため
+      z-index: 10;
+    }
     .flex-header-update-btns{
       order: 1;
       flex-grow: 1;
@@ -194,10 +199,7 @@ header{
       order: 3;
       flex-grow: 1;
       display: -webkit-inline-box;
-      margin-right: 3px;
-      .btn-group .btn.active {
-        z-index: 10;
-      }
+      margin-right: 2px;
       #btn-auto-update:hover::after{
         content: '自動更新';
         z-index: 100;
@@ -211,8 +213,21 @@ header{
         z-index: 100;
       }
     }
-    .flex-header-url{
+    .flex-header-preferences-btns{
       order: 4;
+      flex-grow: 1;
+      display: -webkit-inline-box;
+      margin-right: 3px;
+      #btn-preferences{
+        border-radius: 5px;
+      }
+      #btn-preferences:hover::after{
+        content: '環境設定';
+        z-index: 100;
+      }
+    }
+    .flex-header-url{
+      order: 5;
       flex-grow: 300;
       input{
         width: 100%;

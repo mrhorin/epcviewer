@@ -420,6 +420,11 @@ export default class App extends React.Component {
     this.setState({ isShowWriteForm: !this.state.isShowWriteForm })
   }
 
+  // 環境設定を開く
+  openPreferences = () => {
+    ipcRenderer.send('open-preferences-window')
+  }
+
   outputLog = (log) => {
     this.setState({ log: log })
     shell.beep()
@@ -481,7 +486,8 @@ export default class App extends React.Component {
     return (
       <div id="container" className={this.state.theme}>
         <Header
-          listMode={this.state.listMode} currentUrl={this.state.currentUrl} updateCurrentList={this.updateCurrentList}
+          listMode={this.state.listMode} currentUrl={this.state.currentUrl}
+          updateCurrentList={this.updateCurrentList} openPreferences={this.openPreferences}
           isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll} isJimakuServer={this.state.isJimakuServer}
           setListMode={this.setListMode} setCurrentUrl={this.setCurrentUrl} getCurrentUrl={this.getCurrentUrl}
           switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchJimakuServer={this.switchJimakuServer} />

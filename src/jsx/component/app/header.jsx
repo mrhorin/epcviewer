@@ -109,6 +109,14 @@ export default class Header extends React.Component {
               </button>
             </div>
           </div>
+          {/*環境設定ボタン*/}
+          <div className="flex-header-preferences-btns">
+            <div className="btn-group">
+              <button id="btn-preferences" className="btn btn-default btn-mini" onClick={this.props.openPreferences}>
+                <span className="icon icon-cog"></span>
+              </button>
+            </div>
+          </div>
           {/*URL欄*/}
           <div className="flex-header-url">
             <input type="text" value={this.props.currentUrl}

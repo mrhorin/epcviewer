@@ -355,6 +355,10 @@ ipcMain.on('switch-jimaku-server', (event, isJimakuServer) => {
   isJimakuServer ? jimaku.start() : jimaku.stop()
 })
 
+ipcMain.on('open-preferences-window', (event) => {
+  openPreferencesWindow()
+})
+
 // ------- 環境設定ウィンドウを閉じる -------
 ipcMain.on('close-preferences-window', (event, preferences) => {
   window.preferences.close()
