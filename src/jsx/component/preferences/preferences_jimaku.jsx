@@ -73,7 +73,7 @@ export default class PreferencesJimaku extends React.Component {
           </div>
           <div id="preferences-jimaku-fontoutlinesize" className="preferences-item">
             <div className="preferences-title">輪郭サイズ</div>
-            <input type="number" min="1" value={this.props.fontOutlineSize}
+            <input type="number" min="0" value={this.props.fontOutlineSize}
               onChange={e => this._onChangeForm(e, 'jimakuFontOutlineSize')} /> px
           </div>
         </div>
