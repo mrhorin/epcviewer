@@ -23,6 +23,10 @@ export default class PreferencesJimaku extends React.Component {
     this.props.onChange(key, e.target.checked)
   }
 
+  _onClickCheckbox = (e, key) => {
+    this.props.onChange(key, !this.refs[key].checked)
+  }
+
   _onClickDialog = (e, key) => {
     let path = dialog.showOpenDialog()
     this.props.onChange(key, path[0])
@@ -107,7 +111,9 @@ export default class PreferencesJimaku extends React.Component {
           <div id="preferences-jimaku-se">
             <div className="preferences-title">レス着信音</div>
             <input ref="isJimakuSe" type="checkbox" onChange={e => this._onChangeCheckbox(e, 'isJimakuSe')} checked={this.props.isJimakuSe} />
-            <span className="checkbox-label">新着レスがある時に着信音を再生する</span>
+            <span className="checkbox-label" onClick={e => this._onClickCheckbox(e, 'isJimakuSe')}>
+              新着レスがある時に着信音を再生する
+            </span>
           </div>
         </div>
         {/* レス着信音声ファイル */}

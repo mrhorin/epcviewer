@@ -11,6 +11,10 @@ export default class PreferencesGeneral extends React.Component {
     this.props.onChange(key, e.target.checked)
   }
 
+  _onClickCheckbox = (e, key) => {
+    this.props.onChange(key, !this.refs[key].checked)
+  }
+
   _onChangeSelect = (e, key) => {
     this.props.onChange(key, e.target.value)
   }
@@ -24,11 +28,15 @@ export default class PreferencesGeneral extends React.Component {
             <div className="preferences-title">起動時</div>
             <div id="preferences-startup-boards">
               <input ref="isReturnBoards" type="checkbox" onChange={e => this._onChangeCheckbox(e, 'isReturnBoards')} checked={this.props.isReturnBoards} />
-              <span className="checkbox-label">板一覧を復帰</span>
+              <span className="checkbox-label" onClick={e => this._onClickCheckbox(e, 'isReturnBoards')}>
+                板一覧を復帰
+              </span>
             </div>
             <div id="preferences-startup-threads">
-              <input ref="isTeturnThreads" type="checkbox" onChange={e => this._onChangeCheckbox(e, 'isReturnThreads')} checked={this.props.isReturnThreads} />
-              <span className="checkbox-label">スレッド一覧を復帰</span>
+              <input ref="isReturnThreads" type="checkbox" onChange={e => this._onChangeCheckbox(e, 'isReturnThreads')} checked={this.props.isReturnThreads} />
+              <span className="checkbox-label" onClick={e => this._onClickCheckbox(e, 'isReturnThreads')}>
+                スレッド一覧を復帰
+              </span>
             </div>
           </div>
         </div>
