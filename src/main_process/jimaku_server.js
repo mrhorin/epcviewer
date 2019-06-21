@@ -63,6 +63,7 @@ export default class JimakuServer{
   }
 
   pushPosts = (posts) => {
+    if (this.posts.length > 1000) this.posts.shift()
     this.posts = this.posts.concat(posts)
   }
 
