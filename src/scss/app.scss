@@ -434,6 +434,8 @@ header{
     border-radius: 0px;
     border: 1px solid #ccc;
     resize: vertical;
+    word-break: break-all;
+    white-space: pre-line;
   }
   textarea::-webkit-scrollbar{
     display: none;
