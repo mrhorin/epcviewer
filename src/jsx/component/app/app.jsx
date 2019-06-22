@@ -99,7 +99,16 @@ export default class App extends React.Component {
     ipcRenderer.on('post-write-reply', (event, res, err) => {
       this.setUpdateStatus('WAIT')
       if (err) {
-        this.outputLog(`書き込み失敗(${err.status})`)
+        // レスポンスヘッダのcontent-lengthからエラー内容を判別
+        let messages = {
+          '605': 'ホスト規制中',
+          '615': 'NGワードが含まれています',
+          '634': '多重書き込みです',
+          'etc': '書き込み失敗'
+        }
+        let length = String(err.response.headers['content-length'])
+        let key = (Object.keys(messages).indexOf(length) >= 0) ? (length) : ('etc')
+        this.outputLog(`${messages[key]}(${err.status})`)
       } else {
         this.writeFormTextarea.value = ""
         this.updateCurrentThread()

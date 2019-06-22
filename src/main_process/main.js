@@ -318,6 +318,7 @@ ipcMain.on('post-write', (event, thread, message) => {
         event.sender.send('post-write-reply', res, err)
       })
   } else {
+    // 一般的な2ch互換掲示板の時
     const threadUrl = thread.url+"/"
     const uri = threadUrl.split('/')
     const writeUrl = `${uri[0]}//${uri[2]}/test/bbs.cgi`
