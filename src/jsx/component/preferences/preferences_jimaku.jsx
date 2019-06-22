@@ -32,6 +32,10 @@ export default class PreferencesJimaku extends React.Component {
     this.props.onChange(key, path[0])
   }
 
+  _onChangeVolume = (e, key) => {
+    this.props.onChange(key, Math.round(e.target.value))
+  }
+
   _handleChangeCompletePicker = (color, key) => {
     this.props.onChange(key, color.hex)
   }
@@ -116,10 +120,18 @@ export default class PreferencesJimaku extends React.Component {
             </span>
           </div>
         </div>
+        {/* 音量 */}
+        <div className="preferences-item-row">
+          <div id="preferences-jimaku-se-volume">
+            <div className="preferences-title">音量</div>
+            <input ref="jimakuSeVolume" type="range" min="0" max="10" value={this.props.jimakuSeVolume}
+              onChange={e => this._onChangeVolume(e, 'jimakuSeVolume')} />
+          </div>
+        </div>
         {/* レス着信音声ファイル */}
         <div className="preferences-item-row">
           <div id="preferences-jimaku-se-file-path">
-            <div className="preferences-title">レス着信音声ファイル</div>
+            <div className="preferences-title">音声ファイル</div>
             <div className="form-group form-dialog">
               <input type="text" value={this.props.jimakuSeFilePath} onChange={e => this._onChangeForm(e, 'jimakuSeFilePath')} />
               <button className="btn btn-mini btn-default" onClick={e => this._onClickDialog(e, 'jimakuSeFilePath')}>

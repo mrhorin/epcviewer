@@ -64,7 +64,10 @@ export default class JimakuBrowser{
   }
 
   playSe = () => {
-    if (this.preferences.jimakuSeFilePath) this.seElement.play()
+    if (this.preferences.jimakuSeFilePath) {
+      this.seElement.volume = Number(this.preferences.jimakuSeVolume) / 10
+      this.seElement.play()
+    }
   }
 
   dequeuePost = () => {

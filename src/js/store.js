@@ -44,6 +44,7 @@ export default class Store{
       isReturnThreads: false,
       isJimakuSe: false,
       jimakuSeFilePath: "",
+      jimakuSeVolume: 5,
       jimakuFontSize: 16,
       jimakuFontOutlineSize: 2,
       jimakuFontColor: "#0000ff",

@@ -67,7 +67,7 @@ a:active{ color: #ff8000; }
     }
     .preferences-item-column,
     .preferences-item-row{
-      padding: 5px 15px;
+      padding: 3px 15px;
       display: flex;
       .preferences-title{
         font-size: 11px;
@@ -120,6 +120,8 @@ a:active{ color: #ff8000; }
       }
       #preferences-jimaku-se-file-path{
         width: 100vh;
+      }
+      #preferences-jimaku-se-volume{
       }
     }
     #preferences-startup{

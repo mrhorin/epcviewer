@@ -54,7 +54,8 @@ export default class Preferences extends React.Component {
           <PreferencesJimaku key={1} onChange={this.onChange} port={this.state.jimakuPort}
             fontSize={this.state.jimakuFontSize} fontOutlineSize={this.state.jimakuFontOutlineSize}
             fontColor={this.state.jimakuFontColor} fontOutlineColor={this.state.jimakuFontOutlineColor}
-            isJimakuSe={this.state.isJimakuSe} jimakuSeFilePath={this.state.jimakuSeFilePath} />
+            isJimakuSe={this.state.isJimakuSe} jimakuSeVolume={this.state.jimakuSeVolume}
+            jimakuSeFilePath={this.state.jimakuSeFilePath} />
       }
     ]
     let tabs = components.map((value, index) => {
