@@ -177,11 +177,18 @@ header{
       display: -webkit-inline-box;
       margin-right: 2px;
       #btn-update{
-        border-radius: 5px;
+        border-radius: 5px 0px 0px 5px;
       }
-      #btn-update:hover::after{
+      #btn-update:hover::before{
         content: '更新';
         z-index: 100;
+      }
+      #btn-update-dropdown{
+        padding-left: 2px;
+        padding-right: 3px;
+      }
+      #btn-update-dropdown:after{
+        margin-left: 0px;
       }
     }
     .flex-header-list-btns{
@@ -189,11 +196,11 @@ header{
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 2px;
-      #btn-boards:hover::after{
+      #btn-boards:hover::before{
         content: '板一覧';
         z-index: 100;
       }
-      #btn-threads:hover::after{
+      #btn-threads:hover::before{
         content: 'スレッド一覧';
         z-index: 100;
       }
@@ -203,15 +210,18 @@ header{
       flex-grow: 1;
       display: -webkit-inline-box;
       margin-right: 2px;
-      #btn-auto-update:hover::after{
+      #btn-auto-update:hover::before{
         content: '自動更新';
         z-index: 100;
       }
-      #btn-auto-scroll:hover::after{
+      #btn-auto-scroll:hover::before{
         content: 'オートスクロール';
         z-index: 100;
       }
-      #btn-jimaku-server:hover::after{
+      #btn-jimaku-server{
+        border-radius: 5px;
+      }
+      #btn-jimaku-server:hover::before{
         content: '字幕サーバー';
         z-index: 100;
       }
@@ -224,7 +234,7 @@ header{
       #btn-preferences{
         border-radius: 5px;
       }
-      #btn-preferences:hover::after{
+      #btn-preferences:hover::before{
         content: '環境設定';
         z-index: 100;
       }
@@ -496,8 +506,8 @@ footer{
 /* photonKit override */
 .btn-group{
   display: -webkit-inline-box !important;
-  button.btn:hover::after,
-  button.btn.active::after{
+  button.btn:hover::before,
+  button.btn.active::before{
     position: absolute;
     bottom: -25px;
     right: -20px;

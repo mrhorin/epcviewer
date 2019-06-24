@@ -1,6 +1,10 @@
 import React from 'react'
 import { ipcRenderer, remote } from 'electron'
 
+const Menu = remote.Menu
+const MenuItem =  remote.MenuItem
+const clipboard = remote.clipboard
+
 export default class Header extends React.Component {
 
   constructor(props) {
@@ -70,13 +74,25 @@ export default class Header extends React.Component {
   }
 
   _onContextMenuCurrentUrl = (event) => {
-    const clipboard = remote.clipboard
-    const Menu =  remote.Menu
-    const MenuItem =  remote.MenuItem
     let menu = new Menu()
     menu.append(new MenuItem({
       label: 'コピー',
       click: ()=>{ clipboard.writeText(window.getSelection().toString()) }
+    }))
+    event.preventDefault()
+    menu.popup(remote.getCurrentWindow())
+  }
+
+  _onClickAutoUpdate = (event) => {
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: '自動更新',
+      type: 'checkbox',
+      checked: this.props.isAutoUpdate,
+      click: () => {
+        this.props.switchAutoUpdate()
+        this.props.switchAutoScroll()
+      }
     }))
     event.preventDefault()
     menu.popup(remote.getCurrentWindow())
@@ -94,6 +110,7 @@ export default class Header extends React.Component {
               <button id="btn-update" className="btn btn-default btn-mini" onClick={this.props.updateCurrentList}>
                 <span className="icon icon-arrows-ccw"></span>
               </button>
+              <button id="btn-update-dropdown" className="btn btn-default btn-mini btn-dropdown" onClick={this._onClickAutoUpdate}/>
             </div>
           </div>
           {/*リストボタン*/}
@@ -112,14 +129,6 @@ export default class Header extends React.Component {
           {/*スレッドボタン*/}
           <div className="flex-header-thread-btns">
             <div className="btn-group">
-              {/*自動更新*/}
-              <button id="btn-auto-update" className={css.autoUpdate} onClick={this.props.switchAutoUpdate}>
-                <span className="icon icon-clock"></span>
-              </button>
-              {/*自動スクロール*/}
-              <button id="btn-auto-scroll" className={css.autoScroll} onClick={this.props.switchAutoScroll}>
-                <span className="icon icon-down-bold"></span>
-              </button>
               {/* 字幕サーバー */}
               <button id="btn-jimaku-server" className={css.jimakuServer} onClick={this.props.switchJimakuServer}>
                 <span className="icon icon-network"></span>
