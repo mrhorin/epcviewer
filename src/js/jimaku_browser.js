@@ -83,7 +83,7 @@ export default class JimakuBrowser{
   get interval() {
     if (this.posts.length <= 0) return 300
     else if (this.posts.length == 1) return 9000
-    else if (2 <= this.posts.length <= 3) return 6000
+    else if (2 <= this.posts.length <= 3) return 7000
     else if (4 <= this.posts.length <= 5) return 5000
     else if (6 <= this.posts.length <= 10) return 3500
     else if (11 <= this.posts.length <= 15) return 2000
