@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 
 export default class Header extends React.Component {
 
@@ -65,6 +65,23 @@ export default class Header extends React.Component {
     }
   }
 
+  _onFocusInput = (event) => {
+    event.target.select()
+  }
+
+  _onContextMenuCurrentUrl = (event) => {
+    const clipboard = remote.clipboard
+    const Menu =  remote.Menu
+    const MenuItem =  remote.MenuItem
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'コピー',
+      click: ()=>{ clipboard.writeText(window.getSelection().toString()) }
+    }))
+    event.preventDefault()
+    menu.popup(remote.getCurrentWindow())
+  }
+
   render() {
     let css = this.btnCssClassName
 
@@ -122,7 +139,8 @@ export default class Header extends React.Component {
             <input type="text" value={this.props.currentUrl}
               onChange={e => { this.props.setCurrentUrl(e.target.value) }}
               onKeyUp={this._onKeyUpUrlHandler}
-              onFocus={e => { e.target.select() }}/>
+              onFocus={this._onFocusInput}
+              onContextMenu={this._onContextMenuCurrentUrl}/>
           </div>
         </div>
       </header>
