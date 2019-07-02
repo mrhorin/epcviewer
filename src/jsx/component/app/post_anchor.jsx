@@ -17,8 +17,8 @@ export default class PostAnchor extends React.Component {
       if (post) {
         this.setState({
           showTooltip: true,
-          tooltipComponent: <Post no={this.props.no} post={post} getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />          
-        })        
+          tooltipComponent: <Post no={this.props.no} post={post} getPost={this.props.getPost} idCounter={this.props.idCounter} />
+        })
       } else {
         this.hideTooltip()
       }
@@ -45,8 +45,8 @@ export default class PostAnchor extends React.Component {
         {tooltip}
         <div className="post-body-anchor-no">
           {">>"+this.props.no}
-        </div>        
-      </div>      
+        </div>
+      </div>
     )
   }
 }

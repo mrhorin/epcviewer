@@ -12,6 +12,10 @@ export default class ThreadBox extends React.Component {
     super(props)
   }
 
+  get currentThread() {
+    return this.props.threads[this.props.currentThreadIndex]
+  }
+
   get currentPosts() {
     return this.props.threads[this.props.currentThreadIndex].posts
   }
@@ -45,23 +49,6 @@ export default class ThreadBox extends React.Component {
   getPost = (no) => {
     const index = _.findIndex(this.currentPosts, { no: Number(no) })
     return this.currentPosts[index]
-  }
-
-  // 引数の番号のレスのIDカウンターを取得
-  getIdCounter = (no) => {
-    // 全IDごとの格納位置を集計
-    let idCounters = {}
-    this.currentPosts.forEach((currentValue, index) => {
-      if ((idCounters[currentValue.id]) && !(currentValue.id.match(/\?\?\?/gi))) {
-        idCounters[currentValue.id].push(index+1)
-      } else if (currentValue.id && !(currentValue.id.match(/\?\?\?/gi))) {
-        idCounters[currentValue.id] = [index+1]
-      }
-    })
-    // no番のレスのIDが何回目の発言か
-    let noIndex = Number(no) - 1
-    let id = this.currentPosts[noIndex].id
-    return idCounters[id]
   }
 
   // 書き込み一覧の一番下までスクロール
@@ -127,7 +114,8 @@ export default class ThreadBox extends React.Component {
     let posts = []
     if (this.props.hasBoard && this.hasPost) {
       posts = this.currentPosts.map((post, index) => {
-        return <Post key={index} no={index + 2} post={post} getPost={this.getPost} getIdCounter={this.getIdCounter}/>
+        let idCounter = post.id ? this.currentThread.idCounter[post.id] : []
+        return <Post key={index} no={index + 2} post={post} getPost={this.getPost} idCounter={idCounter} />
       })
     }
     let tabs = []

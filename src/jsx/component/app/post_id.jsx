@@ -14,20 +14,20 @@ export default class PostId extends React.Component {
     return this.props.id.replace(/^ID:/, "")
   }
 
-  get idCounter() {
-    let counter = this.props.getIdCounter(this.props.no)
-    let count = counter.findIndex((value, index) => {
-      return value == this.props.no
-    })
-    return { count: Number(count) + 1, total: counter.length }
+  get count() {
+    return Number(this.props.idCounter.indexOf(this.props.no)) + 1
+  }
+
+  get total() {
+    return this.props.idCounter.length
   }
 
   showTooltip = () => {
     if (!this.state.showTooltip) {
-      let posts = this.props.getIdCounter(this.props.no).map((no, index) => {
+      let posts = this.props.idCounter.map((no, index) => {
         let post = this.props.getPost(no)
         return (
-          <Post key={index} no={no} post={post} getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
+          <Post key={index} no={no} post={post} getPost={this.props.getPost} idCounter={this.props.idCounter} />
         )
       })
       this.setState({
@@ -48,8 +48,7 @@ export default class PostId extends React.Component {
   }
 
   render() {
-    let idCounter = this.idCounter
-    let extractClass = (idCounter.total<5) ? 'post-id-extract' : 'post-id-extract post-id-extract-hisshi'
+    let extractClass = (this.total<5) ? 'post-id-extract' : 'post-id-extract post-id-extract-hisshi'
     let tooltip = ""
     if (this.state.showTooltip) {
       tooltip = <PostTooltip component={this.state.tooltipComponent} hideTooltip={this.hideTooltip} />
@@ -61,10 +60,11 @@ export default class PostId extends React.Component {
         </div>
         <div className="post-id-uid">{this.id}</div>
         <div className="post-id-counter">
-          <div className="post-id-counter-count">{idCounter.count}</div>
-          <div className="post-id-counter-total">{idCounter.total}</div>
+          <div className="post-id-counter-count">{this.count}</div>
+          <div className="post-id-counter-total">{this.total}</div>
         </div>
       </div>
     )
   }
+
 }

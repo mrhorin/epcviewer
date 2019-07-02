@@ -75,14 +75,15 @@ export default class App extends React.Component {
       let index = _.findIndex(this.state.threads, { url: thread.url })
       // 新着レスがあるか
       if ((index >= 0) && (thread.posts.length > 0)) {
-        let currentState = this.state
+        let nextState = this.state
         // 新着レスをstateにセット
-        currentState.threads[index].posts = currentState.threads[index].posts.concat(thread.posts)
-        currentState.threads[index].headers.contentLength += thread.headers.contentLength
-        currentState.threads[index].headers.lastModified = thread.headers.lastModified
-        this.setState({ threads: currentState.threads, updateStatus: "WAIT" })
+        nextState.threads[index].posts = nextState.threads[index].posts.concat(thread.posts)
+        nextState.threads[index].headers.contentLength += thread.headers.contentLength
+        nextState.threads[index].headers.lastModified = thread.headers.lastModified
+        nextState.threads[index].idCounter = this.getIdCounter(nextState.threads[index].posts)
+        this.setState({ threads: nextState.threads, updateStatus: "WAIT" })
         // stateの状態を保存
-        this.store.setAppState(currentState)
+        this.store.setAppState(nextState)
       } else {
         this.setUpdateStatus('WAIT')
       }
@@ -196,6 +197,7 @@ export default class App extends React.Component {
         listMode: "THREADS"
       })
     } else {
+      thread.idCounter = this.getIdCounter(thread.posts)
       // threadを追加して表示
       this.setState({
         threads: this.state.threads.concat(thread),
@@ -278,6 +280,20 @@ export default class App extends React.Component {
         if(this.currentThread.url) this.removeThread(this.currentThread.url)
         break
     }
+  }
+
+  // 引数の番号のレスのIDカウンターを取得
+  getIdCounter = (posts) => {
+    // 全IDごとの格納位置を集計
+    let idCounter = {}
+    posts.forEach((post, index) => {
+      if ((idCounter[post.id]) && !(post.id.match(/\?\?\?/gi))) {
+        idCounter[post.id].push(index+1)
+      } else if (post.id && !(post.id.match(/\?\?\?/gi))) {
+        idCounter[post.id] = [index+1]
+      }
+    })
+    return idCounter
   }
 
   // 更新状態がWAITか

@@ -37,7 +37,7 @@ export default class Post extends React.Component {
       let anchoredPost = this.props.getPost(no)
       return (
         <PostAnchor key={index + '-' + this.randomKey} no={no} anchoredPost={anchoredPost}
-                    getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
+                    getPost={this.props.getPost} idCounter={this.props.idCounter} />
       )
     })
     return body
@@ -125,7 +125,7 @@ export default class Post extends React.Component {
     let nameClass = (this.isAdmin) ? "post-name post-name-admin" : "post-name"
     let postId = (this.hasId) ? (
       <PostId id={this.props.post.id} no={this.props.post.no} post={this.props.post}
-              getPost={this.props.getPost} getIdCounter={this.props.getIdCounter} />
+              idCounter={this.props.idCounter} getPost={this.props.getPost} />
     ) : ( "" )
     return (
       <div className="post">
