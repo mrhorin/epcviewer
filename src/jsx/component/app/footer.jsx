@@ -39,22 +39,22 @@ export default class Footer extends React.Component {
     var title = this.props.currentThread.title
     if (this.hasCurrentThread) {
       // レス数を付加
-      title += `(${this.props.currentThread.posts.length+1})`
+      title += `(${this.props.currentThread.posts.length})`
     }
     return title
   }
 
-  // 現在のスレッドが存在するか  
+  // 現在のスレッドが存在するか
   get hasCurrentThread() {
     return this.props.currentThread.posts.length > 0
   }
 
-  // 更新状態がWAITか  
+  // 更新状態がWAITか
   get isWait() {
     return this.props.updateStatus=='WAIT'
   }
 
-  // スレッドを更新  
+  // スレッドを更新
   updateThread = () => {
     var state = {}
     if (this.isWait && this.props.isAutoUpdate && this.state.autoUpdateCount <= 0) {
@@ -67,7 +67,7 @@ export default class Footer extends React.Component {
     } else {
       state['autoUpdateCount'] = 10
     }
-    this.setState(state)    
+    this.setState(state)
   }
 
   // 自動更新タイマーの開始
@@ -77,7 +77,7 @@ export default class Footer extends React.Component {
     }, 1000)
   }
 
-  // 自動更新タイマーの停止  
+  // 自動更新タイマーの停止
   stopUpdateTimer = () => {
     clearInterval(this.updateTimerId)
   }
