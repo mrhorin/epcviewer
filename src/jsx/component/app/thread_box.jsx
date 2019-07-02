@@ -17,7 +17,11 @@ export default class ThreadBox extends React.Component {
   }
 
   get currentPosts() {
-    return this.props.threads[this.props.currentThreadIndex].posts
+    return this.hasThread ? this.props.threads[this.props.currentThreadIndex].posts : []
+  }
+
+  get hasThread() {
+    return this.props.threads.length > 0
   }
 
   get hasPost() {
