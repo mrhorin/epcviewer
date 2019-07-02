@@ -12,8 +12,12 @@ export default class ThreadBox extends React.Component {
     super(props)
   }
 
+  get currentPosts() {
+    return this.props.threads[this.props.currentThreadIndex].posts
+  }
+
   get hasPost() {
-    return this.props.posts.length > 0
+    return this.currentPosts.length > 0
   }
 
   // 一番下までスクロールしているか
@@ -37,17 +41,17 @@ export default class ThreadBox extends React.Component {
     return (0 < offsetY && offsetY + height < viewportHeight)
   }
 
-  // 引数の番号のレスを取得  
+  // 引数の番号のレスを取得
   getPost = (no) => {
-    const index = _.findIndex(this.props.posts, { no: Number(no) })
-    return this.props.posts[index]
+    const index = _.findIndex(this.currentPosts, { no: Number(no) })
+    return this.currentPosts[index]
   }
 
   // 引数の番号のレスのIDカウンターを取得
   getIdCounter = (no) => {
     // 全IDごとの格納位置を集計
     let idCounters = {}
-    this.props.posts.forEach((currentValue, index) => {
+    this.currentPosts.forEach((currentValue, index) => {
       if ((idCounters[currentValue.id]) && !(currentValue.id.match(/\?\?\?/gi))) {
         idCounters[currentValue.id].push(index+1)
       } else if (currentValue.id && !(currentValue.id.match(/\?\?\?/gi))) {
@@ -56,7 +60,7 @@ export default class ThreadBox extends React.Component {
     })
     // no番のレスのIDが何回目の発言か
     let noIndex = Number(no) - 1
-    let id = this.props.posts[noIndex].id
+    let id = this.currentPosts[noIndex].id
     return idCounters[id]
   }
 
@@ -69,7 +73,7 @@ export default class ThreadBox extends React.Component {
   openBrowser = (url) => {
     shell.openExternal(url)
   }
-  
+
   _removeThread = (threadUrl) => {
     this.props.removeThread(threadUrl)
   }
@@ -93,7 +97,7 @@ export default class ThreadBox extends React.Component {
       label: 'Googleで検索',
       click: () => {
         let q = document.getSelection().toString().replace(/\s/gi, '+')
-        this.openBrowser(`https://www.google.co.jp/search?q=${q}`)  
+        this.openBrowser(`https://www.google.co.jp/search?q=${q}`)
       }
     }))
     e.preventDefault()
@@ -106,7 +110,7 @@ export default class ThreadBox extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return (this.props.posts !== nextProps.posts) ||
+    return (this.currentPosts !== nextProps.posts) ||
       (this.props.threads !== nextProps.threads) ||
       (this.props.isAutoScroll !== nextProps.isAutoScroll) ||
       (this.props.isShowWriteForm !== nextProps.isShowWriteForm)
@@ -114,9 +118,7 @@ export default class ThreadBox extends React.Component {
 
   componentDidUpdate(prevProps) {
     // 書き込み欄が表示されたら && 一番下なら || 新着レスがあったら強制スクロール
-    if (
-      (this.props.isShowWriteForm && (this.props.isShowWriteForm !== prevProps.isShowWriteForm) && this.isMostBottom) ||
-      (this.props.posts.length !== prevProps.posts.length)) {
+    if (this.props.isAutoScroll || this.isMostBottom) {
       this.scrollBottom()
     }
   }
@@ -124,7 +126,7 @@ export default class ThreadBox extends React.Component {
   render() {
     let posts = []
     if (this.props.hasBoard && this.hasPost) {
-      posts = this.props.posts.map((post, index) => {
+      posts = this.currentPosts.map((post, index) => {
         return <Post key={index} no={index + 2} post={post} getPost={this.getPost} getIdCounter={this.getIdCounter}/>
       })
     }

@@ -313,25 +313,6 @@ export default class App extends React.Component {
     }
   }
 
-  // 現在のリストモードのコンポーネントを取得
-  get listComponent() {
-    const getListBox = (mode) => {
-      let lists = {
-        'BOARDS': <BoardBox
-          boards={this.state.boards} threads={this.state.threads} hasBoard={this.hasBoard} currentBoardIndex={this.state.currentBoardIndex}
-          removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
-        'THREADS': <ThreadBox
-          boards={this.state.boards} threads={this.state.threads} posts={this.currentThread.posts}
-          isAutoScroll={this.state.isAutoScroll} isShowWriteForm={this.state.isShowWriteForm}
-          hasBoard={this.hasBoard} hasThread={this.hasThread}
-          currentThreadIndex={this.state.currentThreadIndex}
-          removeThread={this.removeThread} selectThread={this.selectThread} />
-      }
-      return lists[mode]
-    }
-    return getListBox(this.state.listMode)
-  }
-
   // 指定したリストモードの現在のURLを取得
   getCurrentUrl = (listMode) => {
     let url = ""
@@ -492,6 +473,16 @@ export default class App extends React.Component {
 
   render() {
     let writeFormTextareaStyle = (this.state.isShowWriteForm) ? { display: 'block' } : { display: 'none' }
+    let listComponents = {
+      'BOARDS': <BoardBox
+        boards={this.state.boards} threads={this.state.threads} hasBoard={this.hasBoard} currentBoardIndex={this.state.currentBoardIndex}
+        removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
+      'THREADS': <ThreadBox
+        boards={this.state.boards} threads={this.state.threads} currentThreadIndex={this.state.currentThreadIndex}
+        isAutoScroll={this.state.isAutoScroll} isShowWriteForm={this.state.isShowWriteForm}
+        hasBoard={this.hasBoard} hasThread={this.hasThread}
+        removeThread={this.removeThread} selectThread={this.selectThread} />
+    }
     return (
       <div id="container" className={this.state.theme}>
         <Header
@@ -501,7 +492,7 @@ export default class App extends React.Component {
           setListMode={this.setListMode} setCurrentUrl={this.setCurrentUrl} getCurrentUrl={this.getCurrentUrl}
           switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchJimakuServer={this.switchJimakuServer} />
         {/*リスト欄*/}
-        {this.listComponent}
+        {listComponents[this.state.listMode]}
         {/*書き込み欄*/}
         <div id="write-form" className="form-group">
           <textarea id="write-form-textarea" className="form-control"
