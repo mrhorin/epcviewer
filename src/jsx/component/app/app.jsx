@@ -107,9 +107,9 @@ export default class App extends React.Component {
           '634': '多重書き込みです',
           'etc': '書き込み失敗'
         }
-        let length = String(err.response.headers['content-length'])
+        let length = res ? String(err.response.headers['content-length']) : '0'
         let key = (Object.keys(messages).indexOf(length) >= 0) ? (length) : ('etc')
-        this.outputLog(`${messages[key]}(${err.status})`)
+        this.outputLog(`${messages[key]}`)
       } else {
         this.writeFormTextarea.value = ""
         this.updateCurrentThread()

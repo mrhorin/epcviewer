@@ -310,6 +310,7 @@ ipcMain.on('post-write', (event, thread, message) => {
     })
     request
       .post(writeUrl)
+      .timeout(10000)
       .type('form')
       .send(body)
       .set('Referer', threadUrl)
