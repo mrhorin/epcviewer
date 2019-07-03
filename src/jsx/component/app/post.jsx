@@ -1,9 +1,11 @@
 import React from 'react'
-import _ from 'lodash'
 
 import PostAnchor from 'jsx/component/app/post_anchor'
 import PostLink from 'jsx/component/app/post_link'
 import PostId from 'jsx/component/app/post_id'
+
+import _ from 'lodash'
+import Immutable from 'immutable'
 
 export default class Post extends React.Component {
 
@@ -115,6 +117,10 @@ export default class Post extends React.Component {
 
   componentDidMount() {
     this.postElement = window.document.getElementById(`post-${this.props.no}`)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !Immutable.is(this.props.idCounter, nextProps.idCounter)
   }
 
   render() {
