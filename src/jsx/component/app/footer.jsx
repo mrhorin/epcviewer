@@ -26,7 +26,7 @@ export default class Footer extends React.Component {
         return this.props.isAutoUpdate && this.hasCurrentThread ? this.state.autoUpdateCount : '停止中'
         break
       case 'UPDATING':
-        return '更新中'
+        return '取得中'
         break
       case 'POSTING':
         return '書き込み中'
