@@ -396,7 +396,10 @@ export default class App extends React.Component {
 
   // 現在の板を更新
   updateCurrentBoard = () => {
-    if (this.hasBoard) ipcRenderer.send('update-board', this.currentBoard)
+    if (this.isWait && this.hasBoard) {
+      this.setUpdateStatus('UPDATING')
+      ipcRenderer.send('update-board', this.currentBoard)
+    }
   }
 
   // スレッドを取得
