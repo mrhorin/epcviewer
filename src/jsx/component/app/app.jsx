@@ -57,8 +57,9 @@ export default class App extends React.Component {
       if (board) this.addBoard(board)
       this.setUpdateStatus('WAIT')
     })
-    ipcRenderer.on('add-thread-reply', (event, thread) => {
-      if(thread) this.addThread(thread)
+    ipcRenderer.on('add-thread-reply', (event, thread, err) => {
+      if (err) this.outputLog('スレッド取得失敗')
+      if (thread) this.addThread(thread)
       this.setUpdateStatus('WAIT')
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {

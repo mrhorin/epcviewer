@@ -239,8 +239,8 @@ ipcMain.on('add-arg-board', (event) => {
 // ------- URLのThreadを返す -------
 ipcMain.on('add-thread', (event, threadUrl) => {
   var thread = new Thread(threadUrl)
-  thread.fetchAllPosts(() => {
-    event.sender.send('add-thread-reply', thread)
+  thread.fetchAllPosts((res, err) => {
+    event.sender.send('add-thread-reply', thread, err)
   })
 })
 
