@@ -270,7 +270,7 @@ ipcMain.on('update-thread', (event, thread) => {
       event.sender.send('update-thread-reply', newThread)
     })
   } else {
-    console.warn('WARNING: Last-Modifiedヘッダがみつかりません。更新時に毎回レスを全件取得します。')
+    console.warn('WARNING: Last-Modifiedヘッダがみつかりません')
     newThread.fetchAllPosts((res, err) => {
       if (err) {
         console.log(err)
@@ -343,11 +343,6 @@ ipcMain.on('post-write', (event, thread, message) => {
         event.sender.send('post-write-reply', res, err)
       })
   }
-})
-
-// ------- URLのThreadを表示する -------
-ipcMain.on('show-thread', (event, threadUrl) => {
-  event.sender.send('show-thread-reply', threadUrl)
 })
 
 // --- 字幕サーバーの起動状態のON/OFF切り替え ---

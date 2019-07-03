@@ -11,14 +11,9 @@ export default class Subject extends React.Component {
   constructor(props) {
     super(props)
   }
-  
+
   _onClickSubjectHandler = () => {
-    // 追加済みかスレッドか
-    if (_.findIndex(this.props.threads, { url: this.props.subject.url }) >= 0) {
-      ipcRenderer.send('show-thread', this.props.subject.url)
-    } else {
-      ipcRenderer.send('add-thread', this.props.subject.url)
-    }
+    this.props.fetchThread(this.props.subject.url)
   }
 
   shouldComponentUpdate(nextProps, nextState) {

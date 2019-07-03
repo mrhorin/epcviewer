@@ -1,12 +1,11 @@
 /*******************************************************
   state
-    subjectsMode: string
+    subjectsSortMode: string
       スレッド一覧の並び順を示す
       PEERCAST:
         peercast実況向けモード
         進んでいるスレを上に、1000到達しているスレは下に配置
 *******************************************************/
-
 import React from 'react'
 
 import Tab from 'jsx/component/common/tab'
@@ -58,7 +57,7 @@ export default class BoardBox extends React.Component {
     let tabs = []
     if (this.props.hasBoard) {
       subjects = this.getSubjects(this.currentBoard).map((subject) => {
-        return <Subject key={subject.no} subject={subject} threads={this.props.threads}/>
+        return <Subject key={subject.no} subject={subject} fetchThread={this.props.fetchThread}/>
       })
       tabs = this.props.boards.map((board, index) => {
         const active = this.props.currentBoardIndex==index

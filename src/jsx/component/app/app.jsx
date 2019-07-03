@@ -56,16 +56,9 @@ export default class App extends React.Component {
       if (board) this.addBoard(board)
       this.setUpdateStatus('WAIT')
     })
-    ipcRenderer.on('add-thread-reply', (event, thread) => { this.addThread(thread) })
-    ipcRenderer.on('show-thread-reply', (event, threadUrl) => {
-      let index = _.findIndex(this.state.threads, { url: threadUrl })
-      if (index >= 0) {
-        this.setState({
-          currentUrl: threadUrl,
-          currentThreadIndex: index,
-          listMode: "THREADS"
-        })
-      }
+    ipcRenderer.on('add-thread-reply', (event, thread) => {
+      if(thread) this.addThread(thread)
+      this.setUpdateStatus('WAIT')
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {
       // threadがthreadsの何番目に存在するか
@@ -379,7 +372,6 @@ export default class App extends React.Component {
 
   // 板を取得
   fetchBoard = (url) => {
-    console.log(url)
     this.setUpdateStatus('UPDATING')
     ipcRenderer.send('add-board', url)
   }
@@ -387,6 +379,22 @@ export default class App extends React.Component {
   // 現在の板を更新
   updateCurrentBoard = () => {
     if (this.hasBoard) ipcRenderer.send('update-board', this.currentBoard)
+  }
+
+  // スレッドを取得
+  fetchThread = (url) => {
+    let index = _.findIndex(this.state.threads, { url: url })
+    if (index >= 0) {
+      // 既に存在する場合はスレッドを表示
+      this.setState({
+        currentUrl: url,
+        currentThreadIndex: index,
+        listMode: "THREADS"
+      })
+    } else {
+      ipcRenderer.send('add-thread', url)
+      this.setUpdateStatus('UPDATING')
+    }
   }
 
   // 現在のスレッドを更新
@@ -499,7 +507,7 @@ export default class App extends React.Component {
     let listComponents = {
       'BOARDS': <BoardBox
         boards={this.state.boards} threads={this.state.threads} hasBoard={this.hasBoard} currentBoardIndex={this.state.currentBoardIndex}
-        removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
+        fetchThread={this.fetchThread} removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
       'THREADS': <ThreadBox
         boards={this.state.boards} threads={this.state.threads} currentThreadIndex={this.state.currentThreadIndex}
         isAutoScroll={this.state.isAutoScroll} isShowWriteForm={this.state.isShowWriteForm}
