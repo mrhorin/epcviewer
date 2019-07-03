@@ -226,13 +226,13 @@ ipcMain.on('add-arg-board', (event) => {
   if (urlIndex >= 0) {
     const url = global.process.argv[urlIndex]
     var board = new Board(UrlParser.getBoardUrl(url))
-    board.fetchThreads(() => {
+    board.fetchThreads((res, err) => {
       // 板名
       board['title'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url.replace(/^https?:\/\//i, '')
-      event.sender.send('add-board-reply', board)
+      event.sender.send('add-board-reply', board, err)
     })
   } else {
-    event.sender.send('add-board-reply', undefined)
+    event.sender.send('add-board-reply', undefined, undefined)
   }
 })
 

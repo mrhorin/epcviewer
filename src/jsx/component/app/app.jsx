@@ -52,7 +52,8 @@ export default class App extends React.Component {
   }
 
   bindEvents = () => {
-    ipcRenderer.on('add-board-reply', (event, board) => {
+    ipcRenderer.on('add-board-reply', (event, board, err) => {
+      if (err) this.outputLog('板取得に失敗')
       if (board) this.addBoard(board)
       this.setUpdateStatus('WAIT')
     })
