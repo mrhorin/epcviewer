@@ -229,10 +229,10 @@ ipcMain.on('add-arg-board', (event) => {
     board.fetchThreads(() => {
       // 板名
       board['title'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url.replace(/^https?:\/\//i, '')
-      event.sender.send('add-arg-board-reply', board)
+      event.sender.send('add-board-reply', board)
     })
   } else {
-    event.sender.send('add-arg-board-reply', "")
+    event.sender.send('add-board-reply', undefined)
   }
 })
 

@@ -65,7 +65,7 @@ export default class Header extends React.Component {
   _onKeyUpUrlHandler = (event) => {
     let hasUrl = (event.target.value.replace(/\s/g,'').length >0)
     if (event.nativeEvent.key == 'Enter' && hasUrl) {
-      ipcRenderer.send('add-board', event.target.value)
+      this.props.fetchBoard(event.target.value)
     }
   }
 

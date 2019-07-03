@@ -47,18 +47,15 @@ export default class App extends React.Component {
     this.store = new Store()
     this.state = this.store.defaultAppState
     this.preferences = this.store.preferences
-    // Shiftの押下状態
     this.isPressShift = false
     this.bindEvents()
-    ipcRenderer.send('add-arg-board')
   }
 
   bindEvents = () => {
-    // 初回起動時に引数URL取得したboardを受け取る
-    ipcRenderer.on('add-arg-board-reply', (event, board) => {
+    ipcRenderer.on('add-board-reply', (event, board) => {
       if (board) this.addBoard(board)
+      this.setUpdateStatus('WAIT')
     })
-    ipcRenderer.on('add-board-reply', (event, board) => { this.addBoard(board) })
     ipcRenderer.on('add-thread-reply', (event, thread) => { this.addThread(thread) })
     ipcRenderer.on('show-thread-reply', (event, threadUrl) => {
       let index = _.findIndex(this.state.threads, { url: threadUrl })
@@ -380,6 +377,13 @@ export default class App extends React.Component {
     }
   }
 
+  // 板を取得
+  fetchBoard = (url) => {
+    console.log(url)
+    this.setUpdateStatus('UPDATING')
+    ipcRenderer.send('add-board', url)
+  }
+
   // 現在の板を更新
   updateCurrentBoard = () => {
     if (this.hasBoard) ipcRenderer.send('update-board', this.currentBoard)
@@ -485,6 +489,9 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.writeFormTextarea = document.getElementById('write-form-textarea')
+    // 引数URLから板情報を取得
+    ipcRenderer.send('add-arg-board')
+    this.setUpdateStatus('UPDATING')
   }
 
   render() {
@@ -503,7 +510,7 @@ export default class App extends React.Component {
       <div id="container" className={this.state.theme}>
         <Header
           listMode={this.state.listMode} currentUrl={this.state.currentUrl}
-          updateCurrentList={this.updateCurrentList} openPreferences={this.openPreferences}
+          fetchBoard={this.fetchBoard} updateCurrentList={this.updateCurrentList} openPreferences={this.openPreferences}
           isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll} isJimakuServer={this.state.isJimakuServer}
           setListMode={this.setListMode} setCurrentUrl={this.setCurrentUrl} getCurrentUrl={this.getCurrentUrl}
           switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchJimakuServer={this.switchJimakuServer} />
