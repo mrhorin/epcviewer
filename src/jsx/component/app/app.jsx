@@ -378,8 +378,20 @@ export default class App extends React.Component {
 
   // 板を取得
   fetchBoard = (url) => {
-    this.setUpdateStatus('UPDATING')
-    ipcRenderer.send('add-board', url)
+    if (this.isWait) {
+      let index = _.findIndex(this.state.boards, { url: url })
+      if (index >= 0) {
+        // 既に取得済みの場合は板を表示
+        this.setState({
+          currentUrl: url,
+          currentBoardIndex: index,
+          listMode: "BOARDS"
+        })
+      } else {
+        ipcRenderer.send('add-board', url)
+        this.setUpdateStatus('UPDATING')
+      }
+    }
   }
 
   // 現在の板を更新
