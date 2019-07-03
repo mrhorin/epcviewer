@@ -76,7 +76,7 @@ export default class JimakuBrowser{
 
   // 先頭の投稿を取得
   get post() {
-    let ptn = new RegExp(/<("[^"]*"|'[^']*'|[^'">])*>/, "gi")
+    let ptn = new RegExp(/(?!<br>)<("[^"]*"|'[^']*'|[^'">])*>/, "gi")
     return String(this.posts[0].body.replace(ptn, ""))
   }
 
