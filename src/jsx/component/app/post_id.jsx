@@ -3,11 +3,17 @@ import React from 'react'
 import Post from 'jsx/component/app/post'
 import PostTooltip from 'jsx/component/app/post_tooltip'
 
+import Immutable from 'immutable'
+
 export default class PostId extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { showTooltip: false, tooltipComponent: "" }
+    this.state = {
+      idCounter: Immutable.List(this.props.idCounter),
+      showTooltip: false,
+      tooltipComponent: ""
+    }
   }
 
   get id() {
@@ -15,19 +21,19 @@ export default class PostId extends React.Component {
   }
 
   get count() {
-    return Number(this.props.idCounter.indexOf(this.props.no)) + 1
+    return Number(this.state.idCounter.indexOf(this.props.no)) + 1
   }
 
   get total() {
-    return this.props.idCounter.length
+    return this.state.idCounter.size
   }
 
   showTooltip = () => {
     if (!this.state.showTooltip) {
-      let posts = this.props.idCounter.map((no, index) => {
+      let posts = this.state.idCounter.map((no, index) => {
         let post = this.props.getPost(no)
         return (
-          <Post key={index} no={no} post={post} getPost={this.props.getPost} idCounter={this.props.idCounter} />
+          <Post key={index} no={no} post={post} getPost={this.props.getPost} idCounter={this.state.idCounter.toJS()} />
         )
       })
       this.setState({
@@ -44,7 +50,15 @@ export default class PostId extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.state.showTooltip !== nextState.showTooltip
+    let showTooltipDiff = this.state.showTooltip !== nextState.showTooltip
+    let idCounterDiff = !(Immutable.is(this.state.idCounter, Immutable.List(nextProps.idCounter)))
+    return showTooltipDiff || idCounterDiff
+  }
+
+  componentDidUpdate() {
+    if (!(Immutable.is(this.state.idCounter, Immutable.List(this.props.idCounter)))) {
+      this.setState({ idCounter: Immutable.List(this.props.idCounter) })
+    }
   }
 
   render() {

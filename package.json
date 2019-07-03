@@ -17,6 +17,7 @@
     "electron-store": "^3.3.0",
     "emoji-regex": "^8.0.0",
     "encoding-japanese": "^1.0.25",
+    "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "photonkit": "^0.1.2",

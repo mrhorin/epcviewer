@@ -100,13 +100,6 @@ export default class ThreadBox extends React.Component {
     this.scrollBottom()
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (this.currentPosts !== nextProps.posts) ||
-      (this.props.threads !== nextProps.threads) ||
-      (this.props.isAutoScroll !== nextProps.isAutoScroll) ||
-      (this.props.isShowWriteForm !== nextProps.isShowWriteForm)
-  }
-
   componentDidUpdate(prevProps) {
     // 書き込み欄が表示されたら && 一番下なら || 新着レスがあったら強制スクロール
     if (this.props.isAutoScroll || this.isMostBottom) {

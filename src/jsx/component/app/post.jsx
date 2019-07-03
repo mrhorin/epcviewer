@@ -117,10 +117,6 @@ export default class Post extends React.Component {
     this.postElement = window.document.getElementById(`post-${this.props.no}`)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.post != nextProps.post
-  }
-
   render() {
     let nameClass = (this.isAdmin) ? "post-name post-name-admin" : "post-name"
     let postId = (this.hasId) ? (
