@@ -404,23 +404,25 @@ export default class App extends React.Component {
 
   // スレッドを取得
   fetchThread = (url) => {
-    let index = _.findIndex(this.state.threads, { url: url })
-    if (index >= 0) {
-      // 既に存在する場合はスレッドを表示
-      this.setState({
-        currentUrl: url,
-        currentThreadIndex: index,
-        listMode: "THREADS"
-      })
-    } else {
-      ipcRenderer.send('add-thread', url)
-      this.setUpdateStatus('UPDATING')
+    if (this.isWait) {
+      let index = _.findIndex(this.state.threads, { url: url })
+      if (index >= 0) {
+        // 既に存在する場合はスレッドを表示
+        this.setState({
+          currentUrl: url,
+          currentThreadIndex: index,
+          listMode: "THREADS"
+        })
+      } else {
+        ipcRenderer.send('add-thread', url)
+        this.setUpdateStatus('UPDATING')
+      }
     }
   }
 
   // 現在のスレッドを更新
   updateCurrentThread = () => {
-    if (this.hasThread && this.isWait) {
+    if (this.isWait && this.hasThread) {
       this.setUpdateStatus('UPDATING')
       ipcRenderer.send('update-thread', this.currentThread)
     }
