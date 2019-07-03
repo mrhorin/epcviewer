@@ -53,7 +53,7 @@ export default class App extends React.Component {
 
   bindEvents = () => {
     ipcRenderer.on('add-board-reply', (event, board, err) => {
-      if (err) this.outputLog('板取得に失敗')
+      if (err) this.outputLog('板取得失敗')
       if (board) this.addBoard(board)
       this.setUpdateStatus('WAIT')
     })
@@ -79,14 +79,19 @@ export default class App extends React.Component {
         this.setUpdateStatus('WAIT')
       }
     })
-    ipcRenderer.on('update-board-reply', (event, board) => {
-      let index = _.findIndex(this.state.boards, { url: board.url })
-      if (index >= 0) {
-        let boards = this.state.boards
-        board.title = boards[index].title
-        boards[index] = board
-        this.setState({ boards: boards })
+    ipcRenderer.on('update-board-reply', (event, board, err) => {
+      if (err) {
+        this.outputLog('板更新失敗')
+      } else {
+        let index = _.findIndex(this.state.boards, { url: board.url })
+        if (index >= 0) {
+          let boards = this.state.boards
+          board.title = boards[index].title
+          boards[index] = board
+          this.setState({ boards: boards })
+        }
       }
+      this.setUpdateStatus('WAIT')
     })
     ipcRenderer.on('post-write-reply', (event, res, err) => {
       this.setUpdateStatus('WAIT')
