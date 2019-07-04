@@ -12,7 +12,7 @@ export default class PostId extends React.Component {
     this.state = {
       idCounter: Immutable.List(this.props.idCounter),
       showTooltip: false,
-      tooltipComponent: ""
+      tooltipComponent: null
     }
   }
 
@@ -45,7 +45,7 @@ export default class PostId extends React.Component {
 
   hideTooltip = () => {
     if (this.state.showTooltip) {
-      this.setState({ showTooltip: false, tooltipComponent: '' })
+      this.setState({ showTooltip: false, tooltipComponent: null })
     }
   }
 
@@ -69,7 +69,7 @@ export default class PostId extends React.Component {
     }
     return (
       <div className="post-id">
-        <div className={extractClass} onMouseOver={this.showTooltip}>
+        <div className={extractClass} onMouseOver={this.showTooltip} onMouseLeave={this.hideTooltip}>
           {tooltip}
         </div>
         <div className="post-id-uid">{this.id}</div>

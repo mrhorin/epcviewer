@@ -7,7 +7,7 @@ export default class PostAnchor extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { showTooltip: false, tooltipComponent: "" }
+    this.state = { showTooltip: false, tooltipComponent: null }
   }
 
   showTooltip = () => {
@@ -27,7 +27,7 @@ export default class PostAnchor extends React.Component {
 
   hideTooltip = () => {
     if (this.state.showTooltip) {
-      this.setState({ showTooltip: false, tooltipComponent: '' })
+      this.setState({ showTooltip: false, tooltipComponent: null })
     }
   }
 
@@ -41,7 +41,7 @@ export default class PostAnchor extends React.Component {
       tooltip = <PostTooltip component={this.state.tooltipComponent} hideTooltip={this.hideTooltip} />
     }
     return (
-      <div className="post-body-anchor" onMouseOver={this.showTooltip}>
+      <div className="post-body-anchor" onMouseOver={this.showTooltip} onMouseLeave={this.hideTooltip}>
         {tooltip}
         <div className="post-body-anchor-no">
           {">>"+this.props.no}

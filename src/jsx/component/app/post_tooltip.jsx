@@ -44,7 +44,7 @@ export default class PostTooltip extends React.Component {
 
   render() {
     return (
-      <div ref="tooltip" className="post-tooltip" style={this.state.style} onMouseLeave={this.props.hideTooltip}>
+      <div ref="tooltip" className="post-tooltip" style={this.state.style}>
           {this.props.component}
       </div>
     )

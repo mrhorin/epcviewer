@@ -21,7 +21,7 @@ export default class Post extends React.Component {
     // 改行タグを置換
     let body = this.props.post.body.replace(/<br>/gi, "\n")
     // 文字実体参照と置換
-    body = _.unescape( body)
+    body = _.unescape(body)
     // 数値文字参照を置換
     body = this.decodeNumRefToString(body)
     // URLをPostLinkに置換
