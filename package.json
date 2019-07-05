@@ -1,6 +1,6 @@
 {
   "name": "epcviewer",
-  "version": "1.6.7",
+  "version": "0.3.0",
   "main": "./dist/js/main.js",
   "scripts": {
     "build": "gulp clean && gulp jade && webpack --mode=production",
