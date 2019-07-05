@@ -178,8 +178,6 @@ app.on('ready', () => {
     height: appBounds.height,
     x: appBounds.x,
     y: appBounds.y,
-    minWidth: 100,
-    minHeight: 151,
     webPreferences: {
       nodeIntegration: true,
     }
