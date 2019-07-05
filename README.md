@@ -2,18 +2,20 @@
 [![Build Status](https://travis-ci.org/mrhorin/2ch-parser.svg?branch=master)](https://travis-ci.org/mrhorin/epcviewer)
 [![GitHub license](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://raw.githubusercontent.com/mrhorin/epcviewer/master/LICENSE)
 
-![show](https://user-images.githubusercontent.com/6502717/26838433-08802a08-4b1b-11e7-8f81-9aafc7dddb62.png)  
-peercast実況用のBBSブラウザ
+electron製peercast実況用のBBSブラウザ
+<img src="https://user-images.githubusercontent.com/6502717/60570760-2f4d2a00-9dad-11e9-8327-a89ee81f7379.png" width="600px" height="atuo" />
+
+OBSからブラウザソースで字幕も取り込める
+<img src="https://user-images.githubusercontent.com/6502717/60570758-2eb49380-9dad-11e9-944b-4b1558799f2c.png" width="700px" height="atuo" />
 
 ## ダウンロード
-[epcviewer v0.2.1 for macOS](https://github.com/mrhorin/epcviewer/releases/download/v0.2.1/epcviewer_v0.2.1_macos.zip)  
-[epcviewer v0.2.1 for Linux](https://github.com/mrhorin/epcviewer/releases/download/v0.2.1/epcviewer_v0.2.1_linux.zip)
+[epcviewer v0.3.0 beta版](https://github.com/mrhorin/epcviewer/releases/tag/v0.3.0beta)
 
 ## 特徴
-- シンプルUI
 - クロスプラットフォーム
+- ダーク/ライトテーマの切り替え機能
 - タブ表示機能
-- タッチバー対応(macOS)
+- OBS等のブラウザソースから字幕を表示できる
 
 ## 使い方
 [epcyp](https://github.com/mrhorin/epcyp)などのYPブラウザにBBSブラウザとして登録して使用
