@@ -16,8 +16,8 @@ export default class Preferences extends React.Component {
   }
 
   // ウィンドウを閉じる
-  close = () => {
-    ipcRenderer.send('close-preferences-window', this.state)
+  close = (preferences = {}) => {
+    ipcRenderer.send('close-preferences-window', preferences)
   }
 
   onChange = (key, value) => {
@@ -31,7 +31,7 @@ export default class Preferences extends React.Component {
   _onClickOk = (event) => {
     this.state.currentTabIndex = 0
     this.store.setPreferences(this.state)
-    this.close()
+    this.close(this.state)
   }
 
   _onClickCancel = (event) => {

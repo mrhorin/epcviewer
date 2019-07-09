@@ -354,11 +354,14 @@ ipcMain.on('open-preferences-window', (event) => {
 
 // ------- 環境設定ウィンドウを閉じる -------
 ipcMain.on('close-preferences-window', (event, preferences) => {
+  if (Object.keys(preferences).length > 0) {
+    jimaku.emitUpdatePreferences(preferences)
+    window.app.webContents.send('update-preferences', preferences)
+    systemPreferences.setAppLevelAppearance(preferences.theme)
+  }
   window.preferences.close()
   window.preferences = null
-  systemPreferences.setAppLevelAppearance(preferences.theme)
   window.app.setIgnoreMouseEvents(false)
-  window.app.webContents.send('close-preferences-window-reply', preferences)
 })
 
 /*-----------------------------------------

@@ -114,7 +114,7 @@ export default class App extends React.Component {
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()
     })
-    ipcRenderer.on('close-preferences-window-reply', (event, preferences) => {
+    ipcRenderer.on('update-preferences', (event, preferences) => {
       this.preferences = preferences
       this.setState({ theme: preferences.theme })
     })

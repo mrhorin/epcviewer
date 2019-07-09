@@ -22,12 +22,16 @@ export default class JimakuServer{
       res.sendFile(path.resolve(this.store.preferences.jimakuSeFilePath))
     })
     this.io.on('connection', (socket) => {
-      socket.emit('update preferences', this.store.preferences)
+      this.emitUpdatePreferences(this.store.preferences)
     })
   }
 
   emitPosts = (posts) => {
     this.io.emit('posts', posts)
+  }
+
+  emitUpdatePreferences = (preferences) => {
+    this.io.emit('update preferences', preferences)
   }
 
   listen = (port) => {
