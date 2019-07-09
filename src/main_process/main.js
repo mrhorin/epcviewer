@@ -226,7 +226,7 @@ ipcMain.on('add-arg-board', (event) => {
     var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res, err) => {
       // 板名
-      board['title'] = global.process.argv[urlIndex+1] ? global.process.argv[urlIndex+1] : url.replace(/^https?:\/\//i, '')
+      board['title'] = global.process.argv[urlIndex + 1] ? global.process.argv[urlIndex + 1] : url.replace(/^https?:\/\//i, '')
       event.sender.send('add-board-reply', board, err)
     })
   } else {
@@ -258,7 +258,7 @@ ipcMain.on('update-thread', (event, thread) => {
         // 新着レスの差分だけを取得
         if (!UrlParser.isShitaraba(newThread.url)) res.body = getPostsDiff(thread.posts, res.body)
         // 字幕サーバに追加
-        if(jimaku.listening) jimaku.pushPosts(res.body)
+        if (jimaku.isListening) jimaku.emitPosts(res.body)
       }
       newThread.posts = res.body
       event.sender.send('update-thread-reply', newThread)
@@ -276,7 +276,7 @@ ipcMain.on('update-thread', (event, thread) => {
       } else {
         newThread.posts = getPostsDiff(thread.posts, res.body)
         // 新着レスがある時は字幕サーバに追加
-        if(newThread.posts.length > 0 && jimaku.listening) jimaku.pushPosts(newThread.posts)
+        if (jimaku.isListening && newThread.posts.length > 0) jimaku.emitPosts(newThread.posts)
       }
       event.sender.send('update-thread-reply', newThread)
     })
@@ -345,7 +345,7 @@ ipcMain.on('post-write', (event, thread, message) => {
 
 // --- 字幕サーバーの起動状態のON/OFF切り替え ---
 ipcMain.on('switch-jimaku-server', (event, isJimakuServer) => {
-  isJimakuServer ? jimaku.start(store.preferences.jimakuPort) : jimaku.stop()
+  isJimakuServer ? jimaku.listen(store.preferences.jimakuPort) : jimaku.close()
 })
 
 ipcMain.on('open-preferences-window', (event) => {

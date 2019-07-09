@@ -1,4 +1,5 @@
 import request from 'superagent'
+import io from 'socket.io-client'
 
 /*----------------------------------------------
   ブラウザ側からJimakuServerへレスを要求して表示する
@@ -7,55 +8,50 @@ import request from 'superagent'
 export default class JimakuBrowser{
 
   constructor(elementID) {
-    this.port = location.port
-    this.posts = []
+    this._posts = []
     this.preferences = {}
+    this.port = location.port
     this.element = document.getElementById(elementID)
     this.seElement = document.getElementById('se')
     this.style = { 'font-size': '16px' }
     this.speech = new SpeechSynthesisUtterance()
     this.speech.lang = 'ja-JP'
-    Promise.all([
-      this.initializeJimakuServerPromise,
-      this.fetchPreferencesPromise
-    ]).finally(() => {
-      this.startPullPosts()
-      this.startShowJimaku()
+    this.socket = io.connect(`http://localhost:${this.port}`)
+    this.socket.on('update preferences', (preferences) => {
+      this.preferences = preferences
     })
+    this.socket.on('posts', (posts) => {
+      this.pushPosts(posts)
+    })
+    this.startShowJimaku()
   }
 
-  startShowJimaku = (interval = 300) => {
+  startShowJimaku = (interval = 100) => {
     this.showJimakuTimerID = setTimeout(() => {
       this.startShowJimaku(this.interval)
       if (!this.isSaying && this.hasPosts) {
-        if(this.preferences.isJimakuSe) this.playSe()
+        if (this.preferences.isJimakuSe) this.playSe()
         this.showJimaku()
-        this.dequeuePost()
+        this.dequeueCurrentPost()
       } else if (!this.isSaying) {
         this.hideJimaku()
       }
     }, interval)
   }
 
-  startPullPosts = (interval = 3000) => {
-    this.pullPostsTimerID = setTimeout(() => {
-      this.pullPostsPromise.finally(() => {
-        this.startPullPosts()
-      })
-    }, interval)
-  }
-
   showJimaku = () => {
-    if (this.posts.length > 0) {
-      this.element.style.fontSize = this.preferences.jimakuFontSize + 'px'
-      this.element.style.color = this.preferences.jimakuFontColor
-      this.element.style.webkitTextStroke = `${this.preferences.jimakuFontOutlineSize}px ${this.preferences.jimakuFontOutlineColor}`
-      this.element.innerHTML = this.post
-    }
+    this.element.style.fontSize = this.preferences.jimakuFontSize + 'px'
+    this.element.style.color = this.preferences.jimakuFontColor
+    this.element.style.webkitTextStroke = `${this.preferences.jimakuFontOutlineSize}px ${this.preferences.jimakuFontOutlineColor}`
+    this.element.innerHTML = this.currentPost
   }
 
   hideJimaku = () => {
     this.element.innerHTML = ""
+  }
+
+  dequeueCurrentPost = () => {
+    this._posts.shift()
   }
 
   say = () => {
@@ -70,23 +66,31 @@ export default class JimakuBrowser{
     }
   }
 
-  dequeuePost = () => {
-    this.posts.shift()
+  pushPosts = (posts) => {
+    this.posts = this.posts.concat(posts)
   }
 
-  // 先頭の投稿を取得
-  get post() {
+  get posts() {
+    return this._posts
+  }
+
+  set posts(posts) {
+    this._posts = posts
+  }
+
+  get currentPost() {
     let ptn = new RegExp(/(?!<br>)<("[^"]*"|'[^']*'|[^'">])*>/, "gi")
     return String(this.posts[0].body.replace(ptn, ""))
   }
 
   get interval() {
-    if (this.posts.length <= 0) return 300
-    else if (this.posts.length == 1) return 9000
-    else if (2 <= this.posts.length <= 3) return 7000
-    else if (4 <= this.posts.length <= 5) return 5000
-    else if (6 <= this.posts.length <= 10) return 3500
-    else if (11 <= this.posts.length <= 15) return 2000
+    let length = this.posts.length
+    if (length <= 0) return 100
+    else if (length == 1) return 9000
+    else if (2 <= length && length <= 3) return 7000
+    else if (4 <= length && length <= 5) return 5000
+    else if (6 <= length && length <= 10) return 3500
+    else if (11 <= length && length <= 15) return 2000
     else return 1000
   }
 
@@ -94,55 +98,9 @@ export default class JimakuBrowser{
     return speechSynthesis.speaking
   }
 
+  // 未読のレスがあるか
   get hasPosts() {
     return (this.posts.length > 0)
-  }
-
-  // JimakuServerを初期化
-  get initializeJimakuServerPromise() {
-    return new Promise((resolve, reject) => {
-      request
-        .get(`http://localhost:${this.port}/initialize_posts`)
-        .end((err, res) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(res)
-        }
-      })
-    })
-  }
-
-  // 字幕サーバーから環境設定を取得
-  get fetchPreferencesPromise() {
-    return new Promise((resolve, reject) => {
-      request
-      .get(`http://localhost:${this.port}/preferences.json`)
-      .end((err, res) => {
-        if (err) {
-          reject(err)
-        } else {
-          this.preferences = res.body
-          resolve(res)
-        }
-      })
-    })
-  }
-
-  // 字幕サーバーから新着レスを取得
-  get pullPostsPromise() {
-    return new Promise((resolve, reject) => {
-      request
-        .get(`http://localhost:${this.port}/posts.json`)
-        .end((err, res) => {
-          if (err) {
-            reject(err)
-          } else {
-            this.posts = this.posts.concat(res.body)
-            resolve(res)
-          }
-        })
-    })
   }
 
 }

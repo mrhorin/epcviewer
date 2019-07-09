@@ -17,13 +17,17 @@
     "electron-store": "^3.3.0",
     "emoji-regex": "^8.0.0",
     "encoding-japanese": "^1.0.25",
+    "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "photonkit": "^0.1.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "superagent": "^5.0.6"
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "superagent": "^5.0.6",
+    "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

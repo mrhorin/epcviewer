@@ -1,79 +1,45 @@
+import express from 'express'
+import path from 'path'
 import Store from 'js/store'
 
 const http = require('http')
-const html = require('fs').readFileSync(__dirname + '/../html/jimaku.html')
-const js = require('fs').readFileSync(__dirname + '/jimaku_browser.js')
+const socketIO = require('socket.io')
 
-/*---------------------------------------
-  字幕表示用のレスをJSONで返すサーバ
-----------------------------------------*/
 export default class JimakuServer{
 
   constructor() {
-    this.posts = []
     this.store = new Store()
-    this.server = http.createServer((req, res) => {
-      const routes = (url) => {
-        let paths = {
-          '/': () => {
-            res.writeHead(200, { 'Content-Type': 'text/html' })
-            res.end(html)
-          },
-          '/jimaku_browser.js': () => {
-            res.writeHead(200, { 'Content-Type': 'application/javascript' })
-            res.end(js)
-          },
-          '/posts.json': () => {
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(this.pullPostsJson())
-          },
-          '/preferences.json': () => {
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify(this.store.preferences))
-          },
-          '/se.mp3': () => {
-            const se = require('fs').readFileSync(this.store.preferences.jimakuSeFilePath)
-            res.writeHead(200, { 'Content-Type': 'audio/mpeg' })
-            res.end(se)
-          },
-          '/initialize_posts': () => {
-            this.initializePosts()
-            let success = (this.posts.length < 1)
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(`{ "initializePosts": ${success} }`)
-          }
-        }
-        if(paths[url]) paths[url]()
-      }
-      routes(req.url)
+    this.app = express()
+    this.server = http.Server(this.app)
+    this.io = socketIO(this.server)
+    this.app.get('/', (req, res) => {
+      res.sendFile(path.resolve(__dirname + '/../html/jimaku.html'))
+    })
+    this.app.get('/jimaku_browser.js', (req, res) => {
+      res.sendFile(path.resolve(__dirname + '/jimaku_browser.js'))
+    })
+    this.app.get('/se.mp3', (req, res) => {
+      res.sendFile(path.resolve(this.store.preferences.jimakuSeFilePath))
+    })
+    this.io.on('connection', (socket) => {
+      socket.emit('update preferences', this.store.preferences)
     })
   }
 
-  get listening() {
+  emitPosts = (posts) => {
+    this.io.emit('posts', posts)
+  }
+
+  listen = (port) => {
+    this.server.listen(port)
+  }
+
+  close = () => {
+    this.server.close()
+  }
+
+  get isListening() {
     return this.server.listening
-  }
-
-  start = (port) => {
-    if(!this.listening) this.server.listen(port)
-  }
-
-  stop = () => {
-    if(this.listening) this.server.close()
-  }
-
-  pushPosts = (posts) => {
-    if (this.posts.length > 1000) this.posts.shift()
-    this.posts = this.posts.concat(posts)
-  }
-
-  pullPostsJson = () => {
-    let json = JSON.stringify(this.posts)
-    this.initializePosts()
-    return json
-  }
-
-  initializePosts = () => {
-    this.posts = []
   }
 
 }

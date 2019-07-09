@@ -1,5 +1,6 @@
 var path = require('path');
 var WebpackNotifierPlugin = require('webpack-notifier');
+const nodeExternals = require('webpack-node-externals');
 
 const electron = {
   mode: "production",
@@ -34,6 +35,7 @@ const electron = {
     '2ch-parser',
     'superagent',
     'encoding-japanese',
+    nodeExternals()
   ],
   plugins: [
     new WebpackNotifierPlugin()
