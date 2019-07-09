@@ -431,7 +431,8 @@ export default class App extends React.Component {
   // 書き込みの投稿
   postWriteForm = () => {
     let message = this.writeFormTextarea.value
-    let hasMesssage = (message.replace(/\s/g,'').length >0)
+    // スペースを除いた書き込み文字数が1以上あるか
+    let hasMesssage = (message.replace(/\s/g, '').length > 0)
     if ((this.currentThread.posts.length > 0 && hasMesssage) && this.isWait) {
       // 書き込み処理
       this.setUpdateStatus('POSTING')
@@ -482,16 +483,17 @@ export default class App extends React.Component {
       // Shift押下状態を保持
       this.isPressShift = true
     } else if (event.nativeEvent.key == 'Enter' && this.isPressShift) {
-      this.isPressShift = false
-      // Shift+Enterで投稿
+      // Shift+Enter押下時
       this.postWriteForm()
+      // 入力されたキー入力の無効化
+      event.preventDefault()
     }
   }
 
   // 書き込み欄でkeyUpハンドラ
   _releaseWriteFormHandler = (event) => {
     // Shift押下状態を解放
-    this.isPressShift = false
+    if (event.nativeEvent.key == 'Shift') this.isPressShift = false
   }
 
   componentWillMount() {
