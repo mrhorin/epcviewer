@@ -109,7 +109,6 @@ export default class App extends React.Component {
         this.outputLog(`${messages[key]}`)
       } else {
         this.writeFormTextarea.value = ""
-        this.updateCurrentThread()
       }
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()

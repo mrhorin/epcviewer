@@ -10,12 +10,13 @@ export default class Footer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { autoUpdateCount: 10 }
+    this.UPDATE_INTERVAL = 7
+    this.state = { autoUpdateCount: this.UPDATE_INTERVAL }
   }
 
   bindEvent = () => {
     ipcRenderer.on('update-thread-reply', () => {
-      this.setState({ autoUpdateCount: 10 })
+      this.setState({ autoUpdateCount: this.UPDATE_INTERVAL })
     })
   }
 
@@ -60,12 +61,12 @@ export default class Footer extends React.Component {
     if (this.isWait && this.props.isAutoUpdate && this.state.autoUpdateCount <= 0) {
       // 更新処理
       this.props.updateCurrentThread()
-      state['autoUpdateCount'] = 10
+      state['autoUpdateCount'] = this.UPDATE_INTERVAL
     } else if (this.isWait && this.props.isAutoUpdate) {
       // 1秒カウントダウン
       state['autoUpdateCount'] = this.state.autoUpdateCount - 1
     } else {
-      state['autoUpdateCount'] = 10
+      state['autoUpdateCount'] = this.UPDATE_INTERVAL
     }
     this.setState(state)
   }
