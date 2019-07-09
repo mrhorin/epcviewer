@@ -66,7 +66,7 @@ export default class Footer extends React.Component {
       // 更新処理
       this.props.updateCurrentThread()
       state['autoUpdateCount'] = this.UPDATE_INTERVAL
-    } else if (this.isWait && this.props.isAutoUpdate) {
+    } else if ((this.isWait && this.props.isAutoUpdate) || (this.isPosting && this.props.isAutoUpdate)) {
       // 1秒カウントダウン
       state['autoUpdateCount'] = this.state.autoUpdateCount - 1
     } else if(!this.isPosting){
