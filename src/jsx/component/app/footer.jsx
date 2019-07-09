@@ -52,7 +52,11 @@ export default class Footer extends React.Component {
 
   // 更新状態がWAITか
   get isWait() {
-    return this.props.updateStatus=='WAIT'
+    return this.props.updateStatus == 'WAIT'
+  }
+
+  get isPosting() {
+    return this.props.updateStatus == 'POSTING'
   }
 
   // スレッドを更新
@@ -65,7 +69,7 @@ export default class Footer extends React.Component {
     } else if (this.isWait && this.props.isAutoUpdate) {
       // 1秒カウントダウン
       state['autoUpdateCount'] = this.state.autoUpdateCount - 1
-    } else {
+    } else if(!this.isPosting){
       state['autoUpdateCount'] = this.UPDATE_INTERVAL
     }
     this.setState(state)
