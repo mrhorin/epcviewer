@@ -78,6 +78,7 @@ export default class Store{
     state.currentBoardIndex = 0
     state.updateStatus = 'WAIT'
     state.log = ''
+    state.isJimakuServer = false
     this.store.set('appState', state)
   }
 
