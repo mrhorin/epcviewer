@@ -437,6 +437,7 @@ export default class App extends React.Component {
       // 書き込み処理
       this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
+      this.isPressShift = false
       ipcRenderer.send('post-write', this.currentThread, message)
     }
   }
