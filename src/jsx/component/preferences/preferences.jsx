@@ -71,8 +71,8 @@ export default class Preferences extends React.Component {
         {components[this.state.currentTabIndex].component}
         {/* ボタン */}
         <div id="preferences-btns">
-          <button className="btn btn-primary btn-mini" onClick={this._onClickOk}>OK</button>
           <button className="btn btn-default btn-mini" onClick={this._onClickCancel}>キャンセル</button>
+          <button className="btn btn-primary btn-mini" onClick={this._onClickOk}>保存</button>
         </div>
       </div>
     )

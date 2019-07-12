@@ -672,6 +672,19 @@ $darktheme-btn-primary-color: #3c83ec;
     background-color: #dadada;
     background-image: linear-gradient(to top, #dadada 0%, #bdbdbd 100%);
   }
+  .btn-primary{
+    background-color: $darktheme-btn-primary-color;
+    border-color: lighten($darktheme-btn-primary-color, 10%);
+    border-bottom-color: lighten($darktheme-btn-primary-color, 3%);
+    background-image: linear-gradient(to bottom, darken($darktheme-btn-primary-color, 5%) 0%, darken($darktheme-btn-primary-color, 10%) 100%);
+  }
+  .btn-primary:hover{
+    background-color: darken($darktheme-btn-primary-color, 10%);
+    background-image: linear-gradient(to bottom, darken($darktheme-btn-primary-color, 15%) 0%, darken($darktheme-btn-primary-color, 20%) 100%);
+  }
+  .btn-primary:active{
+    background-color: darken($darktheme-btn-primary-color, 25%);
+  }
   .btn-group{
     button.btn:first-child{
     }
