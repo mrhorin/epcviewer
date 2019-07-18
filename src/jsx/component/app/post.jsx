@@ -36,9 +36,8 @@ export default class Post extends React.Component {
     body = this.replaceStringWithComponent(body, anchorPtn, (match, index) => {
       // アンカー先のレスを取得
       let no = this.escapeHtmlTag(match)
-      let anchoredPost = this.props.getPost(no)
       return (
-        <PostAnchor key={index + '-' + this.randomKey} no={no} anchoredPost={anchoredPost}
+        <PostAnchor key={index + '-' + this.randomKey} no={no}
                     getPost={this.props.getPost} idCounter={this.props.idCounter} />
       )
     })
@@ -120,7 +119,7 @@ export default class Post extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !Immutable.is(this.props.idCounter, nextProps.idCounter)
+    return !Immutable.is(this.props.idCounter.get(this.props.post.id), nextProps.idCounter.get(this.props.post.id))
   }
 
   render() {

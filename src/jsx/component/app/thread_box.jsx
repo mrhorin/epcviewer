@@ -5,7 +5,7 @@ import Tab from 'jsx/component/common/tab'
 import Post from 'jsx/component/app/post'
 
 import _ from 'lodash'
-import { List } from 'immutable'
+import { Map } from 'immutable'
 
 /* スレッド一覧 */
 export default class ThreadBox extends React.Component {
@@ -113,8 +113,7 @@ export default class ThreadBox extends React.Component {
     let posts = []
     if (this.props.hasBoard && this.hasPost) {
       posts = this.currentPosts.map((post, index) => {
-        let idCounter = post.id ? List(this.currentThread.idCounter[post.id]) : List([])
-        return <Post key={index + 1} no={index + 1} post={post} getPost={this.getPost} idCounter={idCounter} />
+        return <Post key={index + 1} no={index + 1} post={post} getPost={this.getPost} idCounter={this.currentThread.idCounter} />
       })
     }
     let tabs = []

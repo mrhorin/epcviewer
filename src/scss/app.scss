@@ -372,9 +372,6 @@ header{
               left: 0px;
             }
           }
-          .post-id-extract.post-id-extract-hisshi{
-            color: #fd3f3f;
-          }
           .post-id-extract::before{
             content: "ID";
           }
@@ -432,6 +429,9 @@ header{
       padding-bottom: 10px;
     }
   }
+}
+.post-id-extract-hisshi{
+  color: #fd3f3f !important;
 }
 
 /* -------- 書き込み欄 -------- */

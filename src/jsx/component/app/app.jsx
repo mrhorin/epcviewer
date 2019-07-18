@@ -30,7 +30,6 @@ state
 ********************************************************/
 import React from 'react'
 import { ipcRenderer, shell } from 'electron'
-import _ from 'lodash'
 
 import Header from 'jsx/component/app/header'
 import BoardBox from 'jsx/component/app/board_box'
@@ -38,6 +37,9 @@ import ThreadBox from 'jsx/component/app/thread_box'
 import Footer from 'jsx/component/app/footer'
 
 import Store from 'js/store'
+
+import _ from 'lodash'
+import { Map, List } from 'immutable'
 
 /* アプリケーションのメインウィンドウ */
 export default class App extends React.Component {
@@ -289,7 +291,7 @@ export default class App extends React.Component {
         idCounter[post.id] = [index+1]
       }
     })
-    return idCounter
+    return Map(idCounter).map(idList => List(idList))
   }
 
   // 更新状態がWAITか

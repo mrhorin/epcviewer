@@ -10,7 +10,7 @@ export default class PostId extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      idCounter: Immutable.List(this.props.idCounter),
+      idCounter: this.props.idCounter,
       showTooltip: false,
       tooltipComponent: null
     }
@@ -21,19 +21,19 @@ export default class PostId extends React.Component {
   }
 
   get count() {
-    return Number(this.state.idCounter.indexOf(this.props.no)) + 1
+    return Number(this.state.idCounter.get(this.props.id).indexOf(this.props.no)) + 1
   }
 
   get total() {
-    return this.state.idCounter.size
+    return this.state.idCounter.get(this.props.id).size
   }
 
   showTooltip = () => {
     if (!this.state.showTooltip) {
-      let posts = this.state.idCounter.map((no, index) => {
+      let posts = this.state.idCounter.get(this.props.id).map((no, index) => {
         let post = this.props.getPost(no)
         return (
-          <Post key={index} no={no} post={post} getPost={this.props.getPost} idCounter={this.state.idCounter.toJS()} />
+          <Post key={index} no={no} post={post} getPost={this.props.getPost} idCounter={this.state.idCounter} />
         )
       })
       this.setState({
@@ -51,18 +51,18 @@ export default class PostId extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     let showTooltipDiff = this.state.showTooltip !== nextState.showTooltip
-    let idCounterDiff = !(Immutable.is(this.state.idCounter, Immutable.List(nextProps.idCounter)))
+    let idCounterDiff = !(Immutable.is(this.state.idCounter.get(this.props.id), nextProps.idCounter.get(nextProps.id)))
     return showTooltipDiff || idCounterDiff
   }
 
   componentDidUpdate() {
-    if (!(Immutable.is(this.state.idCounter, Immutable.List(this.props.idCounter)))) {
-      this.setState({ idCounter: Immutable.List(this.props.idCounter) })
+    if (!(Immutable.is(this.state.idCounter.get(this.props.id), this.props.idCounter.get(this.props.id)))) {
+      this.setState({ idCounter: this.props.idCounter })
     }
   }
 
   render() {
-    let extractClass = (this.total<5) ? 'post-id-extract' : 'post-id-extract post-id-extract-hisshi'
+    let extractClass = (this.total < 5) ? 'post-id-extract' : 'post-id-extract post-id-extract-hisshi'
     let tooltip = ""
     if (this.state.showTooltip) {
       tooltip = <PostTooltip component={this.state.tooltipComponent} hideTooltip={this.hideTooltip} />
