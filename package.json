@@ -3,13 +3,13 @@
   "version": "0.3.1",
   "main": "./dist/js/main.js",
   "scripts": {
-    "build": "gulp clean && gulp pug && webpack --mode=production",
-    "clean": "gulp clean",
-    "watch": "webpack -w --mode=development",
-    "start": "electron ./dist/js/main.js",
+    "build": "yarn run gulp clean && yarn run gulp pug && yarn run webpack --mode=production",
+    "clean": "yarn run gulp clean",
+    "watch": "yarn run webpack -w --mode=development",
+    "start": "yarn run electron ./dist/js/main.js",
     "list": "npm list --depth=0",
-    "release:darwin": "npm run build && gulp package:darwin",
-    "release:linux": "npm run build && gulp package:linux"
+    "release:darwin": "yarn run build && gulp package:darwin",
+    "release:linux": "yarn run build && gulp package:linux"
   },
   "license": "MIT",
   "dependencies": {
@@ -45,7 +45,7 @@
     "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.1",
     "gulp-pug": "^4.0.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
