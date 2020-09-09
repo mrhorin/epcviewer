@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var plumber = require('gulp-plumber');
 var pug = require("gulp-pug");
 var del = require('del');
-var packager = require('electron-packager');
+// var packager = require('electron-packager');
 var package = require("./package.json");
 
 gulp.task('watch', function(){

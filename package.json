@@ -8,8 +8,28 @@
     "watch": "yarn run webpack -w --mode=development",
     "start": "yarn run electron ./dist/js/main.js",
     "list": "npm list --depth=0",
-    "release:darwin": "yarn run build && gulp package:darwin",
+    "release:darwin": "yarn run build && yarn run electron-builder --mac",
     "release:linux": "yarn run build && gulp package:linux"
+  },
+  "build": {
+    "appId": "com.electron.${name}",
+    "artifactName": "${name}_${version}_${os}_${arch}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "asar": false,
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "./src/img/darwin/icon_1024x1024.png.icns",
+      "darkModeSupport": true
+    }
   },
   "license": "MIT",
   "dependencies": {
@@ -40,7 +60,7 @@
     "css-loader": "^2.1.1",
     "del": "^4.1.1",
     "electron": "^10.1.1",
-    "electron-packager": "^13.1.1",
+    "electron-builder": "^22.8.0",
     "electron-react-devtools": "^0.5.3",
     "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.1",
