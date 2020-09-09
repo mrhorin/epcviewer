@@ -96,9 +96,11 @@ export default class App extends React.Component {
       }
       this.setUpdateStatus('WAIT')
     })
-    ipcRenderer.on('post-write-reply', (event, res, err) => {
+    ipcRenderer.on('post-write-reply', (event, res) => {
       this.setUpdateStatus('WAIT')
-      if (err) {
+      if (res.statusCode == 200) {
+        this.writeFormTextarea.value = ""
+      } else {
         // レスポンスヘッダのcontent-lengthからエラー内容を判別
         let messages = {
           '605': 'ホスト規制中',
@@ -106,11 +108,9 @@ export default class App extends React.Component {
           '634': '多重書き込みです',
           'etc': '書き込み失敗'
         }
-        let length = res ? String(err.response.headers['content-length']) : '0'
+        let length = res.headers['content-length'] ? String(res.headers['content-length']) : '0'
         let key = (Object.keys(messages).indexOf(length) >= 0) ? (length) : ('etc')
         this.outputLog(`${messages[key]}`)
-      } else {
-        this.writeFormTextarea.value = ""
       }
       this.writeFormTextarea.disabled = false
       this.writeFormTextarea.focus()

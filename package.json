@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "2ch-parser": "^0.6.0",
-    "electron-store": "^3.3.0",
+    "electron-store": "^6.0.0",
     "emoji-regex": "^8.0.0",
     "encoding-japanese": "^1.0.25",
     "express": "^4.17.1",
@@ -39,7 +39,7 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "css-loader": "^2.1.1",
     "del": "^4.1.1",
-    "electron": "^5.0.3",
+    "electron": "^10.1.1",
     "electron-packager": "^13.1.1",
     "electron-react-devtools": "^0.5.3",
     "gulp": "^4.0.2",

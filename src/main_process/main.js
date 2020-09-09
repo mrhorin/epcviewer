@@ -180,6 +180,7 @@ app.on('ready', () => {
     y: appBounds.y,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     }
   })
   window.app.loadURL(`file://${__dirname}/../html/app.html`)
@@ -293,6 +294,7 @@ ipcMain.on('update-board', (event, board) => {
 
 // ------- threadにmessageをPOSTする -------
 ipcMain.on('post-write', (event, thread, message) => {
+  let resReply
   if (UrlParser.isShitaraba(thread.url)) {
     // したらばの時
     const threadUrl = thread.url+"/"
@@ -313,8 +315,19 @@ ipcMain.on('post-write', (event, thread, message) => {
       .send(body)
       .set('Referer', threadUrl)
       .end((err, res) => {
-        if (err) console.log(err)
-        event.sender.send('post-write-reply', res, err)
+        if (err) {
+          console.log(err)
+          resReply = {
+            statusCode: err.response.statusCode,
+            headers: err.response.headers
+          }
+        } else {
+          resReply = {
+            statusCode: res.statusCode,
+            headers: res.headers
+          }
+        }
+        event.sender.send('post-write-reply', resReply)
       })
   } else {
     // 一般的な2ch互換掲示板の時
@@ -337,8 +350,19 @@ ipcMain.on('post-write', (event, thread, message) => {
       .set('Referer', threadUrl)
       .set('User-Agent', 'Monazilla/5.0')
       .end((err, res) => {
-        if (err) console.log(err)
-        event.sender.send('post-write-reply', res, err)
+        if (err) {
+          console.log(err)
+          resReply = {
+            statusCode: err.response.statusCode,
+            headers: err.response.headers
+          }
+        } else {
+          resReply = {
+            statusCode: res.statusCode,
+            headers: res.headers
+          }
+        }
+        event.sender.send('post-write-reply', resReply)
       })
   }
 })
@@ -379,6 +403,7 @@ function openPreferencesWindow() {
     center: true,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     }
   })
   window.preferences.loadURL(`file://${__dirname}/../html/preferences.html`)
