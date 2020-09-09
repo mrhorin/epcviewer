@@ -482,21 +482,9 @@ export default class App extends React.Component {
 
   // 書き込み欄でkeyDownハンドラ
   _pressWriteFormHandler = (event) => {
-    if (event.nativeEvent.key == 'Shift') {
-      // Shift押下状態を保持
-      this.isPressShift = true
-    } else if (event.nativeEvent.key == 'Enter' && this.isPressShift) {
-      // Shift+Enter押下時
+    if (event.shiftKey && event.nativeEvent.key == 'Enter' && event.nativeEvent.type == 'keydown') {
       this.postWriteForm()
-      // 入力されたキー入力の無効化
-      event.preventDefault()
     }
-  }
-
-  // 書き込み欄でkeyUpハンドラ
-  _releaseWriteFormHandler = (event) => {
-    // Shift押下状態を解放
-    if (event.nativeEvent.key == 'Shift') this.isPressShift = false
   }
 
   componentWillMount() {
@@ -556,8 +544,7 @@ export default class App extends React.Component {
         <div id="write-form" className="form-group">
           <textarea id="write-form-textarea" className="form-control"
             rows="3" style={writeFormTextareaStyle}
-            onKeyDown={this._pressWriteFormHandler}
-            onKeyUp={this._releaseWriteFormHandler} />
+            onKeyDown={this._pressWriteFormHandler} />
         </div>
         <Footer
           updateStatus={this.state.updateStatus}
