@@ -475,7 +475,12 @@ function escape2ch(hash) {
 function encode2ch(text) {
   // 絵文字を数値参照に置換
   text = text.replace(emojiRegex(), (emoji) => {
-    return `&#${emoji.codePointAt()};`
+    if (emoji.match(/\d{1,1}/)) {
+      // emojiRegexで半角数値もマッチしてしまう対策
+      return emoji
+    } else {
+      return `&#${emoji.codePointAt()};`
+    }
   })
   const eucjp = Encoding.convert(text, 'SJIS')
   return Encoding.urlEncode(eucjp).replace(/%8F(%A1%C1)/gi, (match, $1) => {

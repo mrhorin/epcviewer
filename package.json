@@ -35,7 +35,7 @@
   "dependencies": {
     "2ch-parser": "^0.6.0",
     "electron-store": "^6.0.0",
-    "emoji-regex": "^8.0.0",
+    "emoji-regex": "^9.0.0",
     "encoding-japanese": "^1.0.25",
     "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",

@@ -49,7 +49,6 @@ export default class App extends React.Component {
     this.store = new Store()
     this.state = this.store.defaultAppState
     this.preferences = this.store.preferences
-    this.isPressShift = false
     this.bindEvents()
   }
 
@@ -439,7 +438,6 @@ export default class App extends React.Component {
       // 書き込み処理
       this.setUpdateStatus('POSTING')
       this.writeFormTextarea.disabled = true
-      this.isPressShift = false
       ipcRenderer.send('post-write', this.currentThread, message)
     }
   }
