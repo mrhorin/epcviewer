@@ -571,7 +571,8 @@ footer{
 }
 
 /* dark theme */
-$darktheme-base-color: #444444;
+$darktheme-base-color: rgb(68, 68, 68);
+$darktheme-base-color-bottom: rgb(55, 55, 55);
 $darktheme-tooltip-bg-color: rgba(0, 0, 0, 0.7);
 $darktheme-btn-default-color: darken($darktheme-base-color, 3%);
 $darktheme-font-color: #ffffff;
@@ -633,7 +634,7 @@ $darktheme-btn-primary-color: #3c83ec;
   }
   .toolbar{
     background-color: $darktheme-base-color;
-    background-image: linear-gradient(to bottom, $darktheme-base-color 0%, $darktheme-base-color*0.82 100%);
+    background-image: linear-gradient(to bottom, $darktheme-base-color 0%, $darktheme-base-color-bottom 100%);
     box-shadow: none;
     color: #ffffff;
   }
@@ -704,7 +705,7 @@ $darktheme-btn-primary-color: #3c83ec;
     }
     .tab-item.tab-item-active{
       background-color: $darktheme-base-color;
-      background-image: linear-gradient(to bottom, $darktheme-base-color*0.82 0%, $darktheme-base-color*0.82 100%);
+      background-image: linear-gradient(to bottom, $darktheme-base-color-bottom 0%, $darktheme-base-color-bottom 100%);
     }
     .tab-item:hover,
     .tab-item-active:hover{
