@@ -173,9 +173,11 @@ app.on('ready', () => {
 
   // 設定を読み込む
   const appBounds = store.appBounds
+  let baseColor = store.preferences.theme == 'dark' ? '#444444' : '#f5f4f5'
   window.app = new BrowserWindow({
     width: appBounds.width,
     height: appBounds.height,
+    backgroundColor: baseColor,
     x: appBounds.x,
     y: appBounds.y,
     webPreferences: {
