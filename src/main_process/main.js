@@ -294,7 +294,6 @@ ipcMain.on('update-board', (event, board) => {
 
 // ------- threadにmessageをPOSTする -------
 ipcMain.on('post-write', (event, thread, message) => {
-  let resReply
   if (UrlParser.isShitaraba(thread.url)) {
     // したらばの時
     const threadUrl = thread.url+"/"
@@ -308,33 +307,16 @@ ipcMain.on('post-write', (event, thread, message) => {
       MAIL: 'sage',
       MESSAGE: message,
     })
-    request
-      .post(writeUrl)
-      .timeout(10000)
-      .type('form')
-      .send(body)
-      .set('Referer', threadUrl)
-      .end((err, res) => {
-        if (err) {
-          console.log(err)
-          resReply = {
-            statusCode: err.response.statusCode,
-            headers: err.response.headers
-          }
-        } else {
-          resReply = {
-            statusCode: res.statusCode,
-            headers: res.headers
-          }
-        }
-        event.sender.send('post-write-reply', resReply)
-      })
+    postMessage(writeUrl, threadUrl, body, (err, res) => {
+      if (err) console.log(err)
+      event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
+    })
   } else {
     // 一般的な2ch互換掲示板の時
     const threadUrl = thread.url+"/"
     const uri = threadUrl.split('/')
-    const writeUrl = `${uri[0]}//${uri[2]}/test/bbs.cgi`
-    const body = escape2ch({
+    let writeUrl = `${uri[0]}//${uri[2]}/test/bbs.cgi`
+    let body = escape2ch({
       bbs: uri[5],
       key: uri[6],
       time: Number(Date.now()-100).toString(),
@@ -343,27 +325,33 @@ ipcMain.on('post-write', (event, thread, message) => {
       submit: '書き込む',
       MESSAGE: message
     })
-    request
-      .post(writeUrl)
-      .type('form')
-      .send(body)
-      .set('Referer', threadUrl)
-      .set('User-Agent', 'Monazilla/5.0')
-      .end((err, res) => {
-        if (err) {
-          console.log(err)
-          resReply = {
-            statusCode: err.response.statusCode,
-            headers: err.response.headers
-          }
+    postMessage(writeUrl, threadUrl, body, (err, res) => {
+      if (err) {
+        console.log(err)
+        event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
+      } else {
+        // 書き込み確認があった場合の処理
+        if (res.text.search(/<title>.*書き込み確認.*<\/title>/)) {
+          writeUrl = `${uri[0]}//${uri[2]}/${extractValueFromHTML(res.text, "form", "method", "POST", "action")}`
+          body = escape2ch({
+            subject: extractValueFromHTML(res.text, "input", "name", "subject", "value"),
+            FROM: extractValueFromHTML(res.text, "input" ,"name", "FROM", "value"),
+            mail: extractValueFromHTML(res.text, "input", "name", "mail", "value"),
+            MESSAGE: extractValueFromHTML(res.text, "input", "name", "MESSAGE", "value"),
+            bbs: extractValueFromHTML(res.text, "input", "name", "bbs", "value"),
+            time: extractValueFromHTML(res.text, "input", "name", "time", "value"),
+            key: extractValueFromHTML(res.text, "input", "name", "key", "value"),
+            submit: extractValueFromHTML(res.text, "input", "type", "submit", "value")
+          })
+          postMessage(writeUrl, threadUrl, body, (err, res) => {
+            if (err) console.log(err)
+            event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
+          })
         } else {
-          resReply = {
-            statusCode: res.statusCode,
-            headers: res.headers
-          }
+          event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
         }
-        event.sender.send('post-write-reply', resReply)
-      })
+      }
+    })
   }
 })
 
@@ -487,4 +475,51 @@ function encode2ch(text) {
     // macOS環境「〜」入力対策
     return $1
   })
+}
+
+function extractValueFromHTML(html, tagName, attr, attrValue, targetAttr) {
+  let reg = new RegExp(`<${tagName}.*${attr}="${attrValue}".*>`)
+  let tag = html.match(reg)
+  reg = new RegExp(`${targetAttr}="(.*)"`)
+  let value = tag ? tag[0].match(reg)[1] : ""
+  return value
+}
+
+function postMessage(postURL, refererURL, body, callback) {
+  let date = new Date()
+  date.setDate(date.getDate() + 30)
+  request
+    .post(postURL)
+    .type('form')
+    .send(body)
+    .set('Referer', refererURL)
+    .set('User-Agent', 'Mozilla/5.0')
+    .set('Accept-Language', 'ja')
+    .set('Set-Cookie', `NAME=""; MAIL="sage"; expires=${date.toUTCString()}; path=/`)
+    .end((err, res) => {
+      callback(err, res)
+    })
+}
+
+function extractHeadersForPostWriteReply(err, res) {
+  let header
+  if (err) {
+    if (err.response) {
+      header = {
+        statusCode: err.response.statusCode,
+        headers: err.response.headers
+      }
+    } else {
+      header = {
+        statusCode: 'etc',
+        headers: { 'content-length': 0 }
+      }
+    }
+  } else {
+    header = {
+      statusCode: res.statusCode,
+      headers: res.headers
+    }
+  }
+  return header
 }
