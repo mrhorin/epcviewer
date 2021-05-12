@@ -333,7 +333,7 @@ ipcMain.on('post-write', (event, thread, message) => {
         event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
       } else {
         // 書き込み確認があった場合の処理
-        if (res.text.search(/<title>.*書き込み確認.*<\/title>/)) {
+        if (res.text.search(/<title>.*書き込み確認.*<\/title>/) >= 0) {
           writeUrl = `${uri[0]}//${uri[2]}/${extractValueFromHTML(res.text, "form", "method", "POST", "action")}`
           body = escape2ch({
             subject: extractValueFromHTML(res.text, "input", "name", "subject", "value"),
