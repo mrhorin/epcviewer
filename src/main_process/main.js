@@ -16,182 +16,181 @@ let window = { app: null, preferences: null }
 
 systemPreferences.setAppLevelAppearance(store.preferences.theme, "light")
 
-/*-----------------------------------------
-  アプリの多重起動を禁止
-  アプリ起動済みの場合は新しい板として登録する
------------------------------------------*/
+// アプリの多重起動を禁止
 const gotTheLock = app.requestSingleInstanceLock()
-if (!gotTheLock) {
-  console.log('The instance will quit because the first instance exists already.')
-  app.quit()
-} else {
-  app.on('second-instance', (event, commandLine) => {
-    console.log('The second instance was build but exited.')
-    const urlIndex = findUrlIndex(commandLine)
-    const url = commandLine[urlIndex]
-    var board = new Board(UrlParser.getBoardUrl(url))
-    board.fetchThreads(() => {
-      window.app.focus()
-      // 板名がない時はURLを板名に
-      board['title'] = commandLine[urlIndex + 1] ? commandLine[urlIndex + 1] : url.replace(/^https?:\/\//i, '')
-      window.app.webContents.send('add-board-reply', board)
-    })
-  })
-}
 
 /*-----------------------------------------
   アプリケーション起動準備完了時
 -----------------------------------------*/
 app.on('ready', () => {
+  if (!gotTheLock) {
+    console.log('This instance will quit because the first instance exists already.')
+    app.quit()
+  } else {
+    menu.setContextMenu([
+      {
+        label: '編集',
+        submenu: [
+          {
+            label: 'コピー',
+            accelerator: 'CmdOrCtrl+C',
+            role: 'copy'
+          },
+          {
+            label: 'カット',
+            accelerator: 'CmdOrCtrl+X',
+            role: 'cut'
+          },
+          {
+            label: 'ペースト',
+            accelerator: 'CmdOrCtrl+V',
+            role: 'paste'
+          },
+          {
+            label: '全選択',
+            accelerator: 'CmdOrCtrl+A',
+            role: 'selectall'
+          },
+          { type: 'separator' },
+          {
+            label: '戻る',
+            accelerator: 'CmdOrCtrl+Z',
+            role: 'undo'
+          },
+          {
+            label: '進む',
+            accelerator: 'Shift+CmdOrCtrl+Z',
+            role: 'redo'
+          },
+        ]
+      },
+      {
+        label: '移動',
+        submenu: [
+          {
+            label: 'タブ左移動',
+            accelerator: 'CmdOrCtrl+Alt+Left',
+            click: () => {
+              window.app.webContents.send('shortcut-tab-left')
+            }
+          },
+          {
+            label: 'タブ右移動',
+            accelerator: 'CmdOrCtrl+Alt+Right',
+            click: () => {
+              window.app.webContents.send('shortcut-tab-right')
+            }
+          },
+          { type: 'separator' },
+          {
+            label: 'タブを閉じる',
+            accelerator: 'CmdOrCtrl+w',
+            click: () => {
+              window.app.webContents.send('shortcut-tab-close')
+            }
+          }
+        ]
+      },
+      {
+        label: '表示',
+        submenu: [
+          {
+            label: '板一覧',
+            accelerator: 'CmdOrCtrl+b',
+            click: () => {
+              window.app.webContents.send('shortcut-show-boards')
+            }
+          },
+          {
+            label: 'スレッド一覧',
+            accelerator: 'CmdOrCtrl+t',
+            click: () => {
+              window.app.webContents.send('shortcut-show-threads')
+            }
+          },
+          { type: 'separator' },
+          {
+            label: '書き込み欄',
+            accelerator: 'CmdOrCtrl+Shift+w',
+            click: () => {
+              window.app.webContents.send('shortcut-switch-write-form')
+            }
+          },
+        ]
+      },
+      {
+        label: '掲示板',
+        submenu: [
+          { label: '一覧の更新', accelerator: 'CmdOrCtrl+r', click: () => { window.app.webContents.send('shortcut-update-current-list') } },
+          { type: 'separator' },
+          { label: '投稿', accelerator: 'Shift+Enter',click: ()=>{ window.app.webContents.send('shortcut-post-write-form') } }
+        ]
+      },
+      {
+        label: '設定',
+        submenu: [
+          { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
+          { type: 'separator' },
+          { label: '設定を初期化', click: ()=>{ window.app.webContents.send('shortcut-clear-storage') } }
+        ]
+      },
+      {
+        label: 'ヘルプ',
+        submenu: [
+          { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
+          { label: "問題を報告する", click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer/issues") } }
+        ]
+      }
+    ])
+    menu.setMacContextMenu({
+        label: app.getName(),
+        submenu: [
+          { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
+          { type: 'separator' },
+          { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
+          { type: 'separator' },
+          { label: '終了', accelerator: 'CmdOrCtrl+Q', click: ()=>{ app.quit() } }
+        ]
+    })
+    menu.show()
 
-  menu.setContextMenu([
-    {
-      label: '編集',
-      submenu: [
-        {
-          label: 'コピー',
-          accelerator: 'CmdOrCtrl+C',
-          role: 'copy'
-        },
-        {
-          label: 'カット',
-          accelerator: 'CmdOrCtrl+X',
-          role: 'cut'
-        },
-        {
-          label: 'ペースト',
-          accelerator: 'CmdOrCtrl+V',
-          role: 'paste'
-        },
-        {
-          label: '全選択',
-          accelerator: 'CmdOrCtrl+A',
-          role: 'selectall'
-        },
-        { type: 'separator' },
-        {
-          label: '戻る',
-          accelerator: 'CmdOrCtrl+Z',
-          role: 'undo'
-        },
-        {
-          label: '進む',
-          accelerator: 'Shift+CmdOrCtrl+Z',
-          role: 'redo'
-        },
-      ]
-    },
-    {
-      label: '移動',
-      submenu: [
-        {
-          label: 'タブ左移動',
-          accelerator: 'CmdOrCtrl+Alt+Left',
-          click: () => {
-            window.app.webContents.send('shortcut-tab-left')
-          }
-        },
-        {
-          label: 'タブ右移動',
-          accelerator: 'CmdOrCtrl+Alt+Right',
-          click: () => {
-            window.app.webContents.send('shortcut-tab-right')
-          }
-        },
-        { type: 'separator' },
-        {
-          label: 'タブを閉じる',
-          accelerator: 'CmdOrCtrl+w',
-          click: () => {
-            window.app.webContents.send('shortcut-tab-close')
-          }
-        }
-      ]
-    },
-    {
-      label: '表示',
-      submenu: [
-        {
-          label: '板一覧',
-          accelerator: 'CmdOrCtrl+b',
-          click: () => {
-            window.app.webContents.send('shortcut-show-boards')
-          }
-        },
-        {
-          label: 'スレッド一覧',
-          accelerator: 'CmdOrCtrl+t',
-          click: () => {
-            window.app.webContents.send('shortcut-show-threads')
-          }
-        },
-        { type: 'separator' },
-        {
-          label: '書き込み欄',
-          accelerator: 'CmdOrCtrl+Shift+w',
-          click: () => {
-            window.app.webContents.send('shortcut-switch-write-form')
-          }
-        },
-      ]
-    },
-    {
-      label: '掲示板',
-      submenu: [
-        { label: '一覧の更新', accelerator: 'CmdOrCtrl+r', click: () => { window.app.webContents.send('shortcut-update-current-list') } },
-        { type: 'separator' },
-        { label: '投稿', accelerator: 'Shift+Enter',click: ()=>{ window.app.webContents.send('shortcut-post-write-form') } }
-      ]
-    },
-    {
-      label: '設定',
-      submenu: [
-        { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
-        { type: 'separator' },
-        { label: '設定を初期化', click: ()=>{ window.app.webContents.send('shortcut-clear-storage') } }
-      ]
-    },
-    {
-      label: 'ヘルプ',
-      submenu: [
-        { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
-        { label: "問題を報告する", click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer/issues") } }
-      ]
-    }
-  ])
-  menu.setMacContextMenu({
-      label: app.getName(),
-      submenu: [
-        { label: 'epcviewerについて', click: ()=>{ shell.openExternal("https://github.com/mrhorin/epcviewer") } },
-        { type: 'separator' },
-        { label: '環境設定', accelerator: 'CmdOrCtrl+,', click: () => { openPreferencesWindow() } },
-        { type: 'separator' },
-        { label: '終了', accelerator: 'CmdOrCtrl+Q', click: ()=>{ app.quit() } }
-      ]
+    // 設定を読み込む
+    const appBounds = store.appBounds
+    let baseColor = store.preferences.theme == 'dark' ? '#444444' : '#f5f4f5'
+    window.app = new BrowserWindow({
+      width: appBounds.width,
+      height: appBounds.height,
+      backgroundColor: baseColor,
+      x: appBounds.x,
+      y: appBounds.y,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      }
+    })
+    window.app.loadURL(`file://${__dirname}/../html/app.html`)
+
+    // 閉じた時
+    window.app.on('close', ()=>{
+      store.setAppBounds(window.app.getBounds())
+    })
+  }
+})
+
+/*-----------------------------------------
+  アプリ起動済みの場合は新しい板として登録する
+-----------------------------------------*/
+app.on('second-instance', (event, commandLine) => {
+  console.log('The second instance was build but exited.')
+  const urlIndex = findUrlIndex(commandLine)
+  const url = commandLine[urlIndex]
+  var board = new Board(UrlParser.getBoardUrl(url))
+  board.fetchThreads(() => {
+    window.app.focus()
+    // 板名がない時はURLを板名に
+    board['title'] = commandLine[urlIndex + 1] ? commandLine[urlIndex + 1] : url.replace(/^https?:\/\//i, '')
+    window.app.webContents.send('add-board-reply', board)
   })
-  menu.show()
-
-  // 設定を読み込む
-  const appBounds = store.appBounds
-  let baseColor = store.preferences.theme == 'dark' ? '#444444' : '#f5f4f5'
-  window.app = new BrowserWindow({
-    width: appBounds.width,
-    height: appBounds.height,
-    backgroundColor: baseColor,
-    x: appBounds.x,
-    y: appBounds.y,
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    }
-  })
-  window.app.loadURL(`file://${__dirname}/../html/app.html`)
-
-  // 閉じた時
-  window.app.on('close', ()=>{
-    store.setAppBounds(window.app.getBounds())
-  })
-
 })
 
 /*-----------------------------------------
