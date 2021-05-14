@@ -528,15 +528,17 @@ export default class App extends React.Component {
 
   render() {
     let writeFormTextareaStyle = (this.state.isShowWriteForm) ? { display: 'block' } : { display: 'none' }
-    let listComponents = {
-      'BOARDS': <BoardBox
-        boards={this.state.boards} threads={this.state.threads} hasBoard={this.hasBoard} currentBoardIndex={this.state.currentBoardIndex}
-        fetchThread={this.fetchThread} removeBoard={this.removeBoard} selectBoard={this.selectBoard} />,
-      'THREADS': <ThreadBox
-        boards={this.state.boards} threads={this.state.threads} currentThreadIndex={this.state.currentThreadIndex}
-        isAutoScroll={this.state.isAutoScroll} isShowWriteForm={this.state.isShowWriteForm}
-        hasBoard={this.hasBoard} hasThread={this.hasThread}
-        removeThread={this.removeThread} selectThread={this.selectThread} />
+    let listComponent
+    if (this.state.listMode == 'BOARDS') {
+      listComponent = <BoardBox
+                        boards={this.state.boards} threads={this.state.threads} hasBoard={this.hasBoard} currentBoardIndex={this.state.currentBoardIndex}
+                        fetchThread={this.fetchThread} removeBoard={this.removeBoard} selectBoard={this.selectBoard} />
+    } else if (this.state.listMode == 'THREADS') {
+      listComponent = <ThreadBox
+                        boards={this.state.boards} threads={this.state.threads} currentThreadIndex={this.state.currentThreadIndex}
+                        isAutoScroll={this.state.isAutoScroll} isShowWriteForm={this.state.isShowWriteForm}
+                        hasBoard={this.hasBoard} hasThread={this.hasThread}
+                        removeThread={this.removeThread} selectThread={this.selectThread} />
     }
     return (
       <div id="container" className={this.state.theme}>
@@ -547,7 +549,7 @@ export default class App extends React.Component {
           setListMode={this.setListMode} setCurrentUrl={this.setCurrentUrl} getCurrentUrl={this.getCurrentUrl}
           switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchJimakuServer={this.switchJimakuServer} />
         {/*リスト欄*/}
-        {listComponents[this.state.listMode]}
+        {listComponent}
         {/*書き込み欄*/}
         <div id="write-form" className="form-group">
           <textarea id="write-form-textarea" className="form-control"

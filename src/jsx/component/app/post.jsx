@@ -119,7 +119,7 @@ export default class Post extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return !Immutable.is(this.props.idCounter.get(this.props.post.id), nextProps.idCounter.get(this.props.post.id))
+    return !Immutable.is(this.props.idCounter.get(this.props.post.id), nextProps.idCounter.get(this.props.post.id)) || nextProps.currentThreadIndex != this.props.currentThreadIndex
   }
 
   render() {

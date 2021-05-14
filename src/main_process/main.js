@@ -250,7 +250,7 @@ ipcMain.on('update-thread', (event, thread) => {
   newThread.title = thread.title
   newThread.posts = thread.posts
   newThread.headers = thread.headers
-  // ペカステBBS対策（Last-Modified ヘッダの存在確認）
+  // Last-Modified ヘッダで差分取得
   if (newThread.headers.lastModified) {
     newThread.newPostsPromise.then((res) => {
       // 新着レスがあるか
@@ -270,7 +270,6 @@ ipcMain.on('update-thread', (event, thread) => {
       event.sender.send('update-thread-reply', newThread)
     })
   } else {
-    console.warn('WARNING: Last-Modifiedヘッダがみつかりません')
     newThread.fetchAllPosts((res, err) => {
       if (err) {
         console.log(err)
