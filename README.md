@@ -9,7 +9,7 @@ OBSからブラウザソースで字幕も取り込める
 <img src="https://user-images.githubusercontent.com/6502717/60570758-2eb49380-9dad-11e9-944b-4b1558799f2c.png" width="700px" height="atuo" />
 
 ## ダウンロード
-[epcviewer v0.3.5 for macOS](https://github.com/mrhorin/epcviewer/releases/download/v0.3.5/epcviewer_0.3.5_mac.dmg)
+[epcviewer](https://github.com/mrhorin/epcviewer/releases)
 
 ## 特徴
 - クロスプラットフォーム
