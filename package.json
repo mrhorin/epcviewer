@@ -39,7 +39,7 @@
     "encoding-japanese": "^1.0.25",
     "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.18.1",
     "photonkit": "^0.1.2",
     "react": "^16.8.6",
