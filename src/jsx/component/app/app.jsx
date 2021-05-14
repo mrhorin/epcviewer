@@ -66,7 +66,7 @@ export default class App extends React.Component {
     ipcRenderer.on('update-thread-reply', (event, thread) => {
       let index = this.findIndexOfThreads(thread)
       // 新着レスがあるか
-      if ((index >= 0) && (thread.posts.length > 0) && (this.state.currentThreadIndex == index)) {
+      if ((index >= 0) && (thread.posts.length > 0)) {
         let nextState = this.state
         // 新着レスをstateにセット
         nextState.threads[index].posts = nextState.threads[index].posts.concat(thread.posts)
