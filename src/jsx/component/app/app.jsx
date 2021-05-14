@@ -64,10 +64,9 @@ export default class App extends React.Component {
       this.setUpdateStatus('WAIT')
     })
     ipcRenderer.on('update-thread-reply', (event, thread) => {
-      // threadがthreadsの何番目に存在するか
-      let index = _.findIndex(this.state.threads, { url: thread.url })
+      let index = this.findIndexOfThreads(thread)
       // 新着レスがあるか
-      if ((index >= 0) && (thread.posts.length > 0)) {
+      if ((index >= 0) && (thread.posts.length > 0) && (this.state.currentThreadIndex == index)) {
         let nextState = this.state
         // 新着レスをstateにセット
         nextState.threads[index].posts = nextState.threads[index].posts.concat(thread.posts)
@@ -440,6 +439,17 @@ export default class App extends React.Component {
       this.writeFormTextarea.disabled = true
       ipcRenderer.send('post-write', this.currentThread, message)
     }
+  }
+
+  findIndexOfThreads = (thread) => {
+    let index = -1
+    for(let i=0; i < this.state.threads.length; i++){
+      if (thread.url == this.state.threads[i].url) {
+        index = i
+        break
+      }
+    }
+    return index
   }
 
   // スレッドの自動更新のON/OFF切り替え
