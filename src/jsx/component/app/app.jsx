@@ -491,7 +491,11 @@ export default class App extends React.Component {
   // 書き込み欄でkeyDownハンドラ
   _pressWriteFormHandler = (event) => {
     if (event.shiftKey && event.nativeEvent.key == 'Enter' && event.nativeEvent.type == 'keydown') {
-      this.postWriteForm()
+      if (this.isWait) {
+        this.postWriteForm()
+      } else {
+        event.preventDefault()
+      }
     }
   }
 
