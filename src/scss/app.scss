@@ -661,17 +661,21 @@ $darktheme-btn-primary-color: #3c83ec;
     border-color: lighten($darktheme-btn-default-color, 10%);
   }
   .btn-default.active{
-    background-color: #fcfcfc;
-    background-image: linear-gradient(to top, #fcfcfc 0%, #dadada 100%);
+    background-color: $darktheme-btn-default-color;
+    background-image: linear-gradient(to top, $darktheme-btn-default-color 0%, lighten($darktheme-btn-default-color, 5%) 100%);
     border-color: lighten($darktheme-btn-default-color, 10%);
     .icon{
-      color: $darktheme-base-color;
+      color: #fff;
     }
   }
   .btn-default.active:hover,
   .btn-default.active:active{
-    background-color: #dadada;
-    background-image: linear-gradient(to top, #dadada 0%, #bdbdbd 100%);
+    background-color: $darktheme-btn-default-color;
+    background-image: linear-gradient(to top, $darktheme-btn-default-color 0%, lighten($darktheme-btn-default-color, 5%) 100%);
+    border-color: lighten($darktheme-btn-default-color, 10%);
+    .icon{
+      color: #fff;
+    }
   }
   .btn-primary{
     background-color: $darktheme-btn-primary-color;
