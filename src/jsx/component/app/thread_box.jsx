@@ -104,7 +104,7 @@ export default class ThreadBox extends React.Component {
 
   componentDidUpdate(prevProps) {
     // 書き込み欄が表示されたら && 一番下なら || 新着レスがあったら強制スクロール || タブが移動したら
-    if (this.props.isAutoScroll || this.isMostBottom || (prevProps.currentThreadIndex != this.props.currentThreadIndex)) {
+    if (this.props.isAutoScroll || this.isMostBottom || (prevProps.currentThreadIndex != this.props.currentThreadIndex) || (prevProps.threads.length != this.props.threads.length)) {
       this.scrollBottom()
     }
   }
@@ -113,7 +113,8 @@ export default class ThreadBox extends React.Component {
     let posts = []
     if (this.props.hasBoard && this.hasPost) {
       posts = this.currentPosts.map((post, index) => {
-        return <Post key={index + 1} no={index + 1} post={post} getPost={this.getPost} idCounter={this.currentThread.idCounter} currentThreadIndex={this.props.currentThreadIndex} />
+        return <Post key={index + 1} no={index + 1} post={post} getPost={this.getPost} idCounter={this.currentThread.idCounter}
+                currentThreadIndex={this.props.currentThreadIndex} threadsLength={this.props.threads.length} />
       })
     }
     let tabs = []
