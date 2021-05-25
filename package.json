@@ -1,6 +1,6 @@
 {
   "name": "epcviewer",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "main": "./dist/js/main.js",
   "scripts": {
     "build": "yarn run gulp clean && yarn run gulp pug && yarn run webpack --mode=production",
