@@ -32,7 +32,7 @@ export default class Post extends React.Component {
       )
     })
     // アンカーをPostAnchorに置換
-    let anchorPtn = /<a.*?>>([0-9]+)<\/a>/gi
+    let anchorPtn = />>(\d+)/gi
     body = this.replaceStringWithComponent(body, anchorPtn, (match, index) => {
       // アンカー先のレスを取得
       let no = this.escapeHtmlTag(match)
