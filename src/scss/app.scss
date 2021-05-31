@@ -365,6 +365,7 @@ header{
         .post-id{
           .post-id-extract{
             @extend .link;
+            cursor: default;
             position: relative;
             .post-tooltip{
               @extend .tooltip;
@@ -374,6 +375,9 @@ header{
           }
           .post-id-extract::before{
             content: "ID";
+          }
+          .post-id-extract-hisshi{
+            color: #fd3f3f;
           }
           .post-id-uid::before{
             content: ":";
@@ -429,9 +433,6 @@ header{
       padding-bottom: 10px;
     }
   }
-}
-.post-id-extract-hisshi{
-  color: #fd3f3f !important;
 }
 
 /* -------- 書き込み欄 -------- */
@@ -794,9 +795,6 @@ $darktheme-btn-primary-color: #3c83ec;
           .post-name{
             color: $name-color;
             font-weight: bold;
-          }
-          .post-id-extract{
-            @extend .link;
           }
         }
         .post-body{
