@@ -411,7 +411,8 @@ header{
         }
         .post-body-link{
           @extend .link;
-          user-select: text;
+          user-select: none;
+          cursor: pointer;
         }
         .post-body-anchor{
           @extend .link;
