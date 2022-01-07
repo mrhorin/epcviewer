@@ -47,7 +47,7 @@ export default class Preferences extends React.Component {
         name: '全般',
         component:
           <PreferencesGeneral key={0} onChange={this.onChange} theme={this.state.theme}
-            isReturnBoards={this.state.isReturnBoards} isReturnThreads={this.state.isReturnThreads} />
+            isReturnBoards={this.state.isReturnBoards} isReturnThreads={this.state.isReturnThreads} isDisableHttps={this.state.isDisableHttps} />
       }, {
         name: '字幕',
         component:

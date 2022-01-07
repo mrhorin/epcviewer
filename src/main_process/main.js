@@ -205,6 +205,9 @@ app.on('window-all-closed', ()=>{
 -----------------------------------------*/
 // ------- URLのBoardを返す -------
 ipcMain.on('add-board', (event, url) => {
+  if (store.preferences.isDisableHttps) {
+    url = url.replace(/^https?:\/\//i, 'http://')
+  }
   var board = new Board(UrlParser.getBoardUrl(url))
   board.fetchThreads((res, err) => {
     if (err) {
@@ -224,7 +227,10 @@ ipcMain.on('add-board', (event, url) => {
 ipcMain.on('add-arg-board', (event) => {
   let urlIndex = findUrlIndex(global.process.argv)
   if (urlIndex >= 0) {
-    const url = global.process.argv[urlIndex]
+    var url = global.process.argv[urlIndex]
+    if (store.preferences.isDisableHttps) {
+      url = url.replace(/^https?:\/\//i, 'http://')
+    }
     var board = new Board(UrlParser.getBoardUrl(url))
     board.fetchThreads((res, err) => {
       // 板名
@@ -238,6 +244,9 @@ ipcMain.on('add-arg-board', (event) => {
 
 // ------- URLのThreadを返す -------
 ipcMain.on('add-thread', (event, threadUrl) => {
+  if (store.preferences.isDisableHttps) {
+    threadUrl = threadUrl.replace(/^https?:\/\//i, 'http://')
+  }
   var thread = new Thread(threadUrl)
   thread.fetchAllPosts((res, err) => {
     event.sender.send('add-thread-reply', thread, err)

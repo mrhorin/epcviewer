@@ -40,6 +40,16 @@ export default class PreferencesGeneral extends React.Component {
             </div>
           </div>
         </div>
+        {/* 通信 */}
+        <div className="preferences-item-column">
+          <div className="preferences-title">通信</div>
+          <div id="preferences-disable-https">
+            <input ref="isDisableHttps" type="checkbox" onChange={e => this._onChangeCheckbox(e, 'isDisableHttps')} checked={this.props.isDisableHttps} />
+            <span className="checkbox-label" onClick={e => this._onClickCheckbox(e, 'isDisableHttps')}>
+              https通信を無効化
+            </span>
+          </div>
+        </div>
         {/* テーマ */}
         <div className="preferences-item-column">
           <div id="preferences-theme">

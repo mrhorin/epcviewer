@@ -42,6 +42,7 @@ export default class Store{
       currentTabIndex: 0,
       isReturnBoards: false,
       isReturnThreads: false,
+      isDisableHttps: false,
       isJimakuSe: false,
       jimakuSeFilePath: "",
       jimakuSeVolume: 5,
