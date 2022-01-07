@@ -34,7 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "2ch-parser": "^0.6.0",
-    "electron-store": "^6.0.0",
+    "electron-store": "^8.0.1",
     "emoji-regex": "^9.0.0",
     "encoding-japanese": "^1.0.25",
     "express": "^4.17.1",
@@ -47,7 +47,7 @@
     "react-dom": "^16.8.6",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
-    "superagent": "^5.0.6",
+    "superagent": "^7.0.0",
     "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
@@ -59,8 +59,8 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "css-loader": "^2.1.1",
     "del": "^4.1.1",
-    "electron": "^10.1.1",
-    "electron-builder": "^22.8.0",
+    "electron": "11.5.0",
+    "electron-builder": "^22.14.5",
     "electron-react-devtools": "^0.5.3",
     "gulp": "^4.0.2",
     "gulp-plumber": "^1.2.1",
