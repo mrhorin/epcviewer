@@ -8,8 +8,7 @@
     "watch": "yarn run webpack -w --mode=development",
     "start": "yarn run electron ./dist/js/main.js",
     "list": "npm list --depth=0",
-    "release:darwin": "yarn run build && yarn run electron-builder --mac",
-    "release:linux": "yarn run build && gulp package:linux"
+    "release:mac": "yarn run build && yarn run electron-builder --mac"
   },
   "build": {
     "appId": "com.electron.${name}",
