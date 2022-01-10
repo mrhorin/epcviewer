@@ -183,7 +183,10 @@ app.on('ready', () => {
 app.on('second-instance', (event, commandLine) => {
   console.log('The second instance was build but exited.')
   const urlIndex = findUrlIndex(commandLine)
-  const url = commandLine[urlIndex]
+  let url = commandLine[urlIndex]
+  if (store.preferences.isDisableHttps) {
+    url = url.replace(/^https?:\/\//i, 'http://')
+  }
   var board = new Board(UrlParser.getBoardUrl(url))
   board.fetchThreads(() => {
     window.app.focus()
