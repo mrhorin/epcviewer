@@ -530,6 +530,21 @@ export default class App extends React.Component {
     this.setUpdateStatus('UPDATING')
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // 現在のURLを更新
+    if (prevState.listMode !== this.state.listMode) {
+      if (this.state.listMode == "BOARDS") {
+        this.setCurrentUrl(this.state.boards[this.state.currentBoardIndex].url)
+      } else {
+        this.setCurrentUrl(this.state.threads[this.state.currentThreadIndex].url)
+      }
+    } else if (this.state.listMode == "BOARDS" && prevState.currentBoardIndex !== this.state.currentBoardIndex) {
+      this.setCurrentUrl(this.state.boards[this.state.currentBoardIndex].url)
+    } else if (this.state.listMode == "THREADS" && prevState.currentThreadIndex !== this.state.currentThreadIndex) {
+      this.setCurrentUrl(this.state.threads[this.state.currentThreadIndex].url)
+    }
+  }
+
   render() {
     let writeFormTextareaStyle = (this.state.isShowWriteForm) ? { display: 'block' } : { display: 'none' }
     let listComponent
