@@ -16,7 +16,7 @@ export default class Say {
       this.isSaying = true
       let sayPromise = new Promise((resolve, reject) => {
         let post = this.posts.shift()
-        let say = spawn('say', [`[[ volm 0.3; ]] レス${post.no}、${post.body}、`])
+        let say = spawn('say', [`[[ volm 0.3; ]] レス${post.no}、${this.omitBody(post.body)}、`])
         // 読み上げ終了時
         say.on('close', (code) => {
           resolve(post)
@@ -44,6 +44,16 @@ export default class Say {
   stop = () => {
     this.posts = []
     this.isSaying = false
+  }
+
+  omitBody = (body) => {
+    // URLを省略、開業タグを削除
+    body = body.replace(/h?ttps?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/gi, 'URL').replace(/<br>/gi, "")
+    // 長文以下省略
+    if (body.length > 100) {
+      body = body.substr(0,140) + '、以下省略、'
+    }
+    return body
   }
 
   get hasPosts() {
