@@ -279,7 +279,7 @@ ipcMain.on('update-thread', (event, thread) => {
         if (jimaku.isListening) jimaku.emitPosts(res.body)
         // 読み上げ
         if (isSay) {
-          say.addPosts(newThread.posts.map((post) => {
+          say.addPosts(res.body.map((post) => {
             return {
               no: post.no,
               name: post.name,
