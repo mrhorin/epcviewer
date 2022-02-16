@@ -18,13 +18,14 @@ export default class Header extends React.Component {
 
   // ボタン用のCSSクラス
   get btnCssClassName() {
-    let css = { boardsList: '', threadsList: '', autoUpdate: '', autoScroll: '', jimakuServer: '' }
+    let css = { boardsList: '', threadsList: '', autoUpdate: '', autoScroll: '', say: '', jimakuServer: '' }
     for (var key in css) {
       css[key] = 'btn btn-default btn-mini'
     }
     // アクティブ状態を付加
     if (this.props.isAutoUpdate) css.autoUpdate += ' active'
     if (this.props.isAutoScroll) css.autoScroll += ' active'
+    if (this.props.isSay) css.say += ' active'
     if (this.props.isJimakuServer) css.jimakuServer += ' active'
     switch (this.props.listMode) {
       case 'BOARDS':
@@ -129,6 +130,10 @@ export default class Header extends React.Component {
           {/*スレッドボタン*/}
           <div className="flex-header-thread-btns">
             <div className="btn-group">
+              {/* 読み上げ */}
+              <button id="btn-say" className={css.say} onClick={this.props.switchSay}>
+                <span className="icon icon-sound"></span>
+              </button>
               {/* 字幕サーバー */}
               <button id="btn-jimaku-server" className={css.jimakuServer} onClick={this.props.switchJimakuServer}>
                 <span className="icon icon-network"></span>

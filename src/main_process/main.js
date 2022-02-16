@@ -6,13 +6,17 @@ import request from 'superagent'
 
 import MenuManager from 'main_process/menu_manager'
 import JimakuServer from 'main_process/jimaku_server'
+import Say from 'main_process/say'
+
 import Store from 'js/store'
 
 const store = new Store()
 const jimaku = new JimakuServer()
+const say = new Say()
 
 let menu = new MenuManager()
 let window = { app: null, preferences: null }
+let isSay = store.appState.isSay // 読み上げ設定ON/OFF状態
 
 systemPreferences.setAppLevelAppearance(store.preferences.theme, "light")
 
@@ -273,6 +277,21 @@ ipcMain.on('update-thread', (event, thread) => {
         if (!UrlParser.isShitaraba(newThread.url)) res.body = getPostsDiff(thread.posts, res.body)
         // 字幕サーバに追加
         if (jimaku.isListening) jimaku.emitPosts(res.body)
+        // 読み上げ
+        if (isSay) {
+          say.addPosts(newThread.posts.map((post) => {
+            return {
+              no: post.no,
+              name: post.name,
+              mail: post.mail,
+              date: post.date,
+              body: post.body,
+              id: post.id,
+              title: post.title
+            }
+          }))
+          say.play()
+        }
       }
       newThread.posts = res.body
       event.sender.send('update-thread-reply', newThread)
@@ -290,6 +309,21 @@ ipcMain.on('update-thread', (event, thread) => {
         newThread.posts = getPostsDiff(thread.posts, res.body)
         // 新着レスがある時は字幕サーバに追加
         if (jimaku.isListening && newThread.posts.length > 0) jimaku.emitPosts(newThread.posts)
+        // 読み上げ
+        if (isSay && newThread.posts.length > 0) {
+          say.addPosts(newThread.posts.map((post) => {
+            return {
+              no: post.no,
+              name: post.name,
+              mail: post.mail,
+              date: post.date,
+              body: post.body,
+              id: post.id,
+              title: post.title
+            }
+          }))
+          say.play()
+        }
       }
       event.sender.send('update-thread-reply', newThread)
     })
@@ -365,6 +399,11 @@ ipcMain.on('post-write', (event, thread, message) => {
       }
     })
   }
+})
+
+// --- 読み上げのON/OFF切り替え ---
+ipcMain.on('switch-say', (event, nextIsSay) => {
+  isSay = nextIsSay
 })
 
 // --- 字幕サーバーの起動状態のON/OFF切り替え ---

@@ -25,6 +25,8 @@ state
     スレッドの自動更新のON/OFF状態
   isAutoScroll: bool
     スレッドのオートスクロールのON/OFF状態
+  isSay: bool
+    スレッド読み上げのON/OFF状態
   isJimakuServer: bool
     字幕サーバーの起動状態のON/OFF状態
 ********************************************************/
@@ -462,6 +464,12 @@ export default class App extends React.Component {
     this.setState({ isAutoScroll: !this.state.isAutoScroll })
   }
 
+  // 読み上げのON/OFF切り替え
+  switchSay = () => {
+    ipcRenderer.send('switch-say', !this.state.isSay)
+    this.setState({ isSay: !this.state.isSay })
+  }
+
   // 字幕サーバーの起動状態のON/OFF切り替え
   switchJimakuServer = () => {
     ipcRenderer.send('switch-jimaku-server', !this.state.isJimakuServer)
@@ -508,6 +516,7 @@ export default class App extends React.Component {
     state.theme = this.preferences.theme
     state.isAutoUpdate = prevState.isAutoUpdate
     state.isAutoScroll = prevState.isAutoScroll
+    state.isSay = prevState.isSay
     state.isJimakuServer = prevState.isJimakuServer
     state.isShowWriteForm = prevState.isShowWriteForm
     if (this.preferences.isReturnBoards) {
@@ -564,9 +573,9 @@ export default class App extends React.Component {
         <Header
           listMode={this.state.listMode} currentUrl={this.state.currentUrl}
           fetchBoard={this.fetchBoard} updateCurrentList={this.updateCurrentList} openPreferences={this.openPreferences}
-          isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll} isJimakuServer={this.state.isJimakuServer}
+          isAutoUpdate={this.state.isAutoUpdate} isAutoScroll={this.state.isAutoScroll} isSay={this.state.isSay} isJimakuServer={this.state.isJimakuServer}
           setListMode={this.setListMode} setCurrentUrl={this.setCurrentUrl} getCurrentUrl={this.getCurrentUrl}
-          switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchJimakuServer={this.switchJimakuServer} />
+          switchAutoUpdate={this.switchAutoUpdate} switchAutoScroll={this.switchAutoScroll} switchSay={this.switchSay} switchJimakuServer={this.switchJimakuServer} />
         {/*リスト欄*/}
         {listComponent}
         {/*書き込み欄*/}

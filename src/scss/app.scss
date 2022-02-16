@@ -218,8 +218,15 @@ header{
         content: 'オートスクロール';
         z-index: 100;
       }
+      #btn-say{
+        border-radius: 5px 0 0 5px;
+      }
+      #btn-say:hover::before{
+        content: '読み上げ';
+        z-index: 100;
+      }
       #btn-jimaku-server{
-        border-radius: 5px;
+        border-radius: 0 5px 5px 0;
       }
       #btn-jimaku-server:hover::before{
         content: '字幕サーバー';

@@ -28,6 +28,7 @@ const electron = {
   externals: [
     'electron',
     'electron-react-devtools',
+    'child_process',
     'ipc',
     'fs',
     'worker_threads',

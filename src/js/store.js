@@ -30,6 +30,7 @@ export default class Store{
       log: "",
       isAutoUpdate: true,
       isAutoScroll: true,
+      isSay: false,
       isJimakuServer: false,
       isShowWriteForm: true,
       theme: "light"
@@ -79,6 +80,7 @@ export default class Store{
     state.currentBoardIndex = 0
     state.updateStatus = 'WAIT'
     state.log = ''
+    state.isSay = false
     state.isJimakuServer = false
     this.store.set('appState', state)
   }
