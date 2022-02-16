@@ -35,7 +35,7 @@ export default class Say {
         this.isSaying = false
         // 読み上げ待ちレスがある場合は再帰呼出し
         if (this.hasPosts) {
-          this.say()
+          this.play()
         }
       })
     }
