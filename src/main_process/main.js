@@ -353,10 +353,10 @@ ipcMain.on('post-write', (event, thread, message) => {
       MAIL: 'sage',
       MESSAGE: message,
     })
-    postMessage(writeUrl, threadUrl, body, (err, res) => {
+    postMessage({ postURL: writeUrl, refererURL: threadUrl, body: body, callback: (err, res) => {
       if (err) console.log(err)
       event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
-    })
+    }})
   } else {
     // 一般的な2ch互換掲示板の時
     const threadUrl = thread.url+"/"
@@ -371,33 +371,10 @@ ipcMain.on('post-write', (event, thread, message) => {
       submit: '書き込む',
       MESSAGE: message
     })
-    postMessage(writeUrl, threadUrl, body, (err, res) => {
-      if (err) {
-        console.log(err)
-        event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
-      } else {
-        // 書き込み確認があった場合の処理
-        if (res.text.search(/<title>.*書き込み確認.*<\/title>/) >= 0) {
-          writeUrl = `${uri[0]}//${uri[2]}/${extractValueFromHTML(res.text, "form", "method", "POST", "action")}`
-          body = escape2ch({
-            subject: extractValueFromHTML(res.text, "input", "name", "subject", "value"),
-            FROM: extractValueFromHTML(res.text, "input" ,"name", "FROM", "value"),
-            mail: extractValueFromHTML(res.text, "input", "name", "mail", "value"),
-            MESSAGE: extractValueFromHTML(res.text, "input", "name", "MESSAGE", "value"),
-            bbs: extractValueFromHTML(res.text, "input", "name", "bbs", "value"),
-            time: extractValueFromHTML(res.text, "input", "name", "time", "value"),
-            key: extractValueFromHTML(res.text, "input", "name", "key", "value"),
-            submit: extractValueFromHTML(res.text, "input", "type", "submit", "value")
-          })
-          postMessage(writeUrl, threadUrl, body, (err, res) => {
-            if (err) console.log(err)
-            event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
-          })
-        } else {
-          event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
-        }
-      }
-    })
+    postMessage({ postURL: writeUrl, refererURL: threadUrl, body: body, callback: (err, res) => {
+      if (err) console.log(err)
+      event.sender.send('post-write-reply', extractHeadersForPostWriteReply(err, res))
+    }})
   }
 })
 
@@ -536,7 +513,7 @@ function extractValueFromHTML(html, tagName, attr, attrValue, targetAttr) {
   return value
 }
 
-function postMessage(postURL, refererURL, body, callback) {
+function postMessage({ postURL, refererURL, body, cookie, callback }) {
   let date = new Date()
   date.setDate(date.getDate() + 30)
   request
@@ -546,7 +523,7 @@ function postMessage(postURL, refererURL, body, callback) {
     .set('Referer', refererURL)
     .set('User-Agent', 'Mozilla/5.0')
     .set('Accept-Language', 'ja')
-    .set('Set-Cookie', `NAME=""; MAIL="sage"; expires=${date.toUTCString()}; path=/`)
+    .set('Cookie', `NAME=""; MAIL="sage"; expires=${date.toUTCString()}; path=/`)
     .end((err, res) => {
       callback(err, res)
     })
