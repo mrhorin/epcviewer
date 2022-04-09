@@ -39,7 +39,7 @@
     "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
-    "moment": "^2.18.1",
+    "moment": "^2.29.2",
     "photonkit": "^0.1.2",
     "react": "^16.8.6",
     "react-color": "^2.17.3",
