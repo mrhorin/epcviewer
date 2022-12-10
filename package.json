@@ -36,7 +36,7 @@
     "electron-store": "^8.0.1",
     "emoji-regex": "^9.0.0",
     "encoding-japanese": "^1.0.25",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "moment": "^2.18.1",
